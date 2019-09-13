@@ -105,7 +105,7 @@ class PullRequest < ApplicationRecord
   def link_by_number(number)
     parent_pr = PullRequest.find_by(
       number: number,
-      repository_id: self.repository_id
+      repository_id: self.repository.id
     )
     return unless parent_pr
 
