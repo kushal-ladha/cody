@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 class Types::RepositoryType < Types::BaseObject

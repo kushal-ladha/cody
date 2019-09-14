@@ -136,3 +136,7 @@ gem 'graphql-client'
 gem 'slack-ruby-client'
 
 gem 'bootsnap', require: false
+
+gem 'sorbet', :group => :development
+gem 'sorbet-runtime'
+gem 'sorbet-rails'

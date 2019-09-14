@@ -1,3 +1,4 @@
+# typed: strict
 stack = Faraday::RackBuilder.new do |builder|
   builder.response :logger, Rails.logger, headers: false do |logger|
     logger.filter(/(Authorization:\s*).*$/, '\1[REDACTED]')

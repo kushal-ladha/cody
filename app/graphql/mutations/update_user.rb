@@ -1,3 +1,4 @@
+# typed: false
 # frozen_string_literal: true
 
 Mutations::UpdateUser = GraphQL::Relay::Mutation.define do

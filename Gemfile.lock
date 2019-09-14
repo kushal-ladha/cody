@@ -233,6 +233,9 @@ GEM
       activerecord (>= 4.2)
       request_store (~> 1.1)
     parallel (1.17.0)
+    parlour (0.6.1)
+      rainbow (~> 3.0.0)
+      sorbet-runtime
     parser (2.6.4.0)
       ast (~> 2.4.0)
     pg (0.21.0)
@@ -376,6 +379,12 @@ GEM
       gli
       hashie
       websocket-driver
+    sorbet (0.4.4751)
+      sorbet-static (= 0.4.4751)
+    sorbet-rails (0.5.4)
+      parlour (~> 0.6.0)
+    sorbet-runtime (0.4.4751)
+    sorbet-static (0.4.4751-universal-darwin-14)
     spring (2.0.2)
       activesupport (>= 4.2)
     sprockets (3.7.2)
@@ -482,6 +491,9 @@ DEPENDENCIES
   sidekiq-unique-jobs
   skylight
   slack-ruby-client
+  sorbet
+  sorbet-rails
+  sorbet-runtime
   spring
   timecop
   transit-ruby

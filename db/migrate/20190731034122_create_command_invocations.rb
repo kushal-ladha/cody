@@ -1,3 +1,4 @@
+# typed: true
 class CreateCommandInvocations < ActiveRecord::Migration[5.1]
   def change
     create_table :command_invocations do |t|

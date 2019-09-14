@@ -1,3 +1,4 @@
+# typed: false
 module StubHelper
   def stub_settings(repo, settings)
     allow(repo).to receive(:read_setting).and_return(nil)
