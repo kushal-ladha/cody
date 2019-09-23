@@ -1,4 +1,4 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 class SlackController < ApplicationController
@@ -15,7 +15,7 @@ class SlackController < ApplicationController
         text: t(".errors.not_installed")
       }
 
-      Faraday.post(
+      Faraday.default_connection.post(
         params[:response_url],
         JSON.generate(message),
         content_type: "application/json"
@@ -23,7 +23,7 @@ class SlackController < ApplicationController
       return
     end
 
-    argv = params[:text].split(" ")
+    argv = params[:text].to_s.split(" ")
     case argv[0]
     when "login"
       login
@@ -94,7 +94,7 @@ class SlackController < ApplicationController
       ]
     }
 
-    Faraday.post(
+    Faraday.default_connection.post(
       params[:response_url],
       JSON.generate(message),
       content_type: "application/json"
@@ -107,7 +107,7 @@ class SlackController < ApplicationController
       text: t(".errors.unrecognized")
     }
 
-    Faraday.post(
+    Faraday.default_connection.post(
       params[:response_url],
       JSON.generate(message),
       content_type: "application/json"

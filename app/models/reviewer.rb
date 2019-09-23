@@ -1,7 +1,9 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 class Reviewer < ApplicationRecord
+  extend T::Sig
+
   belongs_to :review_rule, required: false
   belongs_to :pull_request
 
@@ -16,8 +18,10 @@ class Reviewer < ApplicationRecord
 
   has_paper_trail
 
-  after_save :send_outbound_notifications, if: -> { saved_change_to_login? }
+  after_save :send_outbound_notifications,
+    if: ->(r) { r.saved_change_to_login? }
 
+  sig { returns(String) }
   def addendum
     <<~ADDENDUM
       ### #{self.name_with_code}
@@ -27,6 +31,7 @@ class Reviewer < ApplicationRecord
     ADDENDUM
   end
 
+  sig { returns(String) }
   def status_to_check
     case status
     when STATUS_APPROVED
@@ -36,25 +41,31 @@ class Reviewer < ApplicationRecord
     end
   end
 
+  sig { returns(T.nilable(String)) }
   def name_with_code
-    if self.review_rule.short_code.present?
-      "#{self.review_rule.name} (#{self.review_rule.short_code})"
-    else
-      self.review_rule.name
+    if (review_rule = self.review_rule)
+      if review_rule.short_code.present?
+        "#{review_rule.name} (#{review_rule.short_code})"
+      else
+        review_rule.name
+      end
     end
   end
 
+  sig { void }
   def approve!
     self.status = STATUS_APPROVED
     save!
   end
 
+  sig { void }
   def send_outbound_notifications
     if (user = User.find_by(login: self.login))
       send_slack_message(recipient: user)
     end
   end
 
+  sig { params(recipient: User).void }
   def send_slack_message(recipient:)
     return unless recipient.slack_identity
 
@@ -91,6 +102,7 @@ class Reviewer < ApplicationRecord
 
   private
 
+  sig { void }
   def default_status
     self.status ||= STATUS_PENDING_APPROVAL
   end

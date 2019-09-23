@@ -2,8 +2,6 @@
 require 'rails_helper'
 
 RSpec.describe ReviewRule, type: :model do
-  it { is_expected.to validate_presence_of :name }
-  it { is_expected.to validate_presence_of :reviewer }
   it { is_expected.to belong_to :repository }
 
   let(:rule) { build :review_rule, reviewer: reviewer }

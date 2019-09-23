@@ -1,4 +1,4 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 class Setting < ApplicationRecord
@@ -19,9 +19,9 @@ class Setting < ApplicationRecord
 
   class << self
     def lookup(key)
-      return nil unless exists?(key: key)
-      raw = find_by(key: key).value
-      Transit::Reader.new(:json, StringIO.new(raw)).read
+      if (setting = find_by(key: key))
+        Transit::Reader.new(:json, StringIO.new(setting.value)).read
+      end
     end
 
     def assign(key, value)

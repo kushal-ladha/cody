@@ -1,4 +1,4 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 class ReceivePullRequestEvent
@@ -6,7 +6,6 @@ class ReceivePullRequestEvent
   include Skylight::Helpers
   include GithubApi
 
-  instrument_method
   def perform(payload)
     Current.reset
 
@@ -60,12 +59,10 @@ class ReceivePullRequestEvent
     Current.reset
   end
 
-  instrument_method
   def on_opened
     CreateOrUpdatePullRequest.new.perform(@payload["pull_request"])
   end
 
-  instrument_method
   def on_closed
     number = @payload["number"]
     if (pr = @repository.pull_requests.find_by(number: number))
@@ -82,7 +79,6 @@ class ReceivePullRequestEvent
   #
   # In this case, we preserve the current review status and update the new
   # commit with the correct status indicator.
-  instrument_method
   def on_synchronize
     number = @payload["number"]
     if (pr = @repository.pull_requests.find_by(number: number))

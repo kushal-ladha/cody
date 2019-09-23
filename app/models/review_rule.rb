@@ -1,7 +1,9 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 class ReviewRule < ApplicationRecord
+  extend T::Sig
+
   GENERATED_REVIEWERS_REGEX = /^\s*#*\s*Generated\s*Reviewers\s*$/
 
   belongs_to :repository, required: true
@@ -16,6 +18,7 @@ class ReviewRule < ApplicationRecord
 
   attr_accessor :match_context
 
+  sig { returns(String) }
   def reviewer_human_name
     if self.reviewer.match?(/^\d+$/)
       team = github_client.team(self.reviewer)
@@ -31,6 +34,9 @@ class ReviewRule < ApplicationRecord
   # Reviewer record is created for the PR.
   #
   # @return [void]
+  sig do
+    params(pr: T.untyped, pull_request_hash: T::Hash[String, T.untyped]).void
+  end
   def apply(pr, pull_request_hash)
     if !previously_applied?(pr) && matches?(pull_request_hash)
       add_reviewer(pr)
@@ -59,6 +65,7 @@ class ReviewRule < ApplicationRecord
   #
   # @param pull_request [PullRequest] the PullRequest object to add reviewers to
   # @return [String] the login of the reviewer that was added
+  sig { params(pull_request: PullRequest).returns(T.nilable(String)) }
   def add_reviewer(pull_request)
     reviewer_to_add = choose_reviewer(pull_request)
 
@@ -76,6 +83,7 @@ class ReviewRule < ApplicationRecord
   # List the possible reviewers according to this rule's configuration
   #
   # @return [Array<String>] the list of possible reviewers for this rule
+  sig { returns(T::Array[String]) }
   def possible_reviewers
     if self.reviewer.include?("/")
       org, team = self.reviewer.split("/", 2)
@@ -98,25 +106,29 @@ class ReviewRule < ApplicationRecord
     end
   end
 
+  sig { params(login: String).returns(T::Boolean) }
   def possible_reviewer?(login)
     possible_reviewers.include?(login)
   end
 
   # @return [Boolean] true if the rule was previously applied, false otherwise
+  sig { params(pr: PullRequest).returns(T::Boolean) }
   def previously_applied?(pr)
-    pr.reviewers.find_by(review_rule_id: self.id)
+    pr.reviewers.exists?(review_rule_id: self.id)
   end
 
   # Build and filter commit authors and paused reviewers from possible reviewers
   #
   # @param pull_request [PullRequest] the PullRequest object
   # @return [Array<String>] the list of filtered reviewers
+  sig { params(pull_request: T.untyped).returns(T::Array[String]) }
   def filtered_reviewers(pull_request)
     possible_reviewers - (pull_request.commit_authors | User.paused_logins)
   end
 
   # @param pull_request [PullRequest] the PullRequest object
   # @return [String] the login of the reviewer that was chosen
+  sig { params(pull_request: PullRequest).returns(T.nilable(String)) }
   def choose_reviewer(pull_request)
     all_possible_reviewers = possible_reviewers
 

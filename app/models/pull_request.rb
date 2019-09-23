@@ -1,14 +1,16 @@
-# typed: false
+# typed: true
 # frozen_string_literal: true
 
 class PullRequest < ApplicationRecord
+  extend T::Sig
+
   validates :number, numericality: true, presence: true
   validates :status, presence: true
 
   serialize :pending_reviews, JSON
   serialize :completed_reviews, JSON
 
-  after_save :update_child_pull_requests, if: -> { saved_change_to_status? }
+  after_save :update_child_pull_requests, if: ->(r) { r.saved_change_to_status? }
 
   scope :pending_review, -> { where(status: "pending_review") }
 
@@ -41,10 +43,12 @@ class PullRequest < ApplicationRecord
 
   include GithubApi
 
+  sig { returns(T.nilable(String)) }
   def owner
     self.repository.owner
   end
 
+  sig { returns(T.nilable(String)) }
   def repo
     self.repository.name
   end
@@ -52,9 +56,8 @@ class PullRequest < ApplicationRecord
   # List authors of commits in this pull request
   #
   # Returns the Array listing of all commit authors
+  sig { returns(T::Array[String]) }
   def commit_authors
-    return [] unless repository
-
     commits = github_client.pull_request_commits(
       self.repository.full_name,
       number
@@ -67,6 +70,7 @@ class PullRequest < ApplicationRecord
     }.compact
   end
 
+  sig { void }
   def assign_reviewers
     github_client.update_issue(
       self.repository.full_name,
@@ -75,6 +79,7 @@ class PullRequest < ApplicationRecord
     )
   end
 
+  sig { params(message: T.nilable(String)).void }
   def update_status(message = nil)
     github_client.create_status(
       self.repository.full_name,
@@ -99,6 +104,7 @@ class PullRequest < ApplicationRecord
     self.resource.html_url
   end
 
+  sig { returns(String) }
   def full_title
     "#{self.repository.full_name}##{self.number}: #{self.resource.title}"
   end
@@ -111,7 +117,7 @@ class PullRequest < ApplicationRecord
     return unless parent_pr
 
     self.parent_pull_request = parent_pr
-    self.status = self.parent_pull_request.status
+    self.status = parent_pr.status
     self.save!
   end
 
@@ -195,13 +201,13 @@ class PullRequest < ApplicationRecord
     if self.parent_pull_request
       desc = format(
         STATUS_DELEGATED,
-        parent_number: self.parent_pull_request.number
+        parent_number: self.parent_pull_request&.number
       )
 
       {
         context: "code-review/cody",
         description: desc,
-        target_url: self.parent_pull_request.html_url
+        target_url: self.parent_pull_request&.html_url
       }
     else
       {

@@ -46,10 +46,10 @@ module ReviewRule::GeneratedAttributeMethods
   sig { returns(T::Boolean) }
   def id?; end
 
-  sig { returns(T.nilable(String)) }
+  sig { returns(String) }
   def name; end
 
-  sig { params(value: T.nilable(String)).void }
+  sig { params(value: String).void }
   def name=(value); end
 
   sig { returns(T::Boolean) }
@@ -64,10 +64,10 @@ module ReviewRule::GeneratedAttributeMethods
   sig { returns(T::Boolean) }
   def repository_id?; end
 
-  sig { returns(T.nilable(String)) }
+  sig { returns(String) }
   def reviewer; end
 
-  sig { params(value: T.nilable(String)).void }
+  sig { params(value: String).void }
   def reviewer=(value); end
 
   sig { returns(T::Boolean) }

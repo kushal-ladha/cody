@@ -82,14 +82,6 @@ RSpec.describe PullRequest, type: :model do
     it 'returns array of commit authors' do
       expect(subject).to contain_exactly('aergonaut')
     end
-
-    context 'without a repository' do
-      # legacy case
-      it "returns []" do
-        allow(pr).to receive(:repository).and_return(nil)
-        expect(pr.commit_authors).to be_empty
-      end
-    end
   end
 
   describe "#link_by_number" do

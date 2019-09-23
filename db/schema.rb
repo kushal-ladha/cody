@@ -1,4 +1,3 @@
-# typed: false
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -11,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_08_223845) do
+ActiveRecord::Schema.define(version: 2019_09_23_062919) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -65,10 +64,10 @@ ActiveRecord::Schema.define(version: 2019_09_08_223845) do
   end
 
   create_table "review_rules", id: :serial, force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.string "type"
     t.string "file_match"
-    t.string "reviewer"
+    t.string "reviewer", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "short_code"
@@ -91,8 +90,8 @@ ActiveRecord::Schema.define(version: 2019_09_08_223845) do
   end
 
   create_table "settings", id: :serial, force: :cascade do |t|
-    t.string "key"
-    t.string "value"
+    t.string "key", null: false
+    t.string "value", null: false
     t.bigint "repository_id"
     t.index ["key", "repository_id"], name: "index_settings_on_key_and_repository_id", unique: true
     t.index ["repository_id"], name: "index_settings_on_repository_id"

@@ -19,10 +19,10 @@ module Setting::GeneratedAttributeMethods
   sig { returns(T::Boolean) }
   def id?; end
 
-  sig { returns(T.nilable(String)) }
+  sig { returns(String) }
   def key; end
 
-  sig { params(value: T.nilable(String)).void }
+  sig { params(value: String).void }
   def key=(value); end
 
   sig { returns(T::Boolean) }
@@ -37,10 +37,10 @@ module Setting::GeneratedAttributeMethods
   sig { returns(T::Boolean) }
   def repository_id?; end
 
-  sig { returns(T.nilable(String)) }
+  sig { returns(String) }
   def value; end
 
-  sig { params(value: T.nilable(String)).void }
+  sig { params(value: String).void }
   def value=(value); end
 
   sig { returns(T::Boolean) }
