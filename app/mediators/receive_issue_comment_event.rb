@@ -194,6 +194,7 @@ class ReceiveIssueCommentEvent
     return unless old_reviewers.present?
 
     old_reviewers.each do |reviewer|
+      next unless reviewer.review_rule.present?
       pos_logins = reviewer.review_rule.filtered_reviewers(pr)
       new_usr = pos_logins.reject { |usr| usr.casecmp(commenter).zero? }.sample
       reviewer.update!(login: new_usr) if new_usr
