@@ -57,4 +57,8 @@ class Types::UserType < Types::BaseObject
       argument :status, Types::ReviewerStatusType, required: false,
         description: "Filter assigned reviews by status"
     end
+
+  def assigned_reviews(status: Reviewer::STATUS_PENDING_APPROVAL)
+    Reviewer.where(login: @object.login, status: status)
+  end
 end

@@ -36,4 +36,6 @@ class Types::ReviewerType < Types::BaseObject
   def versions
     @object.versions.map(&:changeset)
   end
+
+  field :pull_request, Types::PullRequestType, null: true
 end
