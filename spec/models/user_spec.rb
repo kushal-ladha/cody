@@ -95,4 +95,14 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe "#average_review_speed" do
+    let(:user) { FactoryBot.create :user }
+
+    it "calls AverageReviewSpeedQuery" do
+      since = 20.days.ago
+      expect(AverageReviewSpeedQuery).to receive(:new).with(login: user.login, since: since).and_return(instance_double(AverageReviewSpeedQuery, run: 2))
+      user.average_review_speed(since: since)
+    end
+  end
 end

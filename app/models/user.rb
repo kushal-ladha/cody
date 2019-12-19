@@ -47,6 +47,10 @@ class User < ApplicationRecord
     relation
   end
 
+  def average_review_speed(since:)
+    AverageReviewSpeedQuery.new(login: self.login, since: since).run
+  end
+
   def make_api_key
     api_key = self.api_keys.build
     api_key.password = SecureRandom.base58(24)
