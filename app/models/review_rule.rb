@@ -87,7 +87,7 @@ class ReviewRule < ApplicationRecord
         team: team,
         context: context
       )
-      ReviwerList.new(reviewers: result.data.organization.team.members.nodes)
+      ReviewerList.new(reviewers: result.data.organization.team.members.nodes)
     elsif self.reviewer.match?(/^\d+$/)
       team_members = github_client.team_members(self.reviewer)
       ReviewerList.new(reviewers: team_members.map(&:login))
