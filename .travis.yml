@@ -23,7 +23,6 @@ env:
   global:
     - CODY_GITHUB_ACCESS_TOKEN=abc123
     - CODY_JWT_SECRET_KEY=fake
-    - CODY_GITHUB_REPO=aergonaut/testrepo
     - CODY_HOST=cody.example
     - CODY_ATTR_ENCRYPTED_KEY="eTJIFMy/H5/FL2HXllaCyZ5XcY6FsC0itYVN7ZbNxv0="
 branches:
