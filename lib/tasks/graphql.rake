@@ -11,4 +11,15 @@ namespace :graphql do
   task relay: :schema do
     sh "bin/yarn relay"
   end
+
+  desc "Update the GitHub GraphQL schema"
+  task :github do
+    Dotenv.load
+    client = Octokit::Client.new(access_token: ENV["CODY_GITHUB_ACCESS_TOKEN"])
+    response = client.get("/graphql")
+    File.write(
+      Rails.root.join("github_schema.json"),
+      JSON.dump(response.to_h)
+    )
+  end
 end
