@@ -43,6 +43,22 @@ class Reviewer < ApplicationRecord
     end
   end
 
+  def reassign
+    return true unless self.review_rule
+
+    new_reviewer =
+      self.review_rule.choose_reviewer(
+        pull_request: self.pull_request,
+        extra_excludes: [self.login]
+      )
+
+    if new_reviewer
+      self.update(login: new_reviewer.login)
+    else
+      false
+    end
+  end
+
   def approve!
     self.status = STATUS_APPROVED
     save!

@@ -59,22 +59,22 @@ class ReviewRule < ApplicationRecord
   # @param pull_request [PullRequest] the PullRequest object to add reviewers to
   # @return [String] the login of the reviewer that was added
   def add_reviewer(pull_request)
-    reviewer_to_add = choose_reviewer(pull_request)
+    reviewer_to_add = choose_reviewer(pull_request: pull_request)
 
     pull_request.reviewers.create!(
-      login: reviewer_to_add,
+      login: reviewer_to_add.login,
       review_rule_id: self.id,
       context: self.match_context
     )
 
     pull_request.save!
 
-    reviewer_to_add
+    reviewer_to_add.login
   end
 
   # List the possible reviewers according to this rule's configuration
   #
-  # @return [Array<String>] the list of possible reviewers for this rule
+  # @return [ReviewrList] the list of possible reviewers for this rule
   def possible_reviewers
     if self.reviewer.include?("/")
       org, team = self.reviewer.split("/", 2)
@@ -87,18 +87,18 @@ class ReviewRule < ApplicationRecord
         team: team,
         context: context
       )
-      result.data.organization.team.members.nodes.map(&:login)
+      ReviwerList.new(reviewers: result.data.organization.team.members.nodes)
     elsif self.reviewer.match?(/^\d+$/)
       team_members = github_client.team_members(self.reviewer)
-      team_members.map(&:login)
+      ReviewerList.new(reviewers: team_members.map(&:login))
     else
       # it's just a single user
-      Array(self.reviewer)
+      ReviewerList.new(reviewers: Array(self.reviewer))
     end
   end
 
   def possible_reviewer?(login)
-    possible_reviewers.include?(login)
+    possible_reviewers.find { |r| r.login == login }.present?
   end
 
   # @return [Boolean] true if the rule was previously applied, false otherwise
@@ -106,40 +106,31 @@ class ReviewRule < ApplicationRecord
     pr.reviewers.find_by(review_rule_id: self.id)
   end
 
-  # Build and filter commit authors and paused reviewers from possible reviewers
+  # Encapsulates choosing a reviewer according to this ReviewRule's options,
+  # including multiple layers of fallbacks.
   #
   # @param pull_request [PullRequest] the PullRequest object
-  # @return [Array<String>] the list of filtered reviewers
-  def filtered_reviewers(pull_request)
-    possible_reviewers - (pull_request.commit_authors | User.paused_logins)
-  end
+  # @param extra_excludes [Array<String>] an Array of extra logins to exclude
+  #   from the initial search
+  # @return [#login]
+  def choose_reviewer(pull_request:, extra_excludes: [])
+    reviewer_list = possible_reviewers
 
-  # @param pull_request [PullRequest] the PullRequest object
-  # @return [String] the login of the reviewer that was chosen
-  def choose_reviewer(pull_request)
-    all_possible_reviewers = possible_reviewers
+    commit_authors = pull_request.commit_authors
 
-    reviewer_to_add = filtered_reviewers(pull_request).shuffle.find do |r|
-      !pull_request.pending_review_logins.include?(r)
-    end
+    excludes =
+      pull_request.pending_review_logins |
+      commit_authors |
+      User.paused_logins |
+      extra_excludes
 
-    if reviewer_to_add.nil?
-      # If we failed to choose a reviewer, that means that all of the possible
-      # reviewers were already on the list or were commit authors.
-      # Priority for adding reviews:
-      #    1. Any potential reviewer that is not a commit author or current
-      #       reviewer
-      #    2. Any potential reviewer that is not a current reviewer
-      #    3. Any potential reviewer
-      new_reviewers = all_possible_reviewers - filtered_reviewers(pull_request)
-      reviewer_to_add = new_reviewers.shuffle.find do |r|
-        !pull_request.pending_review_logins.include?(r)
-      end
-
-      reviewer_to_add ||= all_possible_reviewers.sample
-    end
-
-    reviewer_to_add
+    reviewer_list.choose_reviewer(
+      exclude_list: excludes
+    ) ||
+      reviewer_list.choose_reviewer(
+        exclude_list: pull_request.pending_review_logins
+      ) ||
+      reviewer_list.choose_reviewer
   end
 
   def self.apply(pr, pull_request_hash)

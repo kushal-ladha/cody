@@ -28,6 +28,9 @@ module Graphql
             members(first: 100) {
               nodes {
                 login
+                status {
+                  indicatesLimitedAvailability
+                }
               }
             }
           }

@@ -21,7 +21,7 @@ RSpec.describe ReviewRule, type: :model do
       end
 
       it "returns the list of team member logins" do
-        expect(rule.possible_reviewers).to contain_exactly(*expected_team_members)
+        expect(rule.possible_reviewers.map(&:login)).to contain_exactly(*expected_team_members)
       end
     end
 
@@ -29,22 +29,8 @@ RSpec.describe ReviewRule, type: :model do
       let(:reviewer) { "aergonaut" }
 
       it "just returns the username" do
-        expect(rule.possible_reviewers).to eq(["aergonaut"])
+        expect(rule.possible_reviewers.map(&:login)).to eq(["aergonaut"])
       end
-    end
-  end
-
-  describe "#filtered_reviewers" do
-    let(:pull_request) { Struct.new(:commit_authors).new(["iceman"]) }
-
-    before do
-      allow(User).to receive(:paused_logins).and_return(["maverick"])
-
-      allow_any_instance_of(ReviewRule).to receive(:possible_reviewers).and_return(["iceman", "maverick", "viper"])
-    end
-
-    it "removes authors and paused reviewers" do
-      expect(ReviewRule.new.filtered_reviewers(pull_request)).to eq ["viper"]
     end
   end
 
@@ -54,7 +40,8 @@ RSpec.describe ReviewRule, type: :model do
     let(:rule) { create :review_rule, reviewer: reviewer }
 
     before do
-      expect(rule).to receive(:choose_reviewer).and_return(reviewer)
+      expect(pr).to receive(:commit_authors).and_return([])
+      expect(rule).to receive(:possible_reviewers).and_return(instance_double(ReviewerList, choose_reviewer: ReviewerList::NilStatusUser.new(login: reviewer)))
     end
 
     let(:reviewer) { "BrentW" }

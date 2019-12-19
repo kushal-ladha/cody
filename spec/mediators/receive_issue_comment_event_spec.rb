@@ -213,25 +213,5 @@ RSpec.describe ReceiveIssueCommentEvent do
         expect { job.perform(payload) }.to_not change { foo_reviewer.reload.login }
       end
     end
-
-    context "when other users are paused" do
-      let(:acceptable_reviewer) { "1234" }
-      let(:expected_team_members) { %w(iceman goose) }
-
-      before do
-        allow(User).to receive(:paused_logins).and_return(%w[iceman goose])
-
-        stub_request(:get, %r{https?://api.github.com/teams/1234/members}).to_return(
-          status: 200,
-          headers: { 'Content-Type' => 'application/json' },
-          body: JSON.dump(json_fixture("team_members", members: expected_team_members))
-        )
-      end
-
-      it "does not replace aergonaut" do
-        foo_reviewer = pr.reviewers.find_by(review_rule_id: rule.id)
-        expect { job.perform(payload) }.to_not change { foo_reviewer.reload.login }
-      end
-    end
   end
 end
