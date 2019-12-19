@@ -45,6 +45,10 @@ RSpec.describe ReviewerList do
       def initialize(indicatesLimitedAvailability:)
         @indicatesLimitedAvailability = indicatesLimitedAvailability
       end
+
+      def indicates_limited_availability?
+        @indicatesLimitedAvailability
+      end
     end
   end
 end

@@ -18,7 +18,7 @@ class ReviewerList
 
   def each(&block)
     @reviewers
-      .select { |reviewer| !reviewer.status&.indicatesLimitedAvailability }
+      .select { |reviewer| !reviewer.status&.indicates_limited_availability? }
       .each(&block)
   end
 
