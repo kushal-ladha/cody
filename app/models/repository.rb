@@ -91,7 +91,7 @@ class Repository < ApplicationRecord
 
   def refresh_rules
     teams = github_client.org_teams(self.owner)
-    self.config[:rules].each do |rule_config|
+    self.config[:rules]&.each do |rule_config|
       refresh_rule(rule_config, teams)
     end
   end
