@@ -50,11 +50,11 @@ class WebhooksController < ApplicationController
         body.dig("installation", "id")
       )
     when "pull_request"
-      pull_request
-      return
+      if %w(opened synchronize closed).include?(body["action"])
+        ReceivePullRequestEvent.perform_async(body)
+      end
     when "issue_comment"
-      issue_comment
-      return
+      ReceiveIssueCommentEvent.perform_async(body)
     when "installation"
       ReceiveInstallationRepositoriesEvent.perform_async(
         body["repositories"],
