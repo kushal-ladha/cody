@@ -4,67 +4,59 @@ class WebhooksController < ApplicationController
   protect_from_forgery with: :null_session
 
   def pull_request
-    body = JSON.parse(request.body.read)
-
-    if %w(opened synchronize closed).include?(body["action"])
-      ReceivePullRequestEvent.perform_async(body)
+    if %w(opened synchronize closed).include?(params[:webhook][:action])
+      ReceivePullRequestEvent.perform_async(params[:webhook])
     end
 
     head :accepted
   end
 
   def issue_comment
-    body = JSON.parse(request.body.read)
-
-    if body.key?("zen")
+    if params[:webhook][:zen]
       head :ok
       return
     end
 
-    ReceiveIssueCommentEvent.perform_async(body)
+    ReceiveIssueCommentEvent.perform_async(params[:webhook])
     head :accepted
   end
 
   # The entry point for webhooks from the GitHub app
   def integration
-    body = JSON.parse(request.body.read)
-
-    if body.key?("zen")
+    if params[:webhook][:zen]
       head :ok
       return
     end
 
-    request.body.rewind
-
     event = request.headers["X-GitHub-Event"]
     case event
     when "push"
-      ref = body["ref"]
+      ref = params[:webhook][:ref]
       unless ref == "refs/heads/master"
         head :ok
         return
       end
 
       ReceivePushEvent.perform_async(
-        body["repository"]["full_name"],
-        body.dig("installation", "id")
+        params[:webhook][:repository][:full_name],
+        params[:webhook].dig("installation", "id")
       )
     when "pull_request"
-      if %w(opened synchronize closed).include?(body["action"])
-        ReceivePullRequestEvent.perform_async(body)
+      if %w(opened synchronize closed).include?(params[:webhook][:action])
+        ReceivePullRequestEvent.perform_async(params[:webhook])
       end
     when "issue_comment"
-      ReceiveIssueCommentEvent.perform_async(body)
+      ReceiveIssueCommentEvent.perform_async(params[:webhook])
     when "installation"
       ReceiveInstallationRepositoriesEvent.perform_async(
-        body["repositories"],
-        body.dig("installation", "id")
+        params[:webhook][:repositories],
+        params[:webhook].dig("installation", "id")
       )
     when "installation_repositories"
       ReceiveInstallationRepositoriesEvent
         .perform_async(
-          body["repositories_added"],
-          body.dig("installation", "id")
+          params[:webhook][:repositories_added],
+          params[:webhook].dig("installation", "id")
         )
     end
 

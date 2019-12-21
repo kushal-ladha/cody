@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe WebhooksController, type: :controller do
+RSpec.describe WebhooksController, type: :request do
   shared_examples "pull_request event handler" do
     let(:payload) do
       from_fixture = json_fixture("pull_request")
@@ -45,63 +45,47 @@ RSpec.describe WebhooksController, type: :controller do
 
   describe "POST pull_request" do
     it_behaves_like "pull_request event handler" do
-      subject { post :pull_request, body: JSON.dump(payload) }
+      subject { post "/webhooks/pull_request", params: JSON.dump(payload), headers: { "CONTENT_TYPE" => "application/json" } }
     end
   end
 
   describe "POST issue_comment" do
     it_behaves_like "issue_comment event handler" do
-      subject { post :issue_comment, body: JSON.dump(payload) }
+      subject { post "/webhooks/issue_comment", params: JSON.dump(payload), headers: { "CONTENT_TYPE" => "application/json" } }
     end
   end
 
   describe "POST integration" do
     context "when event is pull_request" do
       it_behaves_like "pull_request event handler" do
-        before do
-          request.headers["X-GitHub-Event"] = "pull_request"
-        end
-
-        subject { post :integration, body: JSON.dump(payload) }
+        subject { post "/webhooks/integration", params: JSON.dump(payload), headers: { "CONTENT_TYPE" => "application/json", "X-GitHub-Event" => "pull_request" } }
       end
     end
 
     context "when event is issue_comment" do
       it_behaves_like "issue_comment event handler" do
-        before do
-          request.headers["X-GitHub-Event"] = "issue_comment"
-        end
-
-        subject { post :integration, body: JSON.dump(payload) }
+        subject { post "/webhooks/integration", params: JSON.dump(payload), headers: { "CONTENT_TYPE" => "application/json", "X-GitHub-Event" => "issue_comment" } }
       end
     end
 
     context "when event is installation_repositories" do
       let(:payload) { json_fixture("installation_repositories") }
-      before do
-        request.headers["X-GitHub-Event"] = "installation_repositories"
-      end
-
       it "creates a new ReceiveInstallationRepositoriesEvent job" do
-        expect { post :integration, body: JSON.dump(payload) }.to change(ReceiveInstallationRepositoriesEvent.jobs, :size).by(1)
+        expect { post "/webhooks/integration", params: JSON.dump(payload), headers: { "CONTENT_TYPE" => "application/json", "X-GitHub-Event" => "installation_repositories" } }.to change(ReceiveInstallationRepositoriesEvent.jobs, :size).by(1)
       end
 
       it "passes in the array of repositories from the event payload" do
         expect(ReceiveInstallationRepositoriesEvent).to receive(:perform_async).with(payload["repositories_added"], payload["installation"]["id"])
-        post :integration, body: JSON.dump(payload)
+        post "/webhooks/integration", params: JSON.dump(payload), headers: { "CONTENT_TYPE" => "application/json", "X-GitHub-Event" => "installation_repositories" }
       end
     end
 
     context "when the event is push" do
-      before do
-        request.headers["X-GitHub-Event"] = "push"
-      end
-
       let(:payload) do
         json_fixture("push", ref: ref)
       end
 
-      subject { post :integration, body: JSON.dump(payload) }
+      subject { post "/webhooks/integration", params: JSON.dump(payload), headers: { "CONTENT_TYPE" => "application/json", "X-GitHub-Event" => "push" } }
 
       context "when the pushed branch is master" do
         let(:ref) { "refs/heads/master" }
