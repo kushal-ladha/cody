@@ -5,7 +5,7 @@ class WebhooksController < ApplicationController
 
   def pull_request
     if %w(opened synchronize closed).include?(params[:webhook][:action])
-      ReceivePullRequestEvent.perform_async(params[:webhook])
+      ReceivePullRequestEvent.perform_async(params[:webhook].permit!.to_h)
     end
 
     head :accepted
@@ -17,7 +17,7 @@ class WebhooksController < ApplicationController
       return
     end
 
-    ReceiveIssueCommentEvent.perform_async(params[:webhook])
+    ReceiveIssueCommentEvent.perform_async(params[:webhook].permit!.to_h)
     head :accepted
   end
 
@@ -43,19 +43,19 @@ class WebhooksController < ApplicationController
       )
     when "pull_request"
       if %w(opened synchronize closed).include?(params[:webhook][:action])
-        ReceivePullRequestEvent.perform_async(params[:webhook])
+        ReceivePullRequestEvent.perform_async(params[:webhook].permit!.to_h)
       end
     when "issue_comment"
-      ReceiveIssueCommentEvent.perform_async(params[:webhook])
+      ReceiveIssueCommentEvent.perform_async(params[:webhook].permit!.to_h)
     when "installation"
       ReceiveInstallationRepositoriesEvent.perform_async(
-        params[:webhook][:repositories],
+        params[:webhook].permit!.to_h[:repositories],
         params[:webhook].dig("installation", "id")
       )
     when "installation_repositories"
       ReceiveInstallationRepositoriesEvent
         .perform_async(
-          params[:webhook][:repositories_added],
+          params[:webhook].permit!.to_h[:repositories_added],
           params[:webhook].dig("installation", "id")
         )
     end
