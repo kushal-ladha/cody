@@ -16,7 +16,7 @@ module Graphql
     end
 
     Schema = ::GraphQL::Client.load_schema(
-      Rails.root.join("github_schema.json").to_s
+      Oj.load_file(Rails.root.join("github_schema.json").to_s)
     )
 
     Client = ::GraphQL::Client.new(schema: Schema, execute: HTTP)
