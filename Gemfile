@@ -101,6 +101,9 @@ group :development do
   gem 'rubocop-rails'
 
   gem 'letter_opener'
+
+  gem 'derailed_benchmarks'
+  gem 'stackprof'
 end
 
 group :test do
