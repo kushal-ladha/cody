@@ -142,9 +142,6 @@ GEM
     graphiql-rails (1.4.8)
       rails
     graphql (1.9.17)
-    graphql-client (0.16.0)
-      activesupport (>= 3.0)
-      graphql (~> 1.8)
     haml (5.1.2)
       temple (>= 0.8.0)
       tilt
@@ -457,7 +454,6 @@ DEPENDENCIES
   font-awesome-sass
   graphiql-rails
   graphql
-  graphql-client
   haml-rails
   jbuilder (~> 2.9)
   jquery-rails

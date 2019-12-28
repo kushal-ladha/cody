@@ -18,7 +18,7 @@ class ReviewerList
 
   def each(&block)
     @reviewers
-      .select { |reviewer| !reviewer.status&.indicates_limited_availability? }
+      .select { |reviewer| user_available?(reviewer) }
       .each(&block)
   end
 
@@ -26,6 +26,20 @@ class ReviewerList
     each
       .reject { |r| exclude_list.include?(r.login) }
       .sample
+  end
+
+  private
+
+  def user_available?(user)
+    if (status = user.status)
+      if status.respond_to?(:indicates_limited_availability?)
+        !status.indicates_limited_availability?
+      else
+        !status.indicatesLimitedAvailability
+      end
+    else
+      true
+    end
   end
 
   class NilStatusUser

@@ -134,8 +134,6 @@ gem 'scout_apm'
 
 gem 'barnes'
 
-gem 'graphql-client'
-
 gem 'slack-ruby-client'
 
 gem 'bootsnap', require: false
