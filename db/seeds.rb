@@ -6,6 +6,6 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
-PullRequest.create! repository: "aergonaut/testrepo", number: 12345, status: "pending_review"
-
-ReviewRuleAlways.create! name: "Second Level Review", short_code: "second_level", reviewer: "123", repository: "aergonaut/testrepo"
+installation = Installation.create!(github_id: 1234)
+repo = installation.repositories.create!(owner: "aergonaut", name: "testrepo")
+repo.pull_requests.create!(number: 1234, status: PullRequest::STATUS_PENDING_REVIEW)
