@@ -101,5 +101,17 @@ RSpec.describe WebhooksController, type: :request do
         end
       end
     end
+
+    context "when the event is pull_request_review" do
+      let(:payload) do
+        json_fixture("pull_request_review")
+      end
+
+      subject { post "/webhooks/integration", params: JSON.dump(payload), headers: { "content-type" => "application/json", "X-GitHub-Event" => "pull_request_review" } }
+
+      it "creates a ReceivePullRequestReviewEvent job" do
+        expect { subject }.to change(ReceivePullRequestReviewEvent.jobs, :size).by(1)
+      end
+    end
   end
 end

@@ -45,6 +45,10 @@ class WebhooksController < ApplicationController
       if %w(opened synchronize closed).include?(params[:webhook][:action])
         ReceivePullRequestEvent.perform_async(params[:webhook].permit!.to_h)
       end
+    when "pull_request_review"
+      ReceivePullRequestReviewEvent.perform_async(
+        ReceivePullRequestReviewEvent.permit(params).to_h
+      )
     when "issue_comment"
       ReceiveIssueCommentEvent.perform_async(params[:webhook].permit!.to_h)
     when "installation"
