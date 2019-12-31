@@ -35,8 +35,8 @@ class ReceivePullRequestReviewEvent
       username: request[:sender][:login]
     )
     Raven.tags_context(
-      event: "pull_request",
-      repo: request[:repository][:full_name]
+      event: "pull_request_review",
+      repo: request[:repository][:full_name],
     )
 
     if (installation_id = request.dig("installation", "id"))
@@ -71,6 +71,7 @@ class ReceivePullRequestReviewEvent
           name: request[:repository][:name]
         }
       )
+    return unless pr.present?
 
     author = request[:sender][:login]
     review = pr.reviewers.pending_review.find_by(login: author)
