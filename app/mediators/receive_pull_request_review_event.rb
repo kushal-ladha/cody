@@ -80,7 +80,7 @@ class ReceivePullRequestReviewEvent
     review.approve!
 
     if pr.reviewers.pending_review.empty?
-      pr.status = "approve"
+      pr.status = PullRequest::STATUS_APPROVED
       pr.save!
       pr.update_status
     end
