@@ -123,4 +123,6 @@ Rails.application.configure do
     :authentication => :plain,
     :enable_starttls_auto => true
   }
+
+  config.middleware.use Rack::CanonicalHost, ENV["CODY_HOST"] if ENV["CODY_HOST"]
 end
