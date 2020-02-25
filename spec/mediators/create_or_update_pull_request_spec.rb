@@ -33,11 +33,13 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
       end
 
       it "links the PR to the parent" do
+        pending "PR linking is disabled until the feature can be redesigned"
         CreateOrUpdatePullRequest.new.perform(payload)
         expect(PullRequest.find_by(number: 9876).parent_pull_request).to eq(parent_pr)
       end
 
       it "posts the commit status" do
+        pending "PR linking is disabled until the feature can be redesigned"
         CreateOrUpdatePullRequest.new.perform(payload)
         expect(WebMock).to have_requested(
           :post,

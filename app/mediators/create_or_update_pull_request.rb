@@ -20,10 +20,10 @@ class CreateOrUpdatePullRequest
     github = github_client
 
     if body =~ PullRequest::REVIEW_LINK_REGEX
-      if pr.link_by_number(Regexp.last_match(1))
-        pr.update_status
-        return
-      end
+      # if pr.link_by_number(Regexp.last_match(1))
+      #   pr.update_status
+      #   return
+      # end
     elsif pr.parent_pull_request.present?
       pr.parent_pull_request = nil
       pr.save!
