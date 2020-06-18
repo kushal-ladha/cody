@@ -48,6 +48,7 @@ RSpec.describe ReceivePullRequestEvent do
         body: JSON.dump(json_fixture("pr"))
       )
       stub_request(:get, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/collaborators/[A-Za-z0-9_-]+}).to_return(status: 204)
+      stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
     end
 
     context "when the action is \"opened\"" do

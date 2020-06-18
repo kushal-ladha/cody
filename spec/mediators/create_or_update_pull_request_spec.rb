@@ -57,6 +57,7 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
         before do
           stub_request(:patch, "https://api.github.com/repos/baxterthehacker/public-repo/issues/9876")
             .to_return(status: 200, body: "", headers: {})
+          stub_request(:post, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
         end
 
         it "removes the parent PR association" do
@@ -102,6 +103,7 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
           .to_return(status: 200, body: "", headers: {})
         stub_request(:patch, "https://api.github.com/repos/baxterthehacker/public-repo/issues/9876")
           .to_return(status: 200, body: "", headers: {})
+        stub_request(:post, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
       end
 
       it "removes peer reviewers who were deleted manually but leaves generated reviewers" do

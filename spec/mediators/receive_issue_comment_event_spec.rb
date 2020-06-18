@@ -30,6 +30,7 @@ RSpec.describe ReceiveIssueCommentEvent do
         headers: { "Content-Type" => "application/json" }
       )
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/issues/\d+})
+      stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
     end
 
     subject { job.perform(payload) }
@@ -130,6 +131,7 @@ RSpec.describe ReceiveIssueCommentEvent do
       )
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+})
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/issues/\d+})
+      stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
 
       FactoryBot.create :reviewer, review_rule: rule, pull_request: pr, login: "aergonaut"
     end
@@ -190,6 +192,7 @@ RSpec.describe ReceiveIssueCommentEvent do
       )
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+})
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/issues/\d+})
+      stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
 
       allow_any_instance_of(PullRequest).to receive(:commit_authors).and_return(["maverick"])
 

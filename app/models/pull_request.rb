@@ -72,6 +72,11 @@ class PullRequest < ApplicationRecord
       self.number,
       assignees: self.pending_review_logins
     )
+    github_client.request_pull_request_review(
+      self.repository.full_name,
+      self.number,
+      reviewers: self.pending_review_logins
+    )
   end
 
   def update_status(message = nil)
