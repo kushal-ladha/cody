@@ -156,6 +156,7 @@ class ReceiveIssueCommentEvent
     pr = find_pull_request(@payload)
     return false unless pr
 
+    removed_reviewers = []
     directives.scan(DIRECTIVE_REGEX).each do |code, login|
       reviewer = pr.generated_reviewers
         .joins(:review_rule)
@@ -166,8 +167,18 @@ class ReceiveIssueCommentEvent
       next unless reviewer.review_rule.possible_reviewer?(login)
 
       reviewer.update!(login: login)
+      if reviewer.saved_change_to_login?
+        removed_reviewers << reviewer.login_before_last_save
+      end
     end
 
+    unless removed_reviewers.empty?
+      github_client.delete_pull_request_review_request(
+        pr.repository.full_name,
+        pr.number,
+        reviewers: removed_reviewers
+      )
+    end
     pr.reload
     pr.update_body
     pr.assign_reviewers

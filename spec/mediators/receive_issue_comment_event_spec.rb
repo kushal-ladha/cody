@@ -132,6 +132,11 @@ RSpec.describe ReceiveIssueCommentEvent do
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+})
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/issues/\d+})
       stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
+      stub_request(:delete, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers}).
+        with(
+          body: "{\"reviewers\":[\"aergonaut\"]}"
+        ).
+        to_return(status: 200, body: "", headers: {})
 
       FactoryBot.create :reviewer, review_rule: rule, pull_request: pr, login: "aergonaut"
     end
