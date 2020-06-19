@@ -129,7 +129,7 @@ RSpec.describe ReceiveIssueCommentEvent do
         status: 200,
         headers: { "Content-Type" => "application/json" }
       )
-      stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+})
+      stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+$})
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/issues/\d+})
       stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
       stub_request(:delete, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers}).
@@ -137,6 +137,13 @@ RSpec.describe ReceiveIssueCommentEvent do
           body: "{\"reviewers\":[\"aergonaut\"]}"
         ).
         to_return(status: 200, body: "", headers: {})
+      stub_request(:get, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers").
+        to_return(
+          status: 200,
+          body: JSON.dump({ "users" => [] }),
+          headers: { "Content-Type" => "application/json" }
+        )
+      stub_request(:delete, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
 
       FactoryBot.create :reviewer, review_rule: rule, pull_request: pr, login: "aergonaut"
     end
@@ -198,6 +205,10 @@ RSpec.describe ReceiveIssueCommentEvent do
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+})
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/issues/\d+})
       stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
+      stub_request(:delete, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers}).
+        with(
+          body: JSON.dump({ reviewers: ["aergonaut"] })
+        )
 
       allow_any_instance_of(PullRequest).to receive(:commit_authors).and_return(["maverick"])
 

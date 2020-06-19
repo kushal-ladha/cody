@@ -139,5 +139,18 @@ class CreateOrUpdatePullRequest
 
     pr.update_status
     pr.assign_reviewers
+
+    current_requested_reviews =
+      github_client.pull_request_review_requests(
+        pr.repository.full_name,
+        pr.number
+      ).users.map(&:login)
+
+    reviews_to_remove = current_requested_reviews - pr.pending_review_logins
+    github_client.delete_pull_request_review_request(
+      pr.repository.full_name,
+      pr.number,
+      reviewers: reviews_to_remove
+    )
   end
 end

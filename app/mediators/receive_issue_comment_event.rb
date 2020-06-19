@@ -210,6 +210,11 @@ class ReceiveIssueCommentEvent
     pr.reload
     pr.update_body
     pr.assign_reviewers
+    github_client.delete_pull_request_review_request(
+      pr.repository.full_name,
+      pr.number,
+      reviewers: [commenter]
+    )
   end
 
   private

@@ -42,13 +42,20 @@ RSpec.describe ReceivePullRequestEvent do
     before do
       stub_request(:post, %r(https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/statuses/[0-9abcdef]{40}))
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/issues/\d+})
-      stub_request(:get, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+}).to_return(
+      stub_request(:get, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+$}).to_return(
         status: 200,
         headers: { 'Content-Type' => 'application/json' },
         body: JSON.dump(json_fixture("pr"))
       )
       stub_request(:get, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/collaborators/[A-Za-z0-9_-]+}).to_return(status: 204)
       stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
+      stub_request(:get, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers}).
+        to_return(
+          status: 200,
+          body: JSON.dump({ "users" => [] }),
+          headers: { "Content-Type" => "application/json" }
+        )
+      stub_request(:delete, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
     end
 
     context "when the action is \"opened\"" do

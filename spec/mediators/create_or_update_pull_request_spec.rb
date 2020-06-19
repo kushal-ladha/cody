@@ -16,14 +16,14 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
 
       before do
         pr_9876 = json_fixture("pr", number: 9876, head_sha: head_sha)
-        stub_request(:get, %r{https://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/9876}).to_return(
+        stub_request(:get, %r{https://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/9876$}).to_return(
           status: 200,
           headers: { 'Content-Type' => 'application/json' },
           body: pr_9876.to_json
         )
 
         pr_1234 = json_fixture("pr", number: 1234)
-        stub_request(:get, %r{https://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/1234}).to_return(
+        stub_request(:get, %r{https://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/1234$}).to_return(
           status: 200,
           headers: { 'Content-Type' => 'application/json' },
           body: pr_1234.to_json
@@ -58,6 +58,13 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
           stub_request(:patch, "https://api.github.com/repos/baxterthehacker/public-repo/issues/9876")
             .to_return(status: 200, body: "", headers: {})
           stub_request(:post, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
+          stub_request(:get, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers").
+            to_return(
+              status: 200,
+              body: JSON.dump({ "users" => [] }),
+              headers: { "Content-Type" => "application/json" }
+            )
+          stub_request(:delete, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
         end
 
         it "removes the parent PR association" do
@@ -80,10 +87,27 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
       let(:r2_name) { SecureRandom.hex }
       let!(:r2) { FactoryBot.create :reviewer, login: r2_name, review_rule: nil, pull_request: pull_request }
 
-      let!(:r3) { FactoryBot.create :reviewer, review_rule: nil, pull_request: pull_request }
+      let(:r3_name) { SecureRandom.hex }
+      let!(:r3) { FactoryBot.create :reviewer, login: r3_name, review_rule: nil, pull_request: pull_request }
 
       let!(:body) do
         "- [ ] @#{r1_name}\\n- [ ] @#{r2_name}"
+      end
+
+      let(:previous_reviewers) do
+        [
+          r1_name,
+          r2_name,
+          r3_name
+        ]
+      end
+
+      let(:expected_reviewers) do
+        [
+          r1_name,
+          r2_name,
+          *gen_reviewers.map(&:login)
+        ]
       end
 
       before do
@@ -104,15 +128,20 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
         stub_request(:patch, "https://api.github.com/repos/baxterthehacker/public-repo/issues/9876")
           .to_return(status: 200, body: "", headers: {})
         stub_request(:post, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
+        stub_request(:get, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers").
+          to_return(
+            status: 200,
+            body: JSON.dump({ "users" => previous_reviewers.map { |x| { "login" => x } } }),
+            headers: { "Content-Type" => "application/json" }
+          )
+        stub_request(:delete, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers").
+          with(
+            body: JSON.dump({ "reviewers" => [r3_name] })
+          )
       end
 
       it "removes peer reviewers who were deleted manually but leaves generated reviewers" do
         CreateOrUpdatePullRequest.new.perform(payload)
-        expected_reviewers = [
-          r1_name,
-          r2_name,
-          *gen_reviewers.map(&:login)
-        ]
         expect(pull_request.reviewers.map(&:login)).to contain_exactly(*expected_reviewers)
       end
     end
