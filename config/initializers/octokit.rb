@@ -1,4 +1,4 @@
-stack = Faraday::RackBuilder.new do |builder|
+stack = Faraday::RackBuilder.new { |builder|
   builder.response :logger, Rails.logger, headers: false do |logger|
     logger.filter(/(Authorization:\s*).*$/, '\1[REDACTED]')
   end
@@ -7,5 +7,5 @@ stack = Faraday::RackBuilder.new do |builder|
   builder.use Octokit::Response::FeedParser
   builder.use Faraday::HttpCache, store: Rails.cache, logger: Rails.logger, shared_cache: false, serializer: Marshal
   builder.adapter Faraday.default_adapter
-end
+}
 Octokit.middleware = stack

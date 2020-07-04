@@ -8,7 +8,7 @@ class CreateOrUpdatePullRequest
   # pull_request - A Hash-like object containing the PR data from the GitHub API
   # options - Hash of options
   #           :skip_review_rules - Boolean to apply review rules or skip
-  # rubocop:disable Metrics/LineLength, Metrics/CyclomaticComplexity, Metrics/MethodLength
+  # rubocop:disable Layout/LineLength, Metrics/CyclomaticComplexity, Metrics/MethodLength
   def perform(pull_request, options = {})
     body = pull_request["body"] || ""
     repository = Repository.find_by_full_name(pull_request["base"]["repo"]["full_name"])
@@ -19,7 +19,7 @@ class CreateOrUpdatePullRequest
 
     github = github_client
 
-    if body =~ PullRequest::REVIEW_LINK_REGEX
+    if PullRequest::REVIEW_LINK_REGEX.match?(body)
       # if pr.link_by_number(Regexp.last_match(1))
       #   pr.update_status
       #   return
@@ -59,9 +59,9 @@ class CreateOrUpdatePullRequest
 
     all_reviewers = pending_reviews + completed_reviews
 
-    reviewers_without_access = pending_reviews.reject do |reviewer|
+    reviewers_without_access = pending_reviews.reject { |reviewer|
       github.collaborator?(pr.repository.full_name, reviewer)
-    end
+    }
 
     unless reviewers_without_access.empty?
       verb_phrase =
@@ -76,7 +76,7 @@ class CreateOrUpdatePullRequest
       pr.update_status(
         format(
           PullRequest::STATUS_PLUM,
-          { reviewers: reviewers_phrase, verb_phrase: verb_phrase }
+          {reviewers: reviewers_phrase, verb_phrase: verb_phrase}
         )
       )
       return
@@ -153,4 +153,5 @@ class CreateOrUpdatePullRequest
       reviewers: reviews_to_remove
     )
   end
+  # rubocop:enable Layout/LineLength, Metrics/CyclomaticComplexity, Metrics/MethodLength
 end

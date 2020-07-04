@@ -21,6 +21,6 @@ class SendSlackMessage
       channel: channel,
       text: message,
       attachments: attachments
-     )
+    )
   end
 end

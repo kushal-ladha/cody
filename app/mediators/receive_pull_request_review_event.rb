@@ -36,7 +36,7 @@ class ReceivePullRequestReviewEvent
     )
     Raven.tags_context(
       event: "pull_request_review",
-      repo: request[:repository][:full_name],
+      repo: request[:repository][:full_name]
     )
 
     if (installation_id = request.dig("installation", "id"))

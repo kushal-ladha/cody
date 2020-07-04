@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe PullRequest, type: :model do
   it { is_expected.to belong_to :repository }
@@ -24,14 +24,14 @@ RSpec.describe PullRequest, type: :model do
     let(:pr_number) { pull_request_response_body["number"] }
     let(:repo_full_name) { pull_request_response_body["base"]["repo"]["full_name"] }
     let(:head_sha) { pull_request_response_body["head"]["sha"] }
-    let(:repository) { FactoryBot.create :repository, owner: repo_full_name.split("/", 2)[0], name: repo_full_name.split("/", 2)[1]}
+    let(:repository) { FactoryBot.create :repository, owner: repo_full_name.split("/", 2)[0], name: repo_full_name.split("/", 2)[1] }
 
     let(:pr) { build :pull_request, number: pr_number, repository: repository }
 
     before do
       stub_request(:get, "https://api.github.com/repos/#{repo_full_name}/pulls/#{pr_number}").to_return(
         status: 200,
-        headers: { 'Content-Type' => 'application/json' },
+        headers: {"Content-Type" => "application/json"},
         body: JSON.dump(json_fixture("pr"))
       )
       stub_request(:post, "https://api.github.com/repos/#{repo_full_name}/statuses/#{head_sha}")
@@ -48,14 +48,14 @@ RSpec.describe PullRequest, type: :model do
     let(:pr_number) { pull_request_response_body["number"] }
     let(:repo_full_name) { pull_request_response_body["base"]["repo"]["full_name"] }
     let(:head_sha) { pull_request_response_body["head"]["sha"] }
-    let(:repository) { FactoryBot.create :repository, owner: repo_full_name.split("/", 2)[0], name: repo_full_name.split("/", 2)[1]}
+    let(:repository) { FactoryBot.create :repository, owner: repo_full_name.split("/", 2)[0], name: repo_full_name.split("/", 2)[1] }
 
     let(:pr) { build :pull_request, number: pr_number, repository: repository }
 
     before do
       stub_request(:get, "https://api.github.com/repos/#{repo_full_name}/pulls/#{pr_number}").to_return(
         status: 200,
-        headers: { 'Content-Type' => 'application/json' },
+        headers: {"Content-Type" => "application/json"},
         body: JSON.dump(json_fixture("pr"))
       )
     end
@@ -71,18 +71,18 @@ RSpec.describe PullRequest, type: :model do
     before do
       stub_request(:get, %r{https?://api.github.com/repos/#{pr.repository.owner}/#{pr.repository.name}/pulls/#{pr.number}/commits}).to_return(
         status: 200,
-        headers: { 'Content-Type' => 'application/json' },
+        headers: {"Content-Type" => "application/json"},
         body: File.open(Rails.root.join("spec", "fixtures", "pull_request_commits.json"))
       )
     end
 
     subject { pr.commit_authors }
 
-    it 'returns array of commit authors' do
-      expect(subject).to contain_exactly('aergonaut')
+    it "returns array of commit authors" do
+      expect(subject).to contain_exactly("aergonaut")
     end
 
-    context 'without a repository' do
+    context "without a repository" do
       # legacy case
       it "returns []" do
         allow(pr).to receive(:repository).and_return(nil)
@@ -123,7 +123,7 @@ RSpec.describe PullRequest, type: :model do
       child_pr["number"] = child.number
       stub_request(:get, %r{https://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/#{child.number}}).to_return(
         status: 200,
-        headers: { 'Content-Type' => 'application/json' },
+        headers: {"Content-Type" => "application/json"},
         body: child_pr.to_json
       )
 
@@ -131,7 +131,7 @@ RSpec.describe PullRequest, type: :model do
       pr_1234["number"] = 1234
       stub_request(:get, %r{https://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/1234}).to_return(
         status: 200,
-        headers: { 'Content-Type' => 'application/json' },
+        headers: {"Content-Type" => "application/json"},
         body: pr_1234.to_json
       )
 
@@ -146,7 +146,7 @@ RSpec.describe PullRequest, type: :model do
       expect(child.reload.status).to eq(pr.status)
       expect(WebMock).to have_requested(:post, "https://api.github.com/repos/#{child.repository.owner}/#{child.repository.name}/statuses/#{child.head_sha}")
         .with { |request|
-          json_body = JSON.load(request.body)
+          json_body = JSON.parse(request.body)
           json_body["state"] == "success"
         }
     end

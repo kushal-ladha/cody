@@ -8,6 +8,6 @@ RSpec.describe ReceiveInstallationRepositoriesEvent, type: :model do
 
     expect(ReceivePushEvent).to receive(:perform_async).once
 
-    ReceiveInstallationRepositoriesEvent.new.perform([{"id"=>1, "name"=>"test-base", "full_name"=>"test-ops/test-base", "private"=>true}, {"id"=>2, "name"=>"test-app", "full_name"=>"test-ops/test-app", "private"=>true}, {"id"=>3, "name"=>"test-db", "full_name"=>"test-ops/test-db", "private"=>true}])
+    ReceiveInstallationRepositoriesEvent.new.perform([{"id" => 1, "name" => "test-base", "full_name" => "test-ops/test-base", "private" => true}, {"id" => 2, "name" => "test-app", "full_name" => "test-ops/test-app", "private" => true}, {"id" => 3, "name" => "test-db", "full_name" => "test-ops/test-db", "private" => true}])
   end
 end

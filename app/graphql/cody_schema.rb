@@ -15,7 +15,7 @@ class CodySchema < GraphQL::Schema
   end
 
   def self.object_from_id(id, query_ctx)
-    if object = GlobalID::Locator.locate_signed(id)
+    if (object = GlobalID::Locator.locate_signed(id))
       return object
     else
       decoded = Base64.urlsafe_decode64(id)

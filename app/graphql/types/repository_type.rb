@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Types::RepositoryType < Types::BaseObject
-
   implements GraphQL::Relay::Node.interface
 
   global_id_field :id
@@ -9,7 +8,7 @@ class Types::RepositoryType < Types::BaseObject
   field :owner, String, null: false
   field :name, String, null: false
 
-  field :pull_requests, Types::PullRequestType.connection_type, null: true, connection: true do # rubocop:disable Metrics/LineLength
+  field :pull_requests, Types::PullRequestType.connection_type, null: true, connection: true do # rubocop:disable Layout/LineLength
     description "This reapository's Pull Requests"
     argument :status, String, required: false
   end
@@ -27,7 +26,7 @@ class Types::RepositoryType < Types::BaseObject
     @object.pull_requests.find_by(number: args[:number])
   end
 
-  field :review_rules, Types::ReviewRuleType.connection_type, null: true, connection: true do # rubocop:disable Metrics/LineLength
+  field :review_rules, Types::ReviewRuleType.connection_type, null: true, connection: true do # rubocop:disable Layout/LineLength
     description "This repository's review rules"
   end
 

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ApplyReviewRules do
   let(:pull_request_hash) do
@@ -20,16 +20,16 @@ RSpec.describe ApplyReviewRules do
 
     expect(pr).to receive(:generated_reviewers).and_return(reviewers).at_least(:once)
 
-    stub_request(:get, "https://api.github.com/repos/#{pr.repository.owner}/#{pr.repository.name}/pulls/42").
-      to_return(status: 200, headers: { 'Content-Type' => 'application/json' }, body: JSON.dump(pull_request_hash))
+    stub_request(:get, "https://api.github.com/repos/#{pr.repository.owner}/#{pr.repository.name}/pulls/42")
+      .to_return(status: 200, headers: {"Content-Type" => "application/json"}, body: JSON.dump(pull_request_hash))
 
     # stub request to update PR body
-    stub_request(:patch, "https://api.github.com/repos/#{pr.repository.owner}/#{pr.repository.name}/pulls/42").
-      to_return(status: 200, body: "", headers: {})
+    stub_request(:patch, "https://api.github.com/repos/#{pr.repository.owner}/#{pr.repository.name}/pulls/42")
+      .to_return(status: 200, body: "", headers: {})
 
     # stub request to update PR labels
-    stub_request(:post, "https://api.github.com/repos/#{pr.repository.owner}/#{pr.repository.name}/issues/42/labels").
-      to_return(status: 200, body: "", headers: {})
+    stub_request(:post, "https://api.github.com/repos/#{pr.repository.owner}/#{pr.repository.name}/issues/42/labels")
+      .to_return(status: 200, body: "", headers: {})
   end
 
   context "when reviewers were generated" do
@@ -37,11 +37,11 @@ RSpec.describe ApplyReviewRules do
     let(:reviewers) { [reviewer] }
 
     let(:expected_addendum) do
-      <<-ADDENDUM.chomp
-## Generated Reviewers
+      <<~ADDENDUM.chomp
+        ## Generated Reviewers
 
-#{reviewer.addendum}
-ADDENDUM
+        #{reviewer.addendum}
+      ADDENDUM
     end
 
     it "updates the PR with the expected addendum" do

@@ -1,5 +1,5 @@
-require 'rails_helper'
-require 'securerandom'
+require "rails_helper"
+require "securerandom"
 
 RSpec.describe Reviewer, type: :model do
   describe "#addendum" do

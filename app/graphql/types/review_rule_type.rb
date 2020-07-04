@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Types::ReviewRuleType < Types::BaseObject
-
   implements GraphQL::Relay::Node.interface
 
   global_id_field :id

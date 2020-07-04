@@ -17,7 +17,7 @@ module FixtureHelper
         File.open(Rails.root.join("spec", "fixtures", "#{path}.json"))
       end
 
-    JSON.load(contents)
+    JSON.parse(contents)
   end
 
   # Reads an ERB fixture and returns the result

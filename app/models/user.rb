@@ -13,7 +13,7 @@ class User < ApplicationRecord
 
   attr_encrypted :access_key, key: :encryption_key
 
-  ALLOWED_JWT_ALGORITHMS = %w(HS256 RS256).freeze
+  ALLOWED_JWT_ALGORITHMS = %w[HS256 RS256].freeze
 
   USER_PREFERENCES = %i[
     send_new_reviews_summary
@@ -40,7 +40,7 @@ class User < ApplicationRecord
   end
 
   def assigned_reviews(status: nil)
-    relation = Reviewer.where(login: self.login)
+    relation = Reviewer.where(login: login)
     unless status.nil?
       relation = relation.where(status: status)
     end
@@ -48,11 +48,11 @@ class User < ApplicationRecord
   end
 
   def average_review_speed(since:)
-    AverageReviewSpeedQuery.new(login: self.login, since: since).run
+    AverageReviewSpeedQuery.new(login: login, since: since).run
   end
 
   def make_api_key
-    api_key = self.api_keys.build
+    api_key = api_keys.build
     api_key.password = SecureRandom.base58(24)
     api_key
   end
@@ -88,15 +88,16 @@ class User < ApplicationRecord
       when "RS256"
         # RS256 tokens are used by external clients authenticating with the
         # GraphQL API.
+        nil
       end
     rescue JWT::VerificationError
-      return
+      nil
     end
   end
 
   def make_access_token
     payload = {
-      sub: self.login,
+      sub: login,
       iat: Time.now.to_i
     }
     JWT.encode(payload, Rails.application.secrets.jwt_secret_key, "HS256")
@@ -106,6 +107,6 @@ class User < ApplicationRecord
 
   def encryption_key
     base64_key = Rails.application.secrets.attr_encrypted_key
-    base64_key.unpack("m").first
+    base64_key.unpack1("m")
   end
 end

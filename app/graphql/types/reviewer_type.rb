@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Types::ReviewerType < Types::BaseObject
-
   implements GraphQL::Relay::Node.interface
 
   global_id_field :id
@@ -17,7 +16,7 @@ class Types::ReviewerType < Types::BaseObject
     @object.review_rule
   end
 
-  VersionType = GraphQL::ObjectType.define do
+  VersionType = GraphQL::ObjectType.define {
     name "ReviewerVersion"
 
     field :login, function: Functions::HashField.new(
@@ -29,7 +28,7 @@ class Types::ReviewerType < Types::BaseObject
       "status",
       types[types.String]
     )
-  end
+  }
 
   field :versions, [VersionType, null: true], null: true
 

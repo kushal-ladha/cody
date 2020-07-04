@@ -7,7 +7,7 @@ class ReviewRule < ApplicationRecord
 
   validates :name, presence: true
   validates :reviewer, presence: true
-  validates :short_code, presence: true, uniqueness: { scope: :repository_id }
+  validates :short_code, presence: true, uniqueness: {scope: :repository_id}
 
   scope :active, -> { where(active: true) }
 
@@ -16,11 +16,11 @@ class ReviewRule < ApplicationRecord
   attr_accessor :match_context
 
   def reviewer_human_name
-    if self.reviewer.match?(/^\d+$/)
-      team = github_client.team(self.reviewer)
+    if reviewer.match?(/^\d+$/)
+      team = github_client.team(reviewer)
       "#{team.organization.login}/#{team.slug}"
     else
-      self.reviewer
+      reviewer
     end
   end
 
@@ -63,8 +63,8 @@ class ReviewRule < ApplicationRecord
 
     pull_request.reviewers.create!(
       login: reviewer_to_add.login,
-      review_rule_id: self.id,
-      context: self.match_context
+      review_rule_id: id,
+      context: match_context
     )
 
     pull_request.save!
@@ -76,24 +76,24 @@ class ReviewRule < ApplicationRecord
   #
   # @return [ReviewrList] the list of possible reviewers for this rule
   def possible_reviewers
-    if self.reviewer.include?("/")
-      org, team = self.reviewer.split("/", 2)
+    if reviewer.include?("/")
+      org, team = reviewer.split("/", 2)
       access_token = integration_access_token(
-        installation_id: self.repository.installation.github_id
+        installation_id: repository.installation.github_id
       )
-      context = { access_token: access_token }
+      context = {access_token: access_token}
       result = Graphql::Github.team_members(
         org: org,
         team: team,
         context: context
       )
       ReviewerList.new(reviewers: result.data.organization.team.members.nodes)
-    elsif self.reviewer.match?(/^\d+$/)
-      team_members = github_client.team_members(self.reviewer)
+    elsif reviewer.match?(/^\d+$/)
+      team_members = github_client.team_members(reviewer)
       ReviewerList.new(reviewers: team_members.map(&:login))
     else
       # it's just a single user
-      ReviewerList.new(reviewers: Array(self.reviewer))
+      ReviewerList.new(reviewers: Array(reviewer))
     end
   end
 
@@ -103,7 +103,7 @@ class ReviewRule < ApplicationRecord
 
   # @return [Boolean] true if the rule was previously applied, false otherwise
   def previously_applied?(pr)
-    pr.reviewers.find_by(review_rule_id: self.id)
+    pr.reviewers.find_by(review_rule_id: id)
   end
 
   # Encapsulates choosing a reviewer according to this ReviewRule's options,

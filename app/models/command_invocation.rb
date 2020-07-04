@@ -25,10 +25,8 @@ class CommandInvocation < ApplicationRecord
   # creation of the record in an exception handler so that exceptions can still
   # be raised and reported, but do not cause the program to stop.
   def self.record_invocation(attributes)
-    begin
-      self.create!(attributes)
-    rescue
-      Raven.capture_exception($ERROR_INFO)
-    end
+    create!(attributes)
+  rescue
+    Raven.capture_exception($ERROR_INFO)
   end
 end

@@ -13,6 +13,6 @@ class ReviewRuleResult
   end
 
   def failure?
-    self.reviewer.nil?
+    reviewer.nil?
   end
 end

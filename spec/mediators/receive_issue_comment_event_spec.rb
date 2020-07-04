@@ -1,6 +1,4 @@
-# encoding: utf-8
-
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ReceiveIssueCommentEvent do
   let!(:repo) { FactoryBot.create :repository }
@@ -24,10 +22,10 @@ RSpec.describe ReceiveIssueCommentEvent do
   describe "#perform" do
     before do
       stub_request(:post, %r(https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/statuses/[0-9abcdef]{40}))
-      stub_request(:get, %r(https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+)).to_return(
+      stub_request(:get, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+}).to_return(
         body: JSON.dump(pr_response_body),
         status: 200,
-        headers: { "Content-Type" => "application/json" }
+        headers: {"Content-Type" => "application/json"}
       )
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/issues/\d+})
       stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
@@ -124,24 +122,24 @@ RSpec.describe ReceiveIssueCommentEvent do
     let(:rule) { FactoryBot.create :review_rule, short_code: "foo", reviewer: acceptable_reviewer }
 
     before do
-      stub_request(:get, %r(https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+)).to_return(
+      stub_request(:get, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+}).to_return(
         body: JSON.dump(json_fixture("pr")),
         status: 200,
-        headers: { "Content-Type" => "application/json" }
+        headers: {"Content-Type" => "application/json"}
       )
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+$})
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/issues/\d+})
       stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
-      stub_request(:delete, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers}).
-        with(
+      stub_request(:delete, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
+        .with(
           body: "{\"reviewers\":[\"aergonaut\"]}"
-        ).
-        to_return(status: 200, body: "", headers: {})
-      stub_request(:get, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers").
-        to_return(
+        )
+        .to_return(status: 200, body: "", headers: {})
+      stub_request(:get, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
+        .to_return(
           status: 200,
-          body: JSON.dump({ "users" => [] }),
-          headers: { "Content-Type" => "application/json" }
+          body: JSON.dump({"users" => []}),
+          headers: {"Content-Type" => "application/json"}
         )
       stub_request(:delete, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
 
@@ -197,17 +195,17 @@ RSpec.describe ReceiveIssueCommentEvent do
     let(:rule) { FactoryBot.create :review_rule, short_code: "foo", reviewer: acceptable_reviewer }
 
     before do
-      stub_request(:get, %r(https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+)).to_return(
+      stub_request(:get, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+}).to_return(
         body: JSON.dump(json_fixture("pr")),
         status: 200,
-        headers: { "Content-Type" => "application/json" }
+        headers: {"Content-Type" => "application/json"}
       )
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+})
       stub_request(:patch, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/issues/\d+})
       stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
-      stub_request(:delete, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers}).
-        with(
-          body: JSON.dump({ reviewers: ["aergonaut"] })
+      stub_request(:delete, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
+        .with(
+          body: JSON.dump({reviewers: ["aergonaut"]})
         )
 
       allow_any_instance_of(PullRequest).to receive(:commit_authors).and_return(["maverick"])

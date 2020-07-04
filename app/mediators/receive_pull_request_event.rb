@@ -46,13 +46,13 @@ class ReceivePullRequestEvent
     PaperTrail.request(whodunnit: @payload["sender"]["login"]) do
       case @payload["action"]
       when "opened"
-        self.on_opened
+        on_opened
       when "synchronize"
-        self.on_synchronize
+        on_synchronize
       when "closed"
-        self.on_closed
+        on_closed
       when "unlabeled"
-        self.on_unlabeled
+        on_unlabeled
       end
     end
 

@@ -1,3 +1,4 @@
+# rubocop:disable Naming/VariableName
 require "rails_helper"
 
 RSpec.describe ReviewerList do
@@ -52,3 +53,4 @@ RSpec.describe ReviewerList do
     end
   end
 end
+# rubocop:enable Naming/VariableName

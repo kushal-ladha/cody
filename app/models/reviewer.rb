@@ -4,8 +4,8 @@ class Reviewer < ApplicationRecord
   belongs_to :review_rule, required: false
   belongs_to :pull_request
 
-  STATUS_PENDING_APPROVAL = "pending_approval".freeze
-  STATUS_APPROVED = "approved".freeze
+  STATUS_PENDING_APPROVAL = "pending_approval"
+  STATUS_APPROVED = "approved"
 
   before_validation :default_status
 
@@ -19,10 +19,10 @@ class Reviewer < ApplicationRecord
 
   def addendum
     <<~ADDENDUM
-      ### #{self.name_with_code}
+      ### #{name_with_code}
 
-      - [#{self.status_to_check}] @#{self.login}
-      #{self.context}
+      - [#{status_to_check}] @#{login}
+      #{context}
     ADDENDUM
   end
 
@@ -36,24 +36,24 @@ class Reviewer < ApplicationRecord
   end
 
   def name_with_code
-    if self.review_rule.short_code.present?
-      "#{self.review_rule.name} (#{self.review_rule.short_code})"
+    if review_rule.short_code.present?
+      "#{review_rule.name} (#{review_rule.short_code})"
     else
-      self.review_rule.name
+      review_rule.name
     end
   end
 
   def reassign
-    return true unless self.review_rule
+    return true unless review_rule
 
     new_reviewer =
-      self.review_rule.choose_reviewer(
-        pull_request: self.pull_request,
-        extra_excludes: [self.login]
+      review_rule.choose_reviewer(
+        pull_request: pull_request,
+        extra_excludes: [login]
       )
 
     if new_reviewer
-      self.update(login: new_reviewer.login)
+      update(login: new_reviewer.login)
     else
       false
     end
@@ -65,7 +65,7 @@ class Reviewer < ApplicationRecord
   end
 
   def send_outbound_notifications
-    if (user = User.find_by(login: self.login))
+    if (user = User.find_by(login: login))
       send_slack_message(recipient: user)
     end
   end
@@ -78,16 +78,16 @@ class Reviewer < ApplicationRecord
         You were assigned a new code review. View the Pull Request below.
       MESSAGE
 
-    pr_html_url = self.pull_request.html_url
+    pr_html_url = pull_request.html_url
     attachments = [
       {
         fallback: "View the Pull Request at #{pr_html_url}",
-        title: self.pull_request.full_title,
+        title: pull_request.full_title,
         title_link: pr_html_url,
         fields: [
           {
             title: "Review Context",
-            value: self.review_rule&.name || "Peer Review",
+            value: review_rule&.name || "Peer Review",
             short: true
           }
         ],

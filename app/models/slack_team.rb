@@ -10,6 +10,6 @@ class SlackTeam < ApplicationRecord
 
   def encryption_key
     base64_key = Rails.application.secrets.attr_encrypted_key
-    base64_key.unpack("m").first
+    base64_key.unpack1("m")
   end
 end

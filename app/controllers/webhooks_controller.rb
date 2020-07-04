@@ -4,7 +4,7 @@ class WebhooksController < ApplicationController
   protect_from_forgery with: :null_session
 
   def pull_request
-    if %w(opened synchronize closed).include?(params[:webhook][:action])
+    if %w[opened synchronize closed].include?(params[:webhook][:action])
       ReceivePullRequestEvent.perform_async(params[:webhook].permit!.to_h)
     end
 
@@ -42,7 +42,7 @@ class WebhooksController < ApplicationController
         params[:webhook].dig("installation", "id")
       )
     when "pull_request"
-      if %w(opened synchronize closed).include?(params[:webhook][:action])
+      if %w[opened synchronize closed].include?(params[:webhook][:action])
         ReceivePullRequestEvent.perform_async(params[:webhook].permit!.to_h)
       end
     when "pull_request_review"

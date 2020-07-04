@@ -1,4 +1,4 @@
-require 'securerandom'
+require "securerandom"
 
 FactoryBot.define do
   factory :reviewer do

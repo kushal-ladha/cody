@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe User, type: :model do
   it { is_expected.to validate_presence_of :login }
@@ -31,7 +31,7 @@ RSpec.describe User, type: :model do
 
   describe ".from_access_token" do
     let(:user) { FactoryBot.create :user }
-    let(:payload) { { sub: user.login, iat: Time.now.to_i } }
+    let(:payload) { {sub: user.login, iat: Time.now.to_i} }
 
     subject { User.from_access_token(token) }
 
@@ -56,7 +56,7 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '.paused_logins' do
+  describe ".paused_logins" do
     let(:paused_user) { FactoryBot.create :user }
     let(:unpaused_user) { FactoryBot.create :user }
 
@@ -74,7 +74,7 @@ RSpec.describe User, type: :model do
     before do
       stub_request(:get, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+}).to_return(
         status: 200,
-        headers: { 'Content-Type' => 'application/json' },
+        headers: {"Content-Type" => "application/json"},
         body: JSON.dump(json_fixture("pr"))
       )
     end

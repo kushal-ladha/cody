@@ -53,7 +53,6 @@ namespace :data do
         # Scan the beginning for reviewer check boxes
         prelude.scan(PullRequest::REVIEWER_CHECKBOX_REGEX)
           .each do |check_mark, reviewer_login|
-
             status =
               if check_mark == "x"
                 Reviewer::STATUS_APPROVED
@@ -137,3 +136,4 @@ namespace :data do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength

@@ -47,7 +47,7 @@ class GraphqlController < ApplicationController
   def require_authentication!
     unless current_user.present?
       head :unauthorized
-      return
+      nil
     end
   end
 

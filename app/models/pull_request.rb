@@ -22,15 +22,15 @@ class PullRequest < ApplicationRecord
   REVIEW_LINK_REGEX = /(?:R|r)eview(?:ed)?\s+in\s+#(\d+)/
   REVIEWER_CHECKBOX_REGEX = /[*-] +\[([ x])\] +@([A-Za-z0-9_-]+)/
 
-  STATUS_APRICOT = "APRICOT: Too few reviewers are listed".freeze
-  STATUS_AVOCADO = "AVOCADO: PR does not meet super-review threshold".freeze
-  STATUS_PLUM = "PLUM: %{reviewers} %{verb_phrase} on this repository".freeze
-  STATUS_DELEGATED = "Review is delegated to #%{parent_number}".freeze
-  STATUS_SKIPPED = "Code reviewers were not assigned".freeze
+  STATUS_APRICOT = "APRICOT: Too few reviewers are listed"
+  STATUS_AVOCADO = "AVOCADO: PR does not meet super-review threshold"
+  STATUS_PLUM = "PLUM: %{reviewers} %{verb_phrase} on this repository"
+  STATUS_DELEGATED = "Review is delegated to #%{parent_number}"
+  STATUS_SKIPPED = "Code reviewers were not assigned"
 
-  STATUS_PENDING_REVIEW = "pending_review".freeze
-  STATUS_APPROVED = "approved".freeze
-  STATUS_CLOSED = "closed".freeze
+  STATUS_PENDING_REVIEW = "pending_review"
+  STATUS_APPROVED = "approved"
+  STATUS_CLOSED = "closed"
 
   COMMIT_STATUS_DESCRIPTIONS = {
     "pending" => "Not all reviewers have approved",
@@ -41,11 +41,11 @@ class PullRequest < ApplicationRecord
   include GithubApi
 
   def owner
-    self.repository.owner
+    repository.owner
   end
 
   def repo
-    self.repository.name
+    repository.name
   end
 
   # List authors of commits in this pull request
@@ -55,12 +55,12 @@ class PullRequest < ApplicationRecord
     return [] unless repository
 
     commits = github_client.pull_request_commits(
-      self.repository.full_name,
+      repository.full_name,
       number
     )
 
     commits.map { |commit|
-      if author = commit[:author]
+      if (author = commit[:author])
         author[:login]
       end
     }.compact
@@ -68,21 +68,21 @@ class PullRequest < ApplicationRecord
 
   def assign_reviewers
     github_client.update_issue(
-      self.repository.full_name,
-      self.number,
-      assignees: self.pending_review_logins
+      repository.full_name,
+      number,
+      assignees: pending_review_logins
     )
     github_client.request_pull_request_review(
-      self.repository.full_name,
-      self.number,
-      reviewers: self.pending_review_logins
+      repository.full_name,
+      number,
+      reviewers: pending_review_logins
     )
   end
 
   def update_status(message = nil)
     github_client.create_status(
-      self.repository.full_name,
-      self.head_sha,
+      repository.full_name,
+      head_sha,
       commit_status,
       commit_status_details(message)
     )
@@ -90,33 +90,33 @@ class PullRequest < ApplicationRecord
 
   def resource
     @resource ||= github_client.pull_request(
-      self.repository.full_name,
-      self.number
+      repository.full_name,
+      number
     )
   end
 
   def head_sha
-    self.resource.head.sha
+    resource.head.sha
   end
 
   def html_url
-    self.resource.html_url
+    resource.html_url
   end
 
   def full_title
-    "#{self.repository.full_name}##{self.number}: #{self.resource.title}"
+    "#{repository.full_name}##{number}: #{resource.title}"
   end
 
   def link_by_number(number)
     parent_pr = PullRequest.find_by(
       number: number,
-      repository_id: self.repository_id
+      repository_id: repository_id
     )
     return unless parent_pr
 
     self.parent_pull_request = parent_pr
-    self.status = self.parent_pull_request.status
-    self.save!
+    self.status = parent_pull_request.status
+    save!
   end
 
   def generated_reviewers
@@ -129,9 +129,9 @@ class PullRequest < ApplicationRecord
 
   def target_url
     Rails.application.routes.url_helpers.pull_url(
-      repo: self.repo,
-      owner: self.owner,
-      number: self.number,
+      repo: repo,
+      owner: owner,
+      number: number,
       host: ENV["CODY_HOST"],
       protocol: "https"
     )
@@ -148,28 +148,28 @@ class PullRequest < ApplicationRecord
     end
 
     # Drop existing Generated Reviewers section and replace with new one
-    old_body = self.resource["body"]
+    old_body = resource["body"]
     prelude, _ = old_body.split(ReviewRule::GENERATED_REVIEWERS_REGEX, 2)
     prelude ||= ""
 
     new_body = prelude.rstrip + "\n\n" + addendum
 
     github_client.update_pull_request(
-      self.repository.full_name,
-      self.number,
+      repository.full_name,
+      number,
       body: new_body
     )
   end
 
   def update_labels
-    labels = generated_reviewers.map do |reviewer|
+    labels = generated_reviewers.map { |reviewer|
       reviewer.review_rule.name
-    end
+    }
     labels = labels.uniq
 
     github_client.add_labels_to_an_issue(
-      self.repository.full_name,
-      self.number,
+      repository.full_name,
+      number,
       labels
     )
   end
@@ -177,15 +177,15 @@ class PullRequest < ApplicationRecord
   private
 
   def update_child_pull_requests
-    PullRequest.where(parent_pull_request_id: self.id).find_each do |child|
-      child.status = self.status
+    PullRequest.where(parent_pull_request_id: id).find_each do |child|
+      child.status = status
       child.save!
       child.update_status
     end
   end
 
   def commit_status
-    case self.status
+    case status
     when "pending_review"
       "pending"
     when "approved"
@@ -196,22 +196,22 @@ class PullRequest < ApplicationRecord
   end
 
   def commit_status_details(message = nil)
-    if self.parent_pull_request
+    if parent_pull_request
       desc = format(
         STATUS_DELEGATED,
-        parent_number: self.parent_pull_request.number
+        parent_number: parent_pull_request.number
       )
 
       {
         context: "code-review/cody",
         description: desc,
-        target_url: self.parent_pull_request.html_url
+        target_url: parent_pull_request.html_url
       }
     else
       {
         context: "code-review/cody",
         description: COMMIT_STATUS_DESCRIPTIONS[commit_status] % message,
-        target_url: self.target_url
+        target_url: target_url
       }
     end
   end

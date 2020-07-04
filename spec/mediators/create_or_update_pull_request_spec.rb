@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe CreateOrUpdatePullRequest, type: :model do
   describe "#perform" do
@@ -18,14 +18,14 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
         pr_9876 = json_fixture("pr", number: 9876, head_sha: head_sha)
         stub_request(:get, %r{https://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/9876$}).to_return(
           status: 200,
-          headers: { 'Content-Type' => 'application/json' },
+          headers: {"Content-Type" => "application/json"},
           body: pr_9876.to_json
         )
 
         pr_1234 = json_fixture("pr", number: 1234)
         stub_request(:get, %r{https://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/1234$}).to_return(
           status: 200,
-          headers: { 'Content-Type' => 'application/json' },
+          headers: {"Content-Type" => "application/json"},
           body: pr_1234.to_json
         )
 
@@ -45,9 +45,9 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
           :post,
           "https://api.github.com/repos/#{repo_full_name}/statuses/#{head_sha}"
         ).with { |request|
-            json_body = JSON.load(request.body)
-            json_body["description"] == "Review is delegated to #1234"
-          }
+                             json_body = JSON.parse(request.body)
+                             json_body["description"] == "Review is delegated to #1234"
+                           }
       end
 
       context "and the link is removed later" do
@@ -58,11 +58,11 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
           stub_request(:patch, "https://api.github.com/repos/baxterthehacker/public-repo/issues/9876")
             .to_return(status: 200, body: "", headers: {})
           stub_request(:post, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
-          stub_request(:get, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers").
-            to_return(
+          stub_request(:get, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
+            .to_return(
               status: 200,
-              body: JSON.dump({ "users" => [] }),
-              headers: { "Content-Type" => "application/json" }
+              body: JSON.dump({"users" => []}),
+              headers: {"Content-Type" => "application/json"}
             )
           stub_request(:delete, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
         end
@@ -79,7 +79,7 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
 
     context "synchronizing the peer review list" do
       let!(:pull_request) { FactoryBot.create :pull_request, number: 9876, repository: repo }
-      let!(:gen_reviewers) { FactoryBot.create_list :reviewer, 2, pull_request: pull_request}
+      let!(:gen_reviewers) { FactoryBot.create_list :reviewer, 2, pull_request: pull_request }
 
       let(:r1_name) { SecureRandom.hex }
       let!(:r1) { FactoryBot.create :reviewer, login: r1_name, review_rule: nil, pull_request: pull_request }
@@ -120,7 +120,7 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
         stub_request(:get, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876").to_return(
           status: 200,
           body: pr_9876.to_json,
-          headers: { 'Content-Type' => 'application/json' }
+          headers: {"Content-Type" => "application/json"}
         )
 
         stub_request(:post, %r{https://api.github.com/repos/baxterthehacker/public-repo/statuses/.*})
@@ -128,15 +128,15 @@ RSpec.describe CreateOrUpdatePullRequest, type: :model do
         stub_request(:patch, "https://api.github.com/repos/baxterthehacker/public-repo/issues/9876")
           .to_return(status: 200, body: "", headers: {})
         stub_request(:post, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
-        stub_request(:get, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers").
-          to_return(
+        stub_request(:get, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
+          .to_return(
             status: 200,
-            body: JSON.dump({ "users" => previous_reviewers.map { |x| { "login" => x } } }),
-            headers: { "Content-Type" => "application/json" }
+            body: JSON.dump({"users" => previous_reviewers.map { |x| {"login" => x} }}),
+            headers: {"Content-Type" => "application/json"}
           )
-        stub_request(:delete, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers").
-          with(
-            body: JSON.dump({ "reviewers" => [r3_name] })
+        stub_request(:delete, "https://api.github.com/repos/baxterthehacker/public-repo/pulls/9876/requested_reviewers")
+          .with(
+            body: JSON.dump({"reviewers" => [r3_name]})
           )
       end
 

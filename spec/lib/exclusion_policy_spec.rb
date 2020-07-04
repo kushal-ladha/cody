@@ -1,9 +1,9 @@
-require 'spec_helper'
-require_relative '../../app/models/exclusion_policy'
+require "spec_helper"
+require_relative "../../app/models/exclusion_policy"
 
 RSpec.describe ExclusionPolicy do
   describe "#permitted?" do
-    let(:list) { %w(a b c d) }
+    let(:list) { %w[a b c d] }
     let(:policy) { ExclusionPolicy.new(list, policy_type) }
 
     context "when whitelisting" do

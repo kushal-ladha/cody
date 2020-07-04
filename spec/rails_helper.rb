@@ -1,13 +1,13 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV['RAILS_ENV'] ||= 'test'
-require File.expand_path('../../config/environment', __FILE__)
+ENV["RAILS_ENV"] ||= "test"
+require File.expand_path("../../config/environment", __FILE__)
 # Prevent database truncation if the environment is production
 abort("The Rails environment is running in production mode!") if Rails.env.production?
-require 'spec_helper'
-require 'rspec/rails'
+require "spec_helper"
+require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
-require 'sidekiq/testing'
-require 'webmock/rspec'
+require "sidekiq/testing"
+require "webmock/rspec"
 
 WebMock.disable_net_connect!(allow_localhost: true)
 
@@ -24,7 +24,7 @@ WebMock.disable_net_connect!(allow_localhost: true)
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
 
 # Checks for pending migration and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
@@ -63,7 +63,7 @@ end
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 
-  driver = (ENV["CI"] == "true" || ENV["HEADLESS"] == "true") ? :headless_chrome : :chrome
+  driver = ENV["CI"] == "true" || ENV["HEADLESS"] == "true" ? :headless_chrome : :chrome
 
   config.before(:each, type: :system) do
     driven_by :selenium, using: driver

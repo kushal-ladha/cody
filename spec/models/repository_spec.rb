@@ -102,14 +102,14 @@ RSpec.describe Repository, type: :model do
       stub_request(:get, "https://api.github.com/repos/#{repo.full_name}/contents/.cody.yml")
         .to_return(
           status: 200,
-          headers: { 'Content-Type' => 'application/json' },
+          headers: {"Content-Type" => "application/json"},
           body: JSON.dump(api_contents)
         )
 
       stub_request(:get, "https://api.github.com/orgs/#{repo.owner}/teams")
         .to_return(
           status: 200,
-          headers: { 'Content-Type' => 'application/json' },
+          headers: {"Content-Type" => "application/json"},
           body: JSON.dump(json_fixture("list_teams", teams: teams))
         )
     end

@@ -16,21 +16,21 @@ class Repository < ApplicationRecord
 
   def self.find_by_full_name(full_name)
     owner, name = full_name.split("/", 2)
-    self.find_by(owner: owner, name: name)
+    find_by(owner: owner, name: name)
   end
 
   # @param key [String]
   # @return [String]
   def read_setting(key)
-    self.setting(key)&.read
+    setting(key)&.read
   end
 
   def setting(key)
-    self.settings.find_by(key: key)
+    settings.find_by(key: key)
   end
 
   def full_name
-    "#{self.owner}/#{self.name}"
+    "#{owner}/#{name}"
   end
 
   # Determines if the repository's settings would ignore the given set of labels
@@ -47,7 +47,7 @@ class Repository < ApplicationRecord
     contents =
       begin
         Base64.decode64(
-          github_client.contents(self.full_name, path: Config::PATH).content
+          github_client.contents(full_name, path: Config::PATH).content
         )
       rescue Octokit::NotFound
         return
@@ -56,7 +56,7 @@ class Repository < ApplicationRecord
     digest = Digest::MD5.new
     digest.update(contents)
     hexdigest = digest.hexdigest
-    return unless self.config_hash != hexdigest
+    return unless config_hash != hexdigest
 
     @config =
       begin
@@ -64,24 +64,24 @@ class Repository < ApplicationRecord
       rescue Psych::Exception
         return
       end
-    return unless self.config.valid?
+    return unless config.valid?
 
     refresh_settings
     refresh_rules
 
     self.config_hash = hexdigest
-    self.save!
+    save!
   end
 
   private
 
   def refresh_settings
-    if (min_reviewers_config = self.config[:minimum_reviewers_required])
-      if (min_reviewers_setting = self.setting("minimum_reviewers_required"))
+    if (min_reviewers_config = config[:minimum_reviewers_required])
+      if (min_reviewers_setting = setting("minimum_reviewers_required"))
         min_reviewers_setting.set(min_reviewers_config)
         min_reviewers_setting.save!
       else
-        self.settings.create!(
+        settings.create!(
           key: "minimum_reviewers_required",
           value: min_reviewers_config
         )
@@ -90,8 +90,8 @@ class Repository < ApplicationRecord
   end
 
   def refresh_rules
-    teams = github_client.org_teams(self.owner)
-    self.config[:rules]&.each do |rule_config|
+    teams = github_client.org_teams(owner)
+    config[:rules]&.each do |rule_config|
       refresh_rule(rule_config, teams)
     end
   end
@@ -101,19 +101,19 @@ class Repository < ApplicationRecord
       if rule_config[:match] == true
         ReviewRuleAlways.find_or_initialize_by(
           short_code: rule_config[:short_code],
-          repository_id: self.id
+          repository_id: id
         )
       elsif rule_config[:match][:path]
         ReviewRuleFileMatch.find_or_initialize_by(
           short_code: rule_config[:short_code],
-          repository_id: self.id,
+          repository_id: id
         ).tap do |r|
           r.file_match = Array.wrap(rule_config[:match][:path]).join("|")
         end
       elsif rule_config[:match][:diff]
         ReviewRuleDiffMatch.find_or_initialize_by(
           short_code: rule_config[:short_code],
-          repository_id: self.id,
+          repository_id: id
         ).tap do |r|
           r.file_match = Array.wrap(rule_config[:match][:diff]).join("|")
         end

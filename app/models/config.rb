@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Config
-  PATH = ".cody.yml".freeze
+  PATH = ".cody.yml"
 
-  # rubocop:disable Metrics/LineLength
+  # rubocop:disable Layout/LineLength
   SCHEMA = {
     "$schema": "http://json-schema.org/draft-04/schema#",
     id: "https://codybot.xyz/config/schema",
@@ -25,7 +25,7 @@ class Config
         description: "List of Review Rule configuration objects",
         items: {
           type: "object",
-          required: %w(name short_code reviewer match),
+          required: %w[name short_code reviewer match],
           properties: {
             name: {
               type: "string",
@@ -104,7 +104,7 @@ class Config
       }
     }
   }.freeze
-  # rubocop:enable Metrics/LineLength
+  # rubocop:enable Layout/LineLength
 
   attr_reader :input
   attr_reader :errors
@@ -118,7 +118,7 @@ class Config
   def valid?
     @errors = JSON::Validator.fully_validate(
       Config::SCHEMA,
-      self.input,
+      input,
       insert_defaults: true
     )
     @errors.empty?

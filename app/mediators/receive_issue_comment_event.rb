@@ -1,4 +1,3 @@
-# encoding: utf-8
 # frozen_string_literal: true
 
 class ReceiveIssueCommentEvent
@@ -39,10 +38,10 @@ class ReceiveIssueCommentEvent
 
     PaperTrail.request(whodunnit: @payload["sender"]["login"]) do
       if comment_affirmative?(comment)
-        self.approval_comment
+        approval_comment
       elsif comment_rebuild_reviews?(comment)
-        self.rebuild_reviews
-      elsif directives = comment_replace?(comment)
+        rebuild_reviews
+      elsif (directives = comment_replace?(comment))
         replace_reviewer(directives)
       elsif comment_replace_me?(comment)
         replace_me
@@ -120,13 +119,13 @@ class ReceiveIssueCommentEvent
     )
 
     # emojis need some extra processing so we handle them separately
-    emojis = %w(
+    emojis = %w[
       \+1
       ok
       shipit
       rocket
       100
-    ).map { |e| ":#{e}:" }
+    ].map { |e| ":#{e}:" }
 
     affirmatives = (phrases + emojis).map { |a| "(^\\s*#{a}\\s*$)" }
     joined = affirmatives.join("|")
@@ -160,7 +159,7 @@ class ReceiveIssueCommentEvent
     directives.scan(DIRECTIVE_REGEX).each do |code, login|
       reviewer = pr.generated_reviewers
         .joins(:review_rule)
-        .find_by(review_rules: { short_code: code })
+        .find_by(review_rules: {short_code: code})
 
       next unless reviewer.present?
 

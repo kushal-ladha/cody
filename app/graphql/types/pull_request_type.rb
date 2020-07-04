@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Types::PullRequestType < Types::BaseObject
-
   implements GraphQL::Relay::Node.interface
 
   global_id_field :id
@@ -14,7 +13,7 @@ class Types::PullRequestType < Types::BaseObject
   end
   field :status, String, null: false
 
-  field :reviewers, Types::ReviewerType.connection_type, null: true, connection: true do # rubocop:disable Metrics/LineLength
+  field :reviewers, Types::ReviewerType.connection_type, null: true, connection: true do # rubocop:disable Layout/LineLength
     argument :status, String, required: false
   end
 

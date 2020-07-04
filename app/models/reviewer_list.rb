@@ -7,13 +7,13 @@ class ReviewerList
 
   def initialize(reviewers:)
     @reviewers =
-      reviewers.map do |reviewer|
+      reviewers.map { |reviewer|
         if reviewer.is_a?(String)
           NilStatusUser.new(login: reviewer)
         else
           reviewer
         end
-      end
+      }
   end
 
   def each(&block)

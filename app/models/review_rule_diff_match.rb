@@ -5,7 +5,7 @@ class ReviewRuleDiffMatch < ReviewRule
   validates :file_match, presence: true
 
   def file_match_regex
-    /#{self.file_match}/
+    /#{file_match}/
   end
 
   def matches?(pull_request_hash)
@@ -15,7 +15,7 @@ class ReviewRuleDiffMatch < ReviewRule
     rescue Octokit::NotFound => e
       if retries < MAX_RETRIES
         retries += 1
-        Rails.logger.info "Request for files for PR ##{pull_request_hash["number"]} was 404, sleeping and retrying (retries = #{retries})" # rubocop:disable Metrics/LineLength
+        Rails.logger.info "Request for files for PR ##{pull_request_hash["number"]} was 404, sleeping and retrying (retries = #{retries})" # rubocop:disable Layout/LineLength
         sleep(1)
         retry
       else
@@ -30,7 +30,7 @@ class ReviewRuleDiffMatch < ReviewRule
       pull_request_hash["number"]
     )
 
-    matched = files.select { |file| file.patch =~ self.file_match_regex }
+    matched = files.select { |file| file.patch =~ file_match_regex }
 
     self.match_context =
       if matched.any?

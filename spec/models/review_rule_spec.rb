@@ -1,4 +1,4 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe ReviewRule, type: :model do
   it { is_expected.to validate_presence_of :name }
@@ -10,12 +10,12 @@ RSpec.describe ReviewRule, type: :model do
   describe "#possible_reviewers" do
     context "when reviewer is a team ID" do
       let(:reviewer) { "1234" }
-      let(:expected_team_members) { %w(aergonaut BrentW farrspace deepthisunder yatish27 h4hardikonly mityaz mpukas nazarik vovka torumori offtop) }
+      let(:expected_team_members) { %w[aergonaut BrentW farrspace deepthisunder yatish27 h4hardikonly mityaz mpukas nazarik vovka torumori offtop] }
 
       before do
         stub_request(:get, %r{https?://api.github.com/teams/1234/members}).to_return(
           status: 200,
-          headers: { 'Content-Type' => 'application/json' },
+          headers: {"Content-Type" => "application/json"},
           body: JSON.dump(json_fixture("team_members", members: expected_team_members))
         )
       end
@@ -62,7 +62,7 @@ RSpec.describe ReviewRule, type: :model do
     let(:pull_request_hash) do
       {
         "number" => 42,
-        'base' => {'repo' => {'full_name' => 'aergonaut/testrepo'}}
+        "base" => {"repo" => {"full_name" => "aergonaut/testrepo"}}
       }
     end
 

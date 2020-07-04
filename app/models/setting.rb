@@ -3,15 +3,15 @@
 class Setting < ApplicationRecord
   belongs_to :repository, required: false
 
-  validates :key, presence: true, uniqueness: { scope: :repository_id }
+  validates :key, presence: true, uniqueness: {scope: :repository_id}
   validates :value, presence: true
 
   def read
-    Transit::Reader.new(:json, StringIO.new(self.value)).read
+    Transit::Reader.new(:json, StringIO.new(value)).read
   end
 
   def set(value)
-    io = StringIO.new(String.new, "w+")
+    io = StringIO.new(+"", "w+")
     Transit::Writer.new(:json, io).write(value)
     self.value = io.string
   end
@@ -24,7 +24,7 @@ class Setting < ApplicationRecord
     end
 
     def assign(key, value)
-      io = StringIO.new(String.new, "w+")
+      io = StringIO.new(+"", "w+")
       Transit::Writer.new(:json, io).write(value)
       s = find_or_initialize_by(key: key)
       s.value = io.string
