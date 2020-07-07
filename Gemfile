@@ -115,7 +115,7 @@ group :test do
 
   gem "codecov", require: false
 
-  gem "capybara", "~> 3.29"
+  gem "capybara", "~> 3.33"
   gem "selenium-webdriver"
 
   gem "timecop"

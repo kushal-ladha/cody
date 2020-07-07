@@ -73,7 +73,7 @@ GEM
     bulma-rails (0.6.2)
       sass (~> 3.2)
     byebug (9.1.0)
-    capybara (3.29.0)
+    capybara (3.33.0)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
@@ -299,7 +299,7 @@ GEM
       ffi (~> 1.0)
     rdoc (4.3.0)
     redis (4.0.1)
-    regexp_parser (1.6.0)
+    regexp_parser (1.7.1)
     request_store (1.4.1)
       rack (>= 1.4)
     rexml (3.2.4)
@@ -463,7 +463,7 @@ DEPENDENCIES
   bootsnap
   bulma-rails
   byebug
-  capybara (~> 3.29)
+  capybara (~> 3.33)
   codecov
   coffee-rails (~> 5.0)
   dalli
