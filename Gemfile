@@ -74,9 +74,7 @@ gem "pundit"
 gem "paper_trail", "~> 10.3"
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem "byebug"
-  gem "pry-byebug"
+  gem "break"
   gem "pry-rails"
 
   gem "rspec-rails"

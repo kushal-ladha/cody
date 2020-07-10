@@ -80,6 +80,10 @@ RSpec.configure do |config|
   config.define_derived_metadata(file_path: /spec\/system/) do |metadata|
     metadata[:browser] = true
   end
+
+  config.after(:each) do
+    Sidekiq::Worker.clear_all
+  end
 end
 
 Shoulda::Matchers.configure do |config|
