@@ -10,6 +10,6 @@ class Types::QueryType < Types::BaseObject
     Current.user
   end
 
-  field :node, field: GraphQL::Relay::Node.field
-  field :nodes, field: GraphQL::Relay::Node.plural_field
+  add_field(GraphQL::Types::Relay::NodeField)
+  add_field(GraphQL::Types::Relay::NodesField)
 end

@@ -1,28 +1,33 @@
 # frozen_string_literal: true
 
-Mutations::UpdateUser = GraphQL::Relay::Mutation.define {
-  name "UpdateUser"
-  description "Update the currently authenticated user"
-  return_field :user, Types::UserType
+module Mutations
+  class UpdateUser < Mutations::BaseMutation
+    description "Update the currently authenticated user"
 
-  input_field :email, !types.String
-  input_field :sendNewReviewsSummary, !types.Boolean
-  input_field :paused, !types.Boolean
-  input_field :timezone, !types.String
+    argument :email, String, required: true
+    argument :send_new_reviews_summary, Boolean, required: true
+    argument :paused, Boolean, required: true
+    argument :timezone, String, required: true
 
-  resolve ->(obj, args, ctx) {
-    ctx[:current_user].update!(email: args[:email])
-    unless ctx[:current_user].user_preference.present?
-      ctx[:current_user].build_user_preference
+    field :user, Types::UserType, null: true
+
+    def resolve(email:, send_new_reviews_summary:, paused:, timezone:)
+      current_user = context[:current_user]
+      current_user.update!(email: args[:email])
+
+      unless current_user.user_preference.present?
+        current_user.build_user_preference
+      end
+
+      current_user.user_preference.update!(
+        send_new_reviews_summary: args[:sendNewReviewsSummary],
+        paused: args[:paused],
+        timezone: args[:timezone]
+      )
+
+      {
+        user: current_user
+      }
     end
-    ctx[:current_user].user_preference.update!(
-      send_new_reviews_summary: args[:sendNewReviewsSummary],
-      paused: args[:paused],
-      timezone: args[:timezone]
-    )
-
-    {
-      user: ctx[:current_user]
-    }
-  }
-}
+  end
+end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Types::RepositoryType < Types::BaseObject
-  implements GraphQL::Relay::Node.interface
+  implements GraphQL::Types::Relay::Node
 
   global_id_field :id
 
