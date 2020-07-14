@@ -428,7 +428,7 @@ GEM
       enumerable-statistics (>= 2.0.1)
     url (0.3.2)
     vcr (6.0.0)
-    web-console (4.0.3)
+    web-console (4.0.4)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
