@@ -13,16 +13,16 @@ module Mutations
 
     def resolve(email:, send_new_reviews_summary:, paused:, timezone:)
       current_user = context[:current_user]
-      current_user.update!(email: args[:email])
+      current_user.update!(email: email)
 
       unless current_user.user_preference.present?
         current_user.build_user_preference
       end
 
       current_user.user_preference.update!(
-        send_new_reviews_summary: args[:sendNewReviewsSummary],
-        paused: args[:paused],
-        timezone: args[:timezone]
+        send_new_reviews_summary: send_new_reviews_summary,
+        paused: paused,
+        timezone: timezone
       )
 
       {
