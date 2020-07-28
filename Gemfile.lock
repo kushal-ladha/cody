@@ -163,7 +163,7 @@ GEM
       haml (>= 4.0, < 6)
       nokogiri (>= 1.6.0)
       ruby_parser (~> 3.5)
-    i18n (1.8.4)
+    i18n (1.8.5)
       concurrent-ruby (~> 1.0)
     jaro_winkler (1.5.4)
     jbuilder (2.10.0)
@@ -376,9 +376,8 @@ GEM
       skylight-core (= 4.3.1)
     skylight-core (4.3.1)
       activesupport (>= 4.2.0)
-    slack-ruby-client (0.14.6)
-      activesupport
-      faraday (>= 0.9)
+    slack-ruby-client (0.15.0)
+      faraday (>= 1.0)
       faraday_middleware
       gli
       hashie
