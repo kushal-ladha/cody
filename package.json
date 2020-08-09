@@ -6,7 +6,7 @@
   "author": "Chris Fung <aergonaut@gmail.com>",
   "license": "MIT",
   "engines": {
-    "node": "<= 9"
+    "node": "12.x"
   },
   "scripts": {
     "relay": "relay-compiler --src ./app/javascript --extensions js jsx --schema ./schema.graphql",
@@ -37,7 +37,7 @@
     "file-loader": "1.1.11",
     "glob": "7.1.2",
     "js-yaml": "3.13.1",
-    "node-sass": "4.7.2",
+    "node-sass": "4.14.1",
     "path-complete-extname": "0.1.0",
     "postcss-loader": "2.1.1",
     "postcss-smart-import": "0.7.6",

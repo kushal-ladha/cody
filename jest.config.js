@@ -1,4 +1,5 @@
 module.exports = {
+  testEnvironment: "node",
   testPathIgnorePatterns: [
     "/node_modules/",
     "<rootDir>/config/webpack/test.js",
