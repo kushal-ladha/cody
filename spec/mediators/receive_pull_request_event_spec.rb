@@ -164,6 +164,9 @@ RSpec.describe ReceivePullRequestEvent do
 
         context "and the PR is approved" do
           let(:status) { "approved" }
+          let(:body) do
+            '- [x] @aergonaut\n- [x] @BrentW\n'
+          end
 
           it "sends the review complete comment in the body" do
             expect(WebMock).to have_requested(:post, %r(https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/statuses/[0-9abcdef]{40}))

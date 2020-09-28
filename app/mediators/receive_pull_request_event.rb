@@ -83,12 +83,7 @@ class ReceivePullRequestEvent
   # commit with the correct status indicator.
   instrument_method
   def on_synchronize
-    number = @payload["number"]
-    if (pr = @repository.pull_requests.find_by(number: number))
-      pr.update_status
-    else
-      CreateOrUpdatePullRequest.new.perform(@payload["pull_request"])
-    end
+    CreateOrUpdatePullRequest.new.perform(@payload["pull_request"])
   end
 
   # This function is called whenever a label is removed.
