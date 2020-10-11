@@ -45,8 +45,6 @@ gem "sentry-raven"
 
 gem "haml-rails"
 
-gem "skylight"
-
 gem "transit-ruby", require: "transit"
 
 gem "dalli"

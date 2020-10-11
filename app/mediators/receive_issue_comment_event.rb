@@ -3,10 +3,8 @@
 class ReceiveIssueCommentEvent
   include Sidekiq::Worker
   include GithubApi
-  include Skylight::Helpers
   DIRECTIVE_REGEX = /([A-Za-z0-9_-]+)=\s?@?([A-Za-z0-9_-]+)/
 
-  instrument_method
   def perform(payload)
     Current.reset
 
@@ -51,7 +49,6 @@ class ReceiveIssueCommentEvent
     Current.reset
   end
 
-  instrument_method
   def approval_comment
     pr = find_pull_request(@payload)
     return unless pr
@@ -84,7 +81,6 @@ class ReceiveIssueCommentEvent
     )
   end
 
-  instrument_method
   def rebuild_reviews
     pull_request = github_client.pull_request(
       @payload["repository"]["full_name"],
@@ -150,7 +146,6 @@ class ReceiveIssueCommentEvent
     comment.match?(/^cody\s+r(eplace)?\s+(me).*$/)
   end
 
-  instrument_method
   def replace_reviewer(directives)
     pr = find_pull_request(@payload)
     return false unless pr
@@ -190,7 +185,6 @@ class ReceiveIssueCommentEvent
     )
   end
 
-  instrument_method
   def replace_me
     pr = find_pull_request(@payload)
     return false unless pr
