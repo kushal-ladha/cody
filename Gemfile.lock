@@ -233,8 +233,8 @@ GEM
     omniauth-oauth2 (1.6.0)
       oauth2 (~> 1.1)
       omniauth (~> 1.9)
-    paper_trail (10.3.1)
-      activerecord (>= 4.2)
+    paper_trail (11.0.0)
+      activerecord (>= 5.2)
       request_store (~> 1.1)
     parallel (1.19.2)
     parser (2.7.1.4)
@@ -292,7 +292,7 @@ GEM
     rdoc (6.2.1)
     redis (4.2.2)
     regexp_parser (1.7.1)
-    request_store (1.4.1)
+    request_store (1.5.0)
       rack (>= 1.4)
     rexml (3.2.4)
     rspec-core (3.9.2)
@@ -464,7 +464,7 @@ DEPENDENCIES
   netrc
   octokit
   omniauth-github
-  paper_trail (~> 10.3)
+  paper_trail (~> 11.0)
   pg (~> 1.2)
   pry-rails
   puma

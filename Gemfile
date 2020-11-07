@@ -69,7 +69,7 @@ gem "font-awesome-sass"
 
 gem "pundit"
 
-gem "paper_trail", "~> 10.3"
+gem "paper_trail", "~> 11.0"
 
 group :development, :test do
   gem "break"
