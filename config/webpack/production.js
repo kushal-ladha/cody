@@ -1,6 +1,5 @@
-const environment = require("./environment");
+process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 
-// Use babel-minify in production instead of UglifyJS
-environment.plugins.delete('UglifyJs');
+const environment = require('./environment')
 
-module.exports = environment.toWebpackConfig();
+module.exports = environment.toWebpackConfig()
