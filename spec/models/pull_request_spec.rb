@@ -99,6 +99,7 @@ RSpec.describe PullRequest, type: :model do
       let!(:parent) { FactoryBot.create :pull_request, status: "pending_review", number: parent_number, repository: pr.repository }
 
       it "returns truthy, sets the parent, copies the status, and persists the object" do
+        pending "PR linking is disabled until the feature can be redesigned"
         expect(pr.link_by_number(parent_number)).to be_truthy
         expect(pr.parent_pull_request).to eq(parent)
         expect(pr.status).to eq(parent.status)
