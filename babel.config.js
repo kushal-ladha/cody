@@ -36,7 +36,7 @@ module.exports = function(api) {
         },
       ],
       "@babel/preset-react",
-      "@babel/preset-flow",
+      "@babel/preset-typescript"
     ].filter(Boolean),
     plugins: [
       "relay",

@@ -5,10 +5,7 @@ module.exports = {
     "<rootDir>/config/webpack/test.js",
     "<rootDir>/vendor"
   ],
-  setupTestFrameworkScriptFile: "<rootDir>/config/setupJest.js",
+  setupFilesAfterEnv: ["<rootDir>/config/setupJest.js"],
   coverageDirectory: "./coverage/",
-  collectCoverage: true,
-  transform: {
-    "^.+\\.jsx?$": "babel-jest"
-  }
+  collectCoverage: true
 };
