@@ -70,15 +70,13 @@ test("Reviewer renders the reviewer's login", () => {
           id: `test-id-${generatedId()}`,
           login: "aergonaut",
           status: "APPROVED",
-          reviewRule: null
-        }
-      }
+          reviewRule: null,
+        };
+      },
     })
   );
 
-  expect(screen.getByTestId("reviewer-login")).toHaveTextContent(
-    "aergonaut"
-  );
+  expect(screen.getByTestId("reviewer-login")).toHaveTextContent("aergonaut");
 });
 
 test("Reviewer renders the review rule name if it is given", () => {
@@ -92,14 +90,33 @@ test("Reviewer renders the review rule name if it is given", () => {
           login: "aergonaut",
           status: "APPROVED",
           reviewRule: {
-            name: "Foobar"
+            name: "Foobar",
           },
         };
       },
     })
   );
 
-  expect(screen.getByTestId("review-rule-name")).toHaveTextContent(
-    "Foobar"
+  expect(screen.getByTestId("review-rule-name")).toHaveTextContent("Foobar");
+});
+
+test("Reviewer renders Pending Approval icon", () => {
+  render(<TestComponent environment={environment} />);
+
+  environment.mock.resolveMostRecentOperation((operation) =>
+    MockPayloadGenerator.generate(operation, {
+      Reviewer(_, generatedId) {
+        return {
+          id: `test-id-${generatedId()}`,
+          login: "aergonaut",
+          status: "PENDING_APPROVAL",
+          reviewRule: {
+            name: "Foobar",
+          },
+        };
+      },
+    })
   );
+
+  expect(screen.getByTitle("Pending approval")).toBeDefined();
 });
