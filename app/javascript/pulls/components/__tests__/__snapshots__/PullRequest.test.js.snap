@@ -1,40 +1,41 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PullRequest snapshot test 1`] = `
-<div
-  className="level box"
->
+<DocumentFragment>
   <div
-    className="level-left code"
+    class="level box"
   >
     <div
-      className="level-item"
+      class="level-left code"
     >
-      <strong>
-        aergonaut/testrepo#1234
-      </strong>
-    </div>
-    <div
-      className="level-item"
-    >
-      pending_review
-    </div>
-  </div>
-  <div
-    className="level-right"
-  >
-    <div
-      className="level-item"
-    >
-      <a
-        className="button"
-        href="/repos/aergonaut/testrepo/pull/1234"
-        onClick={[Function]}
-        title="aergonaut/testrepo#1234"
+      <div
+        class="level-item"
       >
-        • • •
-      </a>
+        <strong>
+          &lt;mock-value-for-field-"repository"&gt;#&lt;mock-value-for-field-"number"&gt;
+        </strong>
+      </div>
+      <div
+        class="level-item"
+      >
+        &lt;mock-value-for-field-"status"&gt;
+      </div>
+    </div>
+    <div
+      class="level-right"
+    >
+      <div
+        class="level-item"
+      >
+        <a
+          class="button"
+          href="/repos/<mock-value-for-field-\\"repository\\">/pull/<mock-value-for-field-\\"number\\">"
+          title="<mock-value-for-field-\\"repository\\">#<mock-value-for-field-\\"number\\">"
+        >
+          • • •
+        </a>
+      </div>
     </div>
   </div>
-</div>
+</DocumentFragment>
 `;

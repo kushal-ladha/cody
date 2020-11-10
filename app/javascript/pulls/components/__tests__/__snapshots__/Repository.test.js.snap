@@ -1,35 +1,36 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Repository snapshot test 1`] = `
-<div
-  className="level box"
->
+<DocumentFragment>
   <div
-    className="level-left code"
+    class="level box"
   >
     <div
-      className="level-item"
+      class="level-left code"
     >
-      <strong>
-        aergonaut/testrepo
-      </strong>
-    </div>
-  </div>
-  <div
-    className="level-right"
-  >
-    <div
-      className="level-item"
-    >
-      <a
-        className="button"
-        href="/repos/aergonaut/testrepo"
-        onClick={[Function]}
-        title="aergonaut/testrepo"
+      <div
+        class="level-item"
       >
-        • • •
-      </a>
+        <strong>
+          &lt;mock-value-for-field-"owner"&gt;/&lt;mock-value-for-field-"name"&gt;
+        </strong>
+      </div>
+    </div>
+    <div
+      class="level-right"
+    >
+      <div
+        class="level-item"
+      >
+        <a
+          class="button"
+          href="/repos/<mock-value-for-field-\\"owner\\">/<mock-value-for-field-\\"name\\">"
+          title="<mock-value-for-field-\\"owner\\">/<mock-value-for-field-\\"name\\">"
+        >
+          • • •
+        </a>
+      </div>
     </div>
   </div>
-</div>
+</DocumentFragment>
 `;

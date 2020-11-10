@@ -1,28 +1,66 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PullRequestDetail snapshot test 1`] = `
-<section
-  className="section"
->
-  <div
-    className="container box code"
+<DocumentFragment>
+  <section
+    class="section"
   >
     <div
-      className="pa4 br2 ba b--light-gray mt4 bg-white"
+      class="container box code"
     >
-      <h1
-        className="title code"
+      <div
+        class="pa4 br2 ba b--light-gray mt4 bg-white"
       >
-        aergonaut/testrepo#1234
-      </h1>
-      <h2
-        className="subtitle code"
-      >
-        pending_review
-      </h2>
+        <h1
+          class="title code"
+        >
+          &lt;mock-value-for-field-"repository"&gt;#&lt;mock-value-for-field-"number"&gt;
+        </h1>
+        <h2
+          class="subtitle code"
+        >
+          &lt;mock-value-for-field-"status"&gt;
+        </h2>
+      </div>
+      <hr />
+      <div>
+        <div
+          class="level"
+        >
+          <div
+            class="level-left"
+          >
+            <div
+              class="level-item"
+            >
+              <span
+                class="icon color-success"
+                title="Approved"
+              >
+                <i
+                  class="fas fa-circle"
+                />
+              </span>
+            </div>
+            <div
+              class="level-item"
+            >
+              <strong
+                data-testid="reviewer-login"
+              >
+                &lt;mock-value-for-field-"login"&gt;
+              </strong>
+            </div>
+            <div
+              class="level-item"
+              data-testid="review-rule-name"
+            >
+              &lt;mock-value-for-field-"name"&gt;
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <hr />
-    <div />
-  </div>
-</section>
+  </section>
+</DocumentFragment>
 `;

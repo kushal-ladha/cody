@@ -1,9 +1,9 @@
 module.exports = {
-  testEnvironment: "jsdom",
   testPathIgnorePatterns: [
     "/node_modules/",
     "<rootDir>/config/webpack/test.js",
-    "<rootDir>/vendor"
+    "<rootDir>/vendor",
+    "__generated__"
   ],
   coverageDirectory: "./coverage/",
   collectCoverage: true
