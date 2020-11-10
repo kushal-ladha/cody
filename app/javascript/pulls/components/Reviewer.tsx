@@ -3,7 +3,7 @@ import { createFragmentContainer, graphql } from "react-relay";
 import type {
   Reviewer_reviewer,
   ReviewerStatus
-} from "./__generated__/Reviewer_reviewer.graphql";
+} from "__generated__/Reviewer_reviewer.graphql";
 
 function statusToOcticon(status: ReviewerStatus) {
   switch (status) {
@@ -29,9 +29,9 @@ const Reviewer = ({ reviewer }: { reviewer: Reviewer_reviewer }) => (
     <div className="level-left">
       <div className="level-item">{statusToOcticon(reviewer.status)}</div>
       <div className="level-item">
-        <strong>{reviewer.login}</strong>
+        <strong data-testid="reviewer-login">{reviewer.login}</strong>
       </div>
-      <div className="level-item">
+      <div className="level-item" data-testid="review-rule-name">
         {reviewer.reviewRule != null ? reviewer.reviewRule.name : false}
       </div>
     </div>

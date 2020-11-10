@@ -2,7 +2,7 @@ import React from "react";
 import Profile from "../Profile";
 import PageHead from "./PageHead";
 import { QueryRenderer, graphql } from "react-relay";
-import { ProfileRouteQuery } from "./__generated__/ProfileRouteQuery.graphql";
+import { ProfileRouteQuery } from "__generated__/ProfileRouteQuery.graphql";
 
 const ProfileRoute = ({ environment }: { environment: any }) => (
   <>

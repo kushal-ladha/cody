@@ -1,6 +1,6 @@
 import React from "react";
 import { createFragmentContainer, graphql } from "react-relay";
-import { ReviewRuleList_repository } from "./__generated__/ReviewRuleList_repository.graphql";
+import { ReviewRuleList_repository } from "__generated__/ReviewRuleList_repository.graphql";
 
 const ReviewRuleList = ({
   repository

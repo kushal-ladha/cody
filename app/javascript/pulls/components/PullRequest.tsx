@@ -1,7 +1,7 @@
 import React from "react";
 import { createFragmentContainer, graphql } from "react-relay";
 import { Link } from "react-router-dom";
-import type { PullRequest_pullRequest } from "./__generated__/PullRequest_pullRequest.graphql";
+import type { PullRequest_pullRequest } from "__generated__/PullRequest_pullRequest.graphql";
 
 const PullRequest = ({
   pullRequest: { number, repository, status }

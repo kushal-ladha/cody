@@ -13,12 +13,15 @@ exports[`Reviewer snapshot test 1`] = `
     <div
       className="level-item"
     >
-      <strong>
+      <strong
+        data-testid="reviewer-login"
+      >
         aergonaut
       </strong>
     </div>
     <div
       className="level-item"
+      data-testid="review-rule-name"
     >
       Foo Review
     </div>

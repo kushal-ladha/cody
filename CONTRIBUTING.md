@@ -111,10 +111,16 @@ authorization of users.
 
 Run `bin/rails s` to start the Rails server.
 
-Run `bin/webpack-dev-server --hot` to compile all the Webpack assets and start
+Run `bin/webpack-dev-server` to compile all the Webpack assets and start
 the Webpack dev server.
 
 Run `bin/sidekiq` to start the Sidekiq background worker.
+
+### Running tests
+
+For Ruby code, run RSpec: `bin/rspec`
+
+For React code, run Jest: `yarn test`
 
 ### Submitting Pull Requests
 

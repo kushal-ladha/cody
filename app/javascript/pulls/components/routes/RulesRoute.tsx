@@ -3,7 +3,7 @@ import ReviewRuleList from "../ReviewRuleList";
 import PageHead from "./PageHead";
 import { QueryRenderer, graphql } from "react-relay";
 import { withRouter } from "react-router-dom";
-import { RulesRouteQuery } from "./__generated__/RulesRouteQuery.graphql";
+import { RulesRouteQuery } from "__generated__/RulesRouteQuery.graphql";
 
 const RulesRoute = ({
   environment,

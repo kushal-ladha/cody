@@ -1,7 +1,8 @@
 import React from "react";
-import { shallow } from "enzyme";
+import { render, screen } from "@testing-library/react";
 import renderer from "react-test-renderer";
 import Reviewer from "../Reviewer";
+import "@testing-library/jest-dom/extend-expect";
 
 test("Reviewer snapshot test", () => {
   const props = {
@@ -16,8 +17,8 @@ test("Reviewer snapshot test", () => {
 });
 
 test("Reviewer renders the reviewer's login", () => {
-  const component = shallow(<Reviewer reviewer={{ login: "aergonaut" }} />);
-  expect(component.text()).toMatch("aergonaut");
+  render(<Reviewer reviewer={{ login: "aergonaut" }} />);
+  expect(screen.getByTestId("reviewer-login")).toHaveTextContent("aergonaut");
 });
 
 test("Reviewer renders the review rule name if it is given", () => {
@@ -27,6 +28,8 @@ test("Reviewer renders the review rule name if it is given", () => {
       name: "Foo Review"
     }
   };
-  const component = shallow(<Reviewer reviewer={props} />);
-  expect(component.text()).toMatch(props.reviewRule.name);
+  render(<Reviewer reviewer={props} />);
+  expect(screen.getByTestId("review-rule-name")).toHaveTextContent(
+    props.reviewRule.name
+  );
 });
