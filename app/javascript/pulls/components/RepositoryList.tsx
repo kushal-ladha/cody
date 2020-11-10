@@ -1,7 +1,7 @@
 import React from "react";
 import Repository from "./Repository";
 import { createFragmentContainer, graphql } from "react-relay";
-import type { RepositoryList_viewer } from "__generated__/RepositoryList_viewer.graphql";
+import type { RepositoryList_viewer } from "./__generated__/RepositoryList_viewer.graphql";
 
 const RepositoryList = ({ viewer }: { viewer: RepositoryList_viewer }) => (
   <section className="section">

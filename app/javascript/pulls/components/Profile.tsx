@@ -3,7 +3,7 @@ import { commitMutation, createFragmentContainer, graphql } from "react-relay";
 import { listTimeZones } from "timezone-support";
 import TextField from "./inputs/TextField";
 import Checkbox from "./inputs/Checkbox";
-import type { Profile_user } from "__generated__/Profile_user.graphql";
+import type { Profile_user } from "./__generated__/Profile_user.graphql";
 
 const UPDATE_USER_MUTATION = graphql`
   mutation ProfileUpdateUserMutation($input: UpdateUserInput!) {

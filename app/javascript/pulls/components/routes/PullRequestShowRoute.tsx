@@ -3,7 +3,7 @@ import PullRequestDetail from "../PullRequestDetail";
 import PageHead from "./PageHead";
 import { QueryRenderer, graphql } from "react-relay";
 import { withRouter } from "react-router-dom";
-import { PullRequestShowRouteQuery } from "__generated__/PullRequestShowRouteQuery.graphql";
+import { PullRequestShowRouteQuery } from "./__generated__/PullRequestShowRouteQuery.graphql";
 
 const PullRequestShowRoute = ({
   environment,

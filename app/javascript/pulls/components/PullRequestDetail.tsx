@@ -1,7 +1,7 @@
 import React from "react";
 import Reviewer from "./Reviewer";
 import { createFragmentContainer, graphql } from "react-relay";
-import { PullRequestDetail_pullRequest } from "__generated__/PullRequestDetail_pullRequest.graphql";
+import { PullRequestDetail_pullRequest } from "./__generated__/PullRequestDetail_pullRequest.graphql";
 
 const PullRequestDetail = ({
   pullRequest

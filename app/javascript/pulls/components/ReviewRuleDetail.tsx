@@ -1,7 +1,7 @@
 import React from "react";
 import TextField from "./inputs/TextField";
 import { createFragmentContainer, graphql } from "react-relay";
-import { ReviewRuleDetail_reviewRule } from "__generated__/ReviewRuleDetail_reviewRule.graphql";
+import { ReviewRuleDetail_reviewRule } from "./__generated__/ReviewRuleDetail_reviewRule.graphql";
 
 const ReviewRuleDetail = ({
   reviewRule
