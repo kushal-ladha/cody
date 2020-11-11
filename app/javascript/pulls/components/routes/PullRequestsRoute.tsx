@@ -20,7 +20,6 @@ const PullRequestsRoute = ({
         query PullRequestsRouteQuery(
           $owner: String!
           $name: String!
-          $cursor: String
         ) {
           viewer {
             repository(owner: $owner, name: $name) {

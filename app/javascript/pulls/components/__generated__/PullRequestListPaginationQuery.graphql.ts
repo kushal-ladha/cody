@@ -4,46 +4,46 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type PullRequestsRouteQueryVariables = {
+export type PullRequestListPaginationQueryVariables = {
     owner: string;
     name: string;
+    count: number;
+    cursor?: string | null;
 };
-export type PullRequestsRouteQueryResponse = {
+export type PullRequestListPaginationQueryResponse = {
     readonly viewer: {
         readonly repository: {
             readonly " $fragmentRefs": FragmentRefs<"PullRequestList_repository">;
         } | null;
-        readonly login: string;
-        readonly name: string;
     } | null;
 };
-export type PullRequestsRouteQuery = {
-    readonly response: PullRequestsRouteQueryResponse;
-    readonly variables: PullRequestsRouteQueryVariables;
+export type PullRequestListPaginationQuery = {
+    readonly response: PullRequestListPaginationQueryResponse;
+    readonly variables: PullRequestListPaginationQueryVariables;
 };
 
 
 
 /*
-query PullRequestsRouteQuery(
+query PullRequestListPaginationQuery(
   $owner: String!
   $name: String!
+  $count: Int!
+  $cursor: String
 ) {
   viewer {
     repository(owner: $owner, name: $name) {
-      ...PullRequestList_repository
+      ...PullRequestList_repository_1G22uz
       id
     }
-    login
-    name
     id
   }
 }
 
-fragment PullRequestList_repository on Repository {
+fragment PullRequestList_repository_1G22uz on Repository {
   owner
   name
-  pullRequests(first: 10) {
+  pullRequests(first: $count, after: $cursor) {
     edges {
       node {
         id
@@ -71,14 +71,24 @@ const node: ConcreteRequest = (function(){
 var v0 = {
   "defaultValue": null,
   "kind": "LocalArgument",
-  "name": "name"
+  "name": "count"
 },
 v1 = {
   "defaultValue": null,
   "kind": "LocalArgument",
+  "name": "cursor"
+},
+v2 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
+  "name": "name"
+},
+v3 = {
+  "defaultValue": null,
+  "kind": "LocalArgument",
   "name": "owner"
 },
-v2 = [
+v4 = [
   {
     "kind": "Variable",
     "name": "name",
@@ -90,25 +100,16 @@ v2 = [
     "variableName": "owner"
   }
 ],
-v3 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "login",
-  "storageKey": null
-},
-v4 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "name",
-  "storageKey": null
-},
 v5 = [
   {
-    "kind": "Literal",
+    "kind": "Variable",
+    "name": "after",
+    "variableName": "cursor"
+  },
+  {
+    "kind": "Variable",
     "name": "first",
-    "value": 10
+    "variableName": "count"
   }
 ],
 v6 = {
@@ -122,11 +123,13 @@ return {
   "fragment": {
     "argumentDefinitions": [
       (v0/*: any*/),
-      (v1/*: any*/)
+      (v1/*: any*/),
+      (v2/*: any*/),
+      (v3/*: any*/)
     ],
     "kind": "Fragment",
     "metadata": null,
-    "name": "PullRequestsRouteQuery",
+    "name": "PullRequestListPaginationQuery",
     "selections": [
       {
         "alias": null,
@@ -138,22 +141,31 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v2/*: any*/),
+            "args": (v4/*: any*/),
             "concreteType": "Repository",
             "kind": "LinkedField",
             "name": "repository",
             "plural": false,
             "selections": [
               {
-                "args": null,
+                "args": [
+                  {
+                    "kind": "Variable",
+                    "name": "count",
+                    "variableName": "count"
+                  },
+                  {
+                    "kind": "Variable",
+                    "name": "cursor",
+                    "variableName": "cursor"
+                  }
+                ],
                 "kind": "FragmentSpread",
                 "name": "PullRequestList_repository"
               }
             ],
             "storageKey": null
-          },
-          (v3/*: any*/),
-          (v4/*: any*/)
+          }
         ],
         "storageKey": null
       }
@@ -164,11 +176,13 @@ return {
   "kind": "Request",
   "operation": {
     "argumentDefinitions": [
-      (v1/*: any*/),
-      (v0/*: any*/)
+      (v3/*: any*/),
+      (v2/*: any*/),
+      (v0/*: any*/),
+      (v1/*: any*/)
     ],
     "kind": "Operation",
-    "name": "PullRequestsRouteQuery",
+    "name": "PullRequestListPaginationQuery",
     "selections": [
       {
         "alias": null,
@@ -180,7 +194,7 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v2/*: any*/),
+            "args": (v4/*: any*/),
             "concreteType": "Repository",
             "kind": "LinkedField",
             "name": "repository",
@@ -193,7 +207,13 @@ return {
                 "name": "owner",
                 "storageKey": null
               },
-              (v4/*: any*/),
+              {
+                "alias": null,
+                "args": null,
+                "kind": "ScalarField",
+                "name": "name",
+                "storageKey": null
+              },
               {
                 "alias": null,
                 "args": (v5/*: any*/),
@@ -286,7 +306,7 @@ return {
                     "storageKey": null
                   }
                 ],
-                "storageKey": "pullRequests(first:10)"
+                "storageKey": null
               },
               {
                 "alias": null,
@@ -301,8 +321,6 @@ return {
             ],
             "storageKey": null
           },
-          (v3/*: any*/),
-          (v4/*: any*/),
           (v6/*: any*/)
         ],
         "storageKey": null
@@ -310,14 +328,14 @@ return {
     ]
   },
   "params": {
-    "cacheID": "ade81d8ba951513fb3e8a516c57446fa",
+    "cacheID": "61080a8be45416cc0af5a15710a73c10",
     "id": null,
     "metadata": {},
-    "name": "PullRequestsRouteQuery",
+    "name": "PullRequestListPaginationQuery",
     "operationKind": "query",
-    "text": "query PullRequestsRouteQuery(\n  $owner: String!\n  $name: String!\n) {\n  viewer {\n    repository(owner: $owner, name: $name) {\n      ...PullRequestList_repository\n      id\n    }\n    login\n    name\n    id\n  }\n}\n\nfragment PullRequestList_repository on Repository {\n  owner\n  name\n  pullRequests(first: 10) {\n    edges {\n      node {\n        id\n        ...PullRequest_pullRequest\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment PullRequest_pullRequest on PullRequest {\n  id\n  repository\n  number\n  status\n}\n"
+    "text": "query PullRequestListPaginationQuery(\n  $owner: String!\n  $name: String!\n  $count: Int!\n  $cursor: String\n) {\n  viewer {\n    repository(owner: $owner, name: $name) {\n      ...PullRequestList_repository_1G22uz\n      id\n    }\n    id\n  }\n}\n\nfragment PullRequestList_repository_1G22uz on Repository {\n  owner\n  name\n  pullRequests(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        ...PullRequest_pullRequest\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment PullRequest_pullRequest on PullRequest {\n  id\n  repository\n  number\n  status\n}\n"
   }
 };
 })();
-(node as any).hash = '8af63bfbca5470a844fb1fea424605b3';
+(node as any).hash = '903e539408ce63acd411f2b7b29c0c67';
 export default node;

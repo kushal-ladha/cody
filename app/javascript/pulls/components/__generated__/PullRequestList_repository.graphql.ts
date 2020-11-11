@@ -5,6 +5,8 @@
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type PullRequestList_repository = {
+    readonly owner: string;
+    readonly name: string;
     readonly pullRequests: {
         readonly edges: ReadonlyArray<{
             readonly node: {
@@ -13,7 +15,6 @@ export type PullRequestList_repository = {
             } | null;
         } | null> | null;
     } | null;
-    readonly id: string;
     readonly " $refType": "PullRequestList_repository";
 };
 export type PullRequestList_repository$data = PullRequestList_repository;
@@ -24,18 +25,16 @@ export type PullRequestList_repository$key = {
 
 
 
-const node: ReaderFragment = (function(){
-var v0 = {
-  "alias": null,
-  "args": null,
-  "kind": "ScalarField",
-  "name": "id",
-  "storageKey": null
-};
-return {
+const node: ReaderFragment = {
   "argumentDefinitions": [
     {
-      "kind": "RootArgument",
+      "defaultValue": 10,
+      "kind": "LocalArgument",
+      "name": "count"
+    },
+    {
+      "defaultValue": null,
+      "kind": "LocalArgument",
       "name": "cursor"
     }
   ],
@@ -43,7 +42,7 @@ return {
   "metadata": {
     "connection": [
       {
-        "count": null,
+        "count": "count",
         "cursor": "cursor",
         "direction": "forward",
         "path": [
@@ -54,6 +53,20 @@ return {
   },
   "name": "PullRequestList_repository",
   "selections": [
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "owner",
+      "storageKey": null
+    },
+    {
+      "alias": null,
+      "args": null,
+      "kind": "ScalarField",
+      "name": "name",
+      "storageKey": null
+    },
     {
       "alias": "pullRequests",
       "args": null,
@@ -78,7 +91,13 @@ return {
               "name": "node",
               "plural": false,
               "selections": [
-                (v0/*: any*/),
+                {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "id",
+                  "storageKey": null
+                },
                 {
                   "alias": null,
                   "args": null,
@@ -131,12 +150,10 @@ return {
         }
       ],
       "storageKey": null
-    },
-    (v0/*: any*/)
+    }
   ],
   "type": "Repository",
   "abstractKey": null
 };
-})();
-(node as any).hash = '0d6319e9de0f8e4643369cc034d92148';
+(node as any).hash = 'c2982a90cbbfb7c95c2a8fb790195e3c';
 export default node;

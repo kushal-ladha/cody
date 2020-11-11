@@ -4,29 +4,35 @@
 
 import { ConcreteRequest } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
-export type ReposRouteQueryVariables = {};
-export type ReposRouteQueryResponse = {
+export type RepositoryListPaginationQueryVariables = {
+    count: number;
+    cursor?: string | null;
+};
+export type RepositoryListPaginationQueryResponse = {
     readonly viewer: {
         readonly " $fragmentRefs": FragmentRefs<"RepositoryList_viewer">;
     } | null;
 };
-export type ReposRouteQuery = {
-    readonly response: ReposRouteQueryResponse;
-    readonly variables: ReposRouteQueryVariables;
+export type RepositoryListPaginationQuery = {
+    readonly response: RepositoryListPaginationQueryResponse;
+    readonly variables: RepositoryListPaginationQueryVariables;
 };
 
 
 
 /*
-query ReposRouteQuery {
+query RepositoryListPaginationQuery(
+  $count: Int!
+  $cursor: String
+) {
   viewer {
-    ...RepositoryList_viewer
+    ...RepositoryList_viewer_1G22uz
     id
   }
 }
 
-fragment RepositoryList_viewer on User {
-  repositories(first: 10) {
+fragment RepositoryList_viewer_1G22uz on User {
+  repositories(first: $count, after: $cursor) {
     edges {
       node {
         id
@@ -52,12 +58,29 @@ fragment Repository_repository on Repository {
 const node: ConcreteRequest = (function(){
 var v0 = [
   {
-    "kind": "Literal",
-    "name": "first",
-    "value": 10
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "count"
+  },
+  {
+    "defaultValue": null,
+    "kind": "LocalArgument",
+    "name": "cursor"
   }
 ],
-v1 = {
+v1 = [
+  {
+    "kind": "Variable",
+    "name": "after",
+    "variableName": "cursor"
+  },
+  {
+    "kind": "Variable",
+    "name": "first",
+    "variableName": "count"
+  }
+],
+v2 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
@@ -66,10 +89,10 @@ v1 = {
 };
 return {
   "fragment": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Fragment",
     "metadata": null,
-    "name": "ReposRouteQuery",
+    "name": "RepositoryListPaginationQuery",
     "selections": [
       {
         "alias": null,
@@ -80,7 +103,18 @@ return {
         "plural": false,
         "selections": [
           {
-            "args": null,
+            "args": [
+              {
+                "kind": "Variable",
+                "name": "count",
+                "variableName": "count"
+              },
+              {
+                "kind": "Variable",
+                "name": "cursor",
+                "variableName": "cursor"
+              }
+            ],
             "kind": "FragmentSpread",
             "name": "RepositoryList_viewer"
           }
@@ -93,9 +127,9 @@ return {
   },
   "kind": "Request",
   "operation": {
-    "argumentDefinitions": [],
+    "argumentDefinitions": (v0/*: any*/),
     "kind": "Operation",
-    "name": "ReposRouteQuery",
+    "name": "RepositoryListPaginationQuery",
     "selections": [
       {
         "alias": null,
@@ -107,7 +141,7 @@ return {
         "selections": [
           {
             "alias": null,
-            "args": (v0/*: any*/),
+            "args": (v1/*: any*/),
             "concreteType": "RepositoryConnection",
             "kind": "LinkedField",
             "name": "repositories",
@@ -129,7 +163,7 @@ return {
                     "name": "node",
                     "plural": false,
                     "selections": [
-                      (v1/*: any*/),
+                      (v2/*: any*/),
                       {
                         "alias": null,
                         "args": null,
@@ -190,32 +224,32 @@ return {
                 "storageKey": null
               }
             ],
-            "storageKey": "repositories(first:10)"
+            "storageKey": null
           },
           {
             "alias": null,
-            "args": (v0/*: any*/),
+            "args": (v1/*: any*/),
             "filters": null,
             "handle": "connection",
             "key": "RepositoryList_repositories",
             "kind": "LinkedHandle",
             "name": "repositories"
           },
-          (v1/*: any*/)
+          (v2/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "b5c8f94c8b2673c0d3e6c547e9bf7259",
+    "cacheID": "e85ea3c5ebdfe44019d28268c1ca969e",
     "id": null,
     "metadata": {},
-    "name": "ReposRouteQuery",
+    "name": "RepositoryListPaginationQuery",
     "operationKind": "query",
-    "text": "query ReposRouteQuery {\n  viewer {\n    ...RepositoryList_viewer\n    id\n  }\n}\n\nfragment RepositoryList_viewer on User {\n  repositories(first: 10) {\n    edges {\n      node {\n        id\n        ...Repository_repository\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment Repository_repository on Repository {\n  id\n  owner\n  name\n}\n"
+    "text": "query RepositoryListPaginationQuery(\n  $count: Int!\n  $cursor: String\n) {\n  viewer {\n    ...RepositoryList_viewer_1G22uz\n    id\n  }\n}\n\nfragment RepositoryList_viewer_1G22uz on User {\n  repositories(first: $count, after: $cursor) {\n    edges {\n      node {\n        id\n        ...Repository_repository\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment Repository_repository on Repository {\n  id\n  owner\n  name\n}\n"
   }
 };
 })();
-(node as any).hash = '7f2d6f5e29b8d124c929d91fcb568752';
+(node as any).hash = '557c528f5e6d83b69f55c566e8da241d';
 export default node;

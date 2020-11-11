@@ -6,7 +6,7 @@ class CodySchema < GraphQL::Schema
 
   def self.id_from_object(object, type_definition, query_ctx)
     if object.is_a?(ApplicationRecord)
-      object.to_signed_global_id
+      object.to_signed_global_id(expires_in: nil)
     elsif object.respond_to?(:owner) && object.respond_to?(:name)
       Base64.urlsafe_encode64("#{object.owner}/#{object.name}")
     else
@@ -28,7 +28,7 @@ class CodySchema < GraphQL::Schema
     raise "Couldn't decode ID: #{id}"
   end
 
-  def self.resolve_type(obj, ctx)
+  def self.resolve_type(type, obj, ctx)
     case obj
     when PullRequest
       Types::PullRequestType

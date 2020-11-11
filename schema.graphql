@@ -1,27 +1,45 @@
-# The mutation root
+"""
+The mutation root
+"""
 type Mutation {
-  # Update the currently authenticated user
+  """
+  Update the currently authenticated user
+  """
   updateUser(input: UpdateUserInput!): UpdateUserPayload
 }
 
-# An object with an ID.
+"""
+An object with an ID.
+"""
 interface Node {
-  # ID of the object.
+  """
+  ID of the object.
+  """
   id: ID!
 }
 
-# Information about pagination in a connection.
+"""
+Information about pagination in a connection.
+"""
 type PageInfo {
-  # When paginating forwards, the cursor to continue.
+  """
+  When paginating forwards, the cursor to continue.
+  """
   endCursor: String
 
-  # When paginating forwards, are there more items?
+  """
+  When paginating forwards, are there more items?
+  """
   hasNextPage: Boolean!
 
-  # When paginating backwards, are there more items?
+  """
+  When paginating backwards, are there more items?
+  """
   hasPreviousPage: Boolean!
 
-  # When paginating backwards, the cursor to continue.
+  """
+  When paginating backwards, the cursor to continue.
+  """
   startCursor: String
 }
 
@@ -30,55 +48,92 @@ type PullRequest implements Node {
   number: String!
   repository: String!
   reviewers(
-    # Returns the elements in the list that come after the specified global ID.
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
     after: String
 
-    # Returns the elements in the list that come before the specified global ID.
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
     before: String
 
-    # Returns the first _n_ elements from the list.
+    """
+    Returns the first _n_ elements from the list.
+    """
     first: Int
 
-    # Returns the last _n_ elements from the list.
+    """
+    Returns the last _n_ elements from the list.
+    """
     last: Int
     status: String
   ): ReviewerConnection
   status: String!
 }
 
-# The connection type for PullRequest.
+"""
+The connection type for PullRequest.
+"""
 type PullRequestConnection {
-  # A list of edges.
+  """
+  A list of edges.
+  """
   edges: [PullRequestEdge]
 
-  # Information to aid in pagination.
+  """
+  A list of nodes.
+  """
+  nodes: [PullRequest]
+
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 }
 
-# An edge in a connection.
+"""
+An edge in a connection.
+"""
 type PullRequestEdge {
-  # A cursor for use in pagination.
+  """
+  A cursor for use in pagination.
+  """
   cursor: String!
 
-  # The item at the end of the edge.
+  """
+  The item at the end of the edge.
+  """
   node: PullRequest
 }
 
-# The query root
+"""
+The query root
+"""
 type Query {
-  # Fetches an object given its ID.
+  """
+  Fetches an object given its ID.
+  """
   node(
-    # ID of the object.
+    """
+    ID of the object.
+    """
     id: ID!
   ): Node
 
-  # Fetches a list of objects given a list of IDs.
+  """
+  Fetches a list of objects given a list of IDs.
+  """
   nodes(
-    # IDs of the objects.
+    """
+    IDs of the objects.
+    """
     ids: [ID!]!
   ): [Node]!
 
-  # The currently authenticated user
+  """
+  The currently authenticated user
+  """
   viewer: User
 }
 
@@ -87,99 +142,169 @@ type Repository implements Node {
   name: String!
   owner: String!
 
-  # Find a PullRequest by number
+  """
+  Find a PullRequest by number
+  """
   pullRequest(number: String!): PullRequest
 
-  # This reapository's Pull Requests
+  """
+  This reapository's Pull Requests
+  """
   pullRequests(
-    # Returns the elements in the list that come after the specified global ID.
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
     after: String
 
-    # Returns the elements in the list that come before the specified global ID.
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
     before: String
 
-    # Returns the first _n_ elements from the list.
+    """
+    Returns the first _n_ elements from the list.
+    """
     first: Int
 
-    # Returns the last _n_ elements from the list.
+    """
+    Returns the last _n_ elements from the list.
+    """
     last: Int
     status: String
   ): PullRequestConnection
 
-  # Find a Review Rule by code
+  """
+  Find a Review Rule by code
+  """
   reviewRule(shortCode: String!): ReviewRule
 
-  # This repository's review rules
+  """
+  This repository's review rules
+  """
   reviewRules(
-    # Returns the elements in the list that come after the specified global ID.
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
     after: String
 
-    # Returns the elements in the list that come before the specified global ID.
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
     before: String
 
-    # Returns the first _n_ elements from the list.
+    """
+    Returns the first _n_ elements from the list.
+    """
     first: Int
 
-    # Returns the last _n_ elements from the list.
+    """
+    Returns the last _n_ elements from the list.
+    """
     last: Int
   ): ReviewRuleConnection
 }
 
-# The connection type for Repository.
+"""
+The connection type for Repository.
+"""
 type RepositoryConnection {
-  # A list of edges.
+  """
+  A list of edges.
+  """
   edges: [RepositoryEdge]
 
-  # Information to aid in pagination.
+  """
+  A list of nodes.
+  """
+  nodes: [Repository]
+
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 }
 
-# An edge in a connection.
+"""
+An edge in a connection.
+"""
 type RepositoryEdge {
-  # A cursor for use in pagination.
+  """
+  A cursor for use in pagination.
+  """
   cursor: String!
 
-  # The item at the end of the edge.
+  """
+  The item at the end of the edge.
+  """
   node: Repository
 }
 
 type ReviewRule implements Node {
   id: ID!
 
-  # The criteria used to match this rule
+  """
+  The criteria used to match this rule
+  """
   match: String!
 
-  # The rule's name
+  """
+  The rule's name
+  """
   name: String!
 
-  # The repository that owns this rule
+  """
+  The repository that owns this rule
+  """
   repository: String!
 
-  # The reviewer assigned to this rule
+  """
+  The reviewer assigned to this rule
+  """
   reviewer: String!
 
-  # Short code identifying the rule in commands
+  """
+  Short code identifying the rule in commands
+  """
   shortCode: String!
 
-  # The rule's type
+  """
+  The rule's type
+  """
   type: String!
 }
 
-# The connection type for ReviewRule.
+"""
+The connection type for ReviewRule.
+"""
 type ReviewRuleConnection {
-  # A list of edges.
+  """
+  A list of edges.
+  """
   edges: [ReviewRuleEdge]
 
-  # Information to aid in pagination.
+  """
+  A list of nodes.
+  """
+  nodes: [ReviewRule]
+
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 }
 
-# An edge in a connection.
+"""
+An edge in a connection.
+"""
 type ReviewRuleEdge {
-  # A cursor for use in pagination.
+  """
+  A cursor for use in pagination.
+  """
   cursor: String!
 
-  # The item at the end of the edge.
+  """
+  The item at the end of the edge.
+  """
   node: ReviewRule
 }
 
@@ -187,47 +312,70 @@ type Reviewer implements Node {
   id: ID!
   login: String!
 
-  # The Review Rule that added this Reviewer
+  """
+  The Review Rule that added this Reviewer
+  """
   reviewRule: ReviewRule
   status: ReviewerStatus!
-  versions: [ReviewerVersion]
 }
 
-# The connection type for Reviewer.
+"""
+The connection type for Reviewer.
+"""
 type ReviewerConnection {
-  # A list of edges.
+  """
+  A list of edges.
+  """
   edges: [ReviewerEdge]
 
-  # Information to aid in pagination.
+  """
+  A list of nodes.
+  """
+  nodes: [Reviewer]
+
+  """
+  Information to aid in pagination.
+  """
   pageInfo: PageInfo!
 }
 
-# An edge in a connection.
+"""
+An edge in a connection.
+"""
 type ReviewerEdge {
-  # A cursor for use in pagination.
+  """
+  A cursor for use in pagination.
+  """
   cursor: String!
 
-  # The item at the end of the edge.
+  """
+  The item at the end of the edge.
+  """
   node: Reviewer
 }
 
-# The review status of a Reviewer
+"""
+The review status of a Reviewer
+"""
 enum ReviewerStatus {
-  # Approved
+  """
+  Approved
+  """
   APPROVED
 
-  # Pending Approval
+  """
+  Pending Approval
+  """
   PENDING_APPROVAL
 }
 
-type ReviewerVersion {
-  login: [String]
-  status: [String]
-}
-
-# Autogenerated input type of UpdateUser
+"""
+Autogenerated input type of UpdateUser
+"""
 input UpdateUserInput {
-  # A unique identifier for the client performing the mutation.
+  """
+  A unique identifier for the client performing the mutation.
+  """
   clientMutationId: String
   email: String!
   paused: Boolean!
@@ -235,64 +383,102 @@ input UpdateUserInput {
   timezone: String!
 }
 
-# Autogenerated return type of UpdateUser
+"""
+Autogenerated return type of UpdateUser
+"""
 type UpdateUserPayload {
-  # A unique identifier for the client performing the mutation.
+  """
+  A unique identifier for the client performing the mutation.
+  """
   clientMutationId: String
   user: User
 }
 
 type User implements Node {
-  # Find the user's assigned reviews
+  """
+  Find the user's assigned reviews
+  """
   assignedReviews(
-    # Returns the elements in the list that come after the specified global ID.
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
     after: String
 
-    # Returns the elements in the list that come before the specified global ID.
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
     before: String
 
-    # Returns the first _n_ elements from the list.
+    """
+    Returns the first _n_ elements from the list.
+    """
     first: Int
 
-    # Returns the last _n_ elements from the list.
+    """
+    Returns the last _n_ elements from the list.
+    """
     last: Int
 
-    # Filter assigned reviews by status
+    """
+    Filter assigned reviews by status
+    """
     status: ReviewerStatus
   ): ReviewerConnection
 
-  # The user's email
+  """
+  The user's email
+  """
   email: String
   id: ID!
 
-  # The user's login
+  """
+  The user's login
+  """
   login: String!
 
-  # The user's name
+  """
+  The user's name
+  """
   name: String!
 
-  # Opt-in choice to temporarily pause assignment of new reviews
+  """
+  Opt-in choice to temporarily pause assignment of new reviews
+  """
   paused: Boolean!
   repositories(
-    # Returns the elements in the list that come after the specified global ID.
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
     after: String
 
-    # Returns the elements in the list that come before the specified global ID.
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
     before: String
 
-    # Returns the first _n_ elements from the list.
+    """
+    Returns the first _n_ elements from the list.
+    """
     first: Int
 
-    # Returns the last _n_ elements from the list.
+    """
+    Returns the last _n_ elements from the list.
+    """
     last: Int
   ): RepositoryConnection
 
-  # Find a given repository by the owner and name
+  """
+  Find a given repository by the owner and name
+  """
   repository(name: String!, owner: String!): Repository
 
-  # Opt-in choice for daily code review summary email
+  """
+  Opt-in choice for daily code review summary email
+  """
   sendNewReviewsSummary: Boolean!
 
-  # The user's configured timezone
+  """
+  The user's configured timezone
+  """
   timezone: String!
 }

@@ -24,23 +24,39 @@ export type RepositoryList_viewer$key = {
 
 
 const node: ReaderFragment = {
-  "argumentDefinitions": [],
+  "argumentDefinitions": [
+    {
+      "defaultValue": 10,
+      "kind": "LocalArgument",
+      "name": "count"
+    },
+    {
+      "defaultValue": null,
+      "kind": "LocalArgument",
+      "name": "cursor"
+    }
+  ],
   "kind": "Fragment",
-  "metadata": null,
+  "metadata": {
+    "connection": [
+      {
+        "count": "count",
+        "cursor": "cursor",
+        "direction": "forward",
+        "path": [
+          "repositories"
+        ]
+      }
+    ]
+  },
   "name": "RepositoryList_viewer",
   "selections": [
     {
-      "alias": null,
-      "args": [
-        {
-          "kind": "Literal",
-          "name": "first",
-          "value": 10
-        }
-      ],
+      "alias": "repositories",
+      "args": null,
       "concreteType": "RepositoryConnection",
       "kind": "LinkedField",
-      "name": "repositories",
+      "name": "__RepositoryList_repositories_connection",
       "plural": false,
       "selections": [
         {
@@ -67,22 +83,61 @@ const node: ReaderFragment = {
                   "storageKey": null
                 },
                 {
+                  "alias": null,
+                  "args": null,
+                  "kind": "ScalarField",
+                  "name": "__typename",
+                  "storageKey": null
+                },
+                {
                   "args": null,
                   "kind": "FragmentSpread",
                   "name": "Repository_repository"
                 }
               ],
               "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "cursor",
+              "storageKey": null
+            }
+          ],
+          "storageKey": null
+        },
+        {
+          "alias": null,
+          "args": null,
+          "concreteType": "PageInfo",
+          "kind": "LinkedField",
+          "name": "pageInfo",
+          "plural": false,
+          "selections": [
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "endCursor",
+              "storageKey": null
+            },
+            {
+              "alias": null,
+              "args": null,
+              "kind": "ScalarField",
+              "name": "hasNextPage",
+              "storageKey": null
             }
           ],
           "storageKey": null
         }
       ],
-      "storageKey": "repositories(first:10)"
+      "storageKey": null
     }
   ],
   "type": "User",
   "abstractKey": null
 };
-(node as any).hash = '42c0f26b8c5144a0ebe8d120f7ed54b7';
+(node as any).hash = 'e4777562dbc6a0a80beefd66237859d5';
 export default node;
