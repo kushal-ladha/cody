@@ -2,6 +2,7 @@ import React from "react";
 import { createPaginationContainer, graphql, RelayPaginationProp } from "react-relay";
 import { AssignedReviews_viewer } from "./__generated__/AssignedReviews_viewer.graphql";
 import { Link } from "react-router-dom";
+import LoadMore from "./LoadMore";
 
 function AssignedReviews({ relay, viewer }: { relay: RelayPaginationProp, viewer: AssignedReviews_viewer }) {
   return (
@@ -38,24 +39,7 @@ function AssignedReviews({ relay, viewer }: { relay: RelayPaginationProp, viewer
             </div>
           );
         })}
-        {relay.hasMore() ? (
-          <div className="has-text-centered">
-            <button
-              className="button"
-              onClick={() => {
-                if (!relay.hasMore() || relay.isLoading()) {
-                  return;
-                }
-
-                relay.loadMore(10, (error) => {
-                  console.log(error);
-                });
-              }}
-            >
-              Load more
-            </button>
-          </div>
-        ) : null}
+        <LoadMore relay={relay} />
       </div>
     </section>
   );
