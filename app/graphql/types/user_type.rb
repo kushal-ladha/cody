@@ -50,7 +50,7 @@ class Types::UserType < Types::BaseObject
       .find_by(owner: args[:owner], name: args[:name])
   end
 
-  field :assignedReviews, Types::ReviewerType.connection_type, null: true,
+  field :assigned_reviews, Types::ReviewerType.connection_type, null: true,
                                                                connection: true do
     description "Find the user's assigned reviews"
     argument :status, Types::ReviewerStatusType, required: false,

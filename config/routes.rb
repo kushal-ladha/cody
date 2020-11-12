@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   get "/repos/:owner/:repo/rules" => "pulls#index"
   get "/repos/:owner/:repo/rules/:code" => "pulls#index"
 
+  get "/assigned" => "pulls#index"
+
   get "/profile" => "pulls#index"
 
   resource :session, only: %i[new create destroy]

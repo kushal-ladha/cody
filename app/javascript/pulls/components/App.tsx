@@ -47,6 +47,13 @@ const RulesLoadable = Loadable({
   }
 });
 
+const PullsLoadable = Loadable({
+  loader: () => import("./routes/PullsRoute"),
+  loading() {
+    return <div className="loader">Loading</div>;
+  }
+})
+
 const App = () => (
   <>
     <PageHead />
@@ -98,6 +105,13 @@ const App = () => (
             path="/profile"
             render={props => (
               <ProfileLoadable {...props} environment={environment} />
+            )}
+          />
+          <Route
+            exact
+            path="/assigned"
+            render={props => (
+              <PullsLoadable {...props} environment={environment} />
             )}
           />
           <Redirect from="/" to="/repos" />

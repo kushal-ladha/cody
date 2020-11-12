@@ -105,6 +105,14 @@ class Nav extends React.Component<{}, State> {
             </div>
             <div className="navbar-end">
               <NavLink
+                to="/assigned"
+                className="navbar-item"
+                activeClassName="has-text-info is-active"
+                title="Assigned Code Reviews"
+              >
+                Assigned
+              </NavLink>
+              <NavLink
                 to="/profile"
                 className="navbar-item"
                 activeClassName="has-text-info is-active"

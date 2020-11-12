@@ -40,7 +40,7 @@ class User < ApplicationRecord
   end
 
   def assigned_reviews(status: nil)
-    relation = Reviewer.where(login: login)
+    relation = Reviewer.joins(:pull_request).where(pull_requests: {status: PullRequest::STATUS_PENDING_REVIEW}).where(login: login).order(updated_at: :desc)
     unless status.nil?
       relation = relation.where(status: status)
     end

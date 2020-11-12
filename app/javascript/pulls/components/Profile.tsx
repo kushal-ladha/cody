@@ -80,7 +80,7 @@ class Profile extends React.Component<Props, State> {
             ) : null}
             <div className="columns">
               <div className="column is-half">
-                <h1 className="title">Profile</h1>
+                <h2 className="title is-size-4">Profile</h2>
                 <TextField
                   label="Email"
                   name="email"

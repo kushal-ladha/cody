@@ -311,6 +311,7 @@ type ReviewRuleEdge {
 type Reviewer implements Node {
   id: ID!
   login: String!
+  pullRequest: PullRequest!
 
   """
   The Review Rule that added this Reviewer
