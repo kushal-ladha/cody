@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { createFragmentContainer, graphql } from "react-relay";
 import type { Repository_repository } from "./__generated__/Repository_repository.graphql";
+import { MoreHorizontal } from "react-feather";
 
 const Repository = ({ repository }: { repository: Repository_repository }) => (
   <div className="level box">
@@ -17,7 +18,7 @@ const Repository = ({ repository }: { repository: Repository_repository }) => (
           className="button"
           title={`${repository.owner}/${repository.name}`}
         >
-          &bull; &bull; &bull;
+          <MoreHorizontal />
         </Link>
       </div>
     </div>

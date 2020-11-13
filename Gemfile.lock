@@ -131,8 +131,6 @@ GEM
     faraday_middleware (1.0.0)
       faraday (~> 1.0)
     ffi (1.13.1)
-    font-awesome-sass (5.15.1)
-      sassc (>= 1.11)
     get_process_mem (0.2.7)
       ffi (~> 1.0)
     gli (2.19.2)
@@ -449,7 +447,6 @@ DEPENDENCIES
   factory_bot_rails
   faraday
   faraday-http-cache
-  font-awesome-sass
   graphiql-rails
   graphql
   haml-rails

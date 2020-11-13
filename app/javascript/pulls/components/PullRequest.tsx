@@ -1,4 +1,5 @@
 import React from "react";
+import { MoreHorizontal } from "react-feather";
 import { createFragmentContainer, graphql } from "react-relay";
 import { Link } from "react-router-dom";
 import type { PullRequest_pullRequest } from "./__generated__/PullRequest_pullRequest.graphql";
@@ -22,7 +23,7 @@ const PullRequest = ({
           className="button"
           title={`${repository}#${number}`}
         >
-          &bull; &bull; &bull;
+          <MoreHorizontal />
         </Link>
       </div>
     </div>

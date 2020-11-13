@@ -65,8 +65,6 @@ gem "kaminari"
 
 gem "bulma-rails"
 
-gem "font-awesome-sass"
-
 gem "pundit"
 
 gem "paper_trail", "~> 11.0"

@@ -1,5 +1,5 @@
 import React from "react";
-import Icon from "./Icon";
+import { User, GitPullRequest } from "react-feather";
 import { NavLink, Route } from "react-router-dom";
 import classNames from "classnames";
 
@@ -41,7 +41,7 @@ class Nav extends React.Component<{}, State> {
             <NavLink to="/" className="navbar-item" title="Cody">
               <strong>Cody</strong>
               &nbsp;
-              <Icon icon="code" size="medium" />
+              <GitPullRequest />
             </NavLink>
             <div
               role="button"
@@ -110,7 +110,7 @@ class Nav extends React.Component<{}, State> {
                 activeClassName="has-text-info is-active"
                 title="Profile"
               >
-                <Icon icon="user-circle" />
+                <User />
               </NavLink>
             </div>
           </div>

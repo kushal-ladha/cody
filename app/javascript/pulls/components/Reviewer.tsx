@@ -1,4 +1,5 @@
 import React from "react";
+import { Circle, CheckCircle } from "react-feather";
 import { createFragmentContainer, graphql } from "react-relay";
 import type {
   Reviewer_reviewer,
@@ -10,13 +11,13 @@ function statusToOcticon(status: ReviewerStatus) {
     case "PENDING_APPROVAL":
       return (
         <span className="icon color-warning" title="Pending approval">
-          <i className="far fa-circle" />
+          <Circle />
         </span>
       );
     case "APPROVED":
       return (
         <span className="icon color-success" title="Approved">
-          <i className="fas fa-circle" />
+          <CheckCircle />
         </span>
       );
     default:
