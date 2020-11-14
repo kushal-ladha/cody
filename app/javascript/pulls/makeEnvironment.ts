@@ -1,7 +1,7 @@
 import { Network, Environment, RecordSource, Store } from "relay-runtime";
 
-export default function makeEnvironment(csrfToken) {
-  function fetchQuery(operation: { text: any; }, variables: any) {
+export default function makeEnvironment(csrfToken: string): Environment {
+  function fetchQuery(operation: { text: unknown; }, variables: unknown) {
     return fetch("/graphql", {
       method: "POST",
       credentials: "same-origin",

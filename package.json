@@ -9,7 +9,8 @@
     "node": "12.x"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "lint": "eslint app/javascript"
   },
   "dependencies": {
     "@babel/plugin-syntax-dynamic-import": "7.8.3",
@@ -20,6 +21,8 @@
     "@types/react": "^16.9.56",
     "@types/react-dom": "^16.9.9",
     "@types/react-relay": "^7.0.17",
+    "@types/react-router": "^5.1.8",
+    "@types/react-router-dom": "^5.1.6",
     "@types/relay-runtime": "^10.0.10",
     "autoprefixer": "7.2.4",
     "babel-plugin-relay": "10.0.1",
@@ -46,11 +49,12 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.1",
+    "@typescript-eslint/eslint-plugin": "^4.7.0",
+    "@typescript-eslint/parser": "^4.7.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "26.6.3",
     "codecov": "3.8.1",
-    "eslint": "4.19.1",
-    "eslint-plugin-jsx-a11y": "6.0.3",
+    "eslint": "7.13.0",
     "eslint-plugin-react": "7.7.0",
     "graphql": "^15.4.0",
     "jest": "26.6.3",

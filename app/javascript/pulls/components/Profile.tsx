@@ -1,5 +1,5 @@
 import React, { SyntheticEvent } from "react";
-import { commitMutation, createFragmentContainer, graphql } from "react-relay";
+import { commitMutation, createFragmentContainer, graphql, RelayProp } from "react-relay";
 import { listTimeZones } from "timezone-support";
 import TextField from "./inputs/TextField";
 import Checkbox from "./inputs/Checkbox";
@@ -19,7 +19,7 @@ const timezones = listTimeZones();
 
 type Props = {
   user: Profile_user,
-  relay: any
+  relay: RelayProp
 };
 
 type State = {

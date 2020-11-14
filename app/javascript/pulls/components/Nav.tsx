@@ -1,123 +1,101 @@
-import React from "react";
+import React, { useState } from "react";
 import { User, GitPullRequest } from "react-feather";
 import { NavLink, Route } from "react-router-dom";
 import classNames from "classnames";
 
-type State = {
-  isExpanded: boolean
-};
+function Nav(): JSX.Element {
+  const [isExpanded, setExpanded] = useState(false);
 
-class Nav extends React.Component<{}, State> {
-  constructor(props: any) {
-    super(props);
+  const burgerClass = classNames({
+    "navbar-burger": true,
+    burger: true,
+    "is-active": isExpanded,
+  });
 
-    this.state = {
-      isExpanded: false
-    };
-  }
+  const menuClass = classNames({
+    "navbar-menu": true,
+    "is-active": isExpanded,
+  });
 
-  onClickBurger = () => {
-    this.setState(({ isExpanded }) => {
-      return { isExpanded: !isExpanded };
-    });
-  };
-
-  render() {
-    const burgerClass = classNames({
-      "navbar-burger": true,
-      burger: true,
-      "is-active": this.state.isExpanded
-    });
-
-    const menuClass = classNames({
-      "navbar-menu": true,
-      "is-active": this.state.isExpanded
-    });
-
-    return (
-      <nav className="navbar has-shadow" aria-label="main-navigation">
-        <div className="container">
-          <div className="navbar-brand">
-            <NavLink to="/" className="navbar-item" title="Cody">
-              <strong>Cody</strong>
-              &nbsp;
-              <GitPullRequest />
-            </NavLink>
-            <div
-              role="button"
-              tabIndex={0}
-              className={burgerClass}
-              data-target="navMenu"
-              onClick={this.onClickBurger}
-              onKeyUp={this.onClickBurger}
-            >
-              <span />
-              <span />
-              <span />
-            </div>
-          </div>
-          <div id="navMenu" className={menuClass}>
-            <div className="navbar-start">
-              <NavLink
-                exact
-                to="/repos"
-                className="navbar-item"
-                activeClassName="has-text-info is-active"
-                title="Repos"
-              >
-                Repos
-              </NavLink>
-              <Route path="/repos/:owner/:name">
-                {({ match }) => {
-                  if (match) {
-                    return (
-                      <React.Fragment>
-                        <div className="navbar-item">
-                          {`${match.params.owner}/${match.params.name}`}
-                        </div>
-                        <NavLink
-                          to={`/repos/${match.params.owner}/${
-                            match.params.name
-                          }/pulls`}
-                          className="navbar-item"
-                          activeClassName="has-text-info is-active"
-                          title="Pulls"
-                        >
-                          Pulls
-                        </NavLink>
-                        <NavLink
-                          to={`/repos/${match.params.owner}/${
-                            match.params.name
-                          }/rules`}
-                          className="navbar-item"
-                          activeClassName="has-text-info is-active"
-                          title="Rules"
-                        >
-                          Rules
-                        </NavLink>
-                      </React.Fragment>
-                    );
-                  } else {
-                    return null;
-                  }
-                }}
-              </Route>
-            </div>
-            <div className="navbar-end">
-              <NavLink
-                to="/profile"
-                className="navbar-item"
-                activeClassName="has-text-info is-active"
-                title="Profile"
-              >
-                <User />
-              </NavLink>
-            </div>
+  return (
+    <nav className="navbar has-shadow" aria-label="main-navigation">
+      <div className="container">
+        <div className="navbar-brand">
+          <NavLink to="/" className="navbar-item" title="Cody">
+            <strong>Cody</strong>
+            &nbsp;
+            <GitPullRequest />
+          </NavLink>
+          <div
+            role="button"
+            tabIndex={0}
+            className={burgerClass}
+            data-target="navMenu"
+            onClick={() => setExpanded(!isExpanded)}
+            onKeyUp={() => setExpanded(!isExpanded)}
+          >
+            <span />
+            <span />
+            <span />
           </div>
         </div>
-      </nav>
-    );
-  }
+        <div id="navMenu" className={menuClass}>
+          <div className="navbar-start">
+            <NavLink
+              exact
+              to="/repos"
+              className="navbar-item"
+              activeClassName="has-text-info is-active"
+              title="Repos"
+            >
+              Repos
+            </NavLink>
+            <Route path="/repos/:owner/:name">
+              {({ match }) => {
+                if (match) {
+                  return (
+                    <React.Fragment>
+                      <div className="navbar-item">
+                        {`${match.params.owner}/${match.params.name}`}
+                      </div>
+                      <NavLink
+                        to={`/repos/${match.params.owner}/${match.params.name}/pulls`}
+                        className="navbar-item"
+                        activeClassName="has-text-info is-active"
+                        title="Pulls"
+                      >
+                        Pulls
+                      </NavLink>
+                      <NavLink
+                        to={`/repos/${match.params.owner}/${match.params.name}/rules`}
+                        className="navbar-item"
+                        activeClassName="has-text-info is-active"
+                        title="Rules"
+                      >
+                        Rules
+                      </NavLink>
+                    </React.Fragment>
+                  );
+                } else {
+                  return null;
+                }
+              }}
+            </Route>
+          </div>
+          <div className="navbar-end">
+            <NavLink
+              to="/profile"
+              className="navbar-item"
+              activeClassName="has-text-info is-active"
+              title="Profile"
+            >
+              <User />
+            </NavLink>
+          </div>
+        </div>
+      </div>
+    </nav>
+  );
 }
 
 export default Nav;

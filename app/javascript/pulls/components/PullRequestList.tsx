@@ -1,50 +1,56 @@
 import React from "react";
 import PullRequest from "./PullRequest";
 import {
-  createFragmentContainer,
   createPaginationContainer,
   graphql,
   RelayPaginationProp,
 } from "react-relay";
 import type { PullRequestList_repository } from "./__generated__/PullRequestList_repository.graphql";
 
-const PullRequestList = ({
+function PullRequestList({
   relay,
   repository,
 }: {
   relay: RelayPaginationProp;
   repository: PullRequestList_repository;
-}) => (
-  <section className="section">
-    <div className="container">
-      {repository.pullRequests != null && repository.pullRequests.edges != null
-        ? repository.pullRequests.edges.map((edge) => {
-            if (edge != null && edge.node != null) {
-              return <PullRequest key={edge.node.id} pullRequest={edge.node} />;
-            } else {
-              return null;
-            }
-          })
-        : null}
-      {relay.hasMore() ? <div className="has-text-centered">
-        <button
-          className="button"
-          onClick={() => {
-            if (!relay.hasMore() || relay.isLoading()) {
-              return;
-            }
+}): JSX.Element {
+  return (
+    <section className="section">
+      <div className="container">
+        {repository.pullRequests != null &&
+        repository.pullRequests.edges != null
+          ? repository.pullRequests.edges.map((edge) => {
+              if (edge != null && edge.node != null) {
+                return (
+                  <PullRequest key={edge.node.id} pullRequest={edge.node} />
+                );
+              } else {
+                return null;
+              }
+            })
+          : null}
+        {relay.hasMore() ? (
+          <div className="has-text-centered">
+            <button
+              className="button"
+              onClick={() => {
+                if (!relay.hasMore() || relay.isLoading()) {
+                  return;
+                }
 
-            relay.loadMore(10, (error) => {
-              console.log(error);
-            });
-          }}
-        >
-          Load more
-        </button>
-      </div> : null}
-    </div>
-  </section>
-);
+                relay.loadMore(10, (error) => {
+                  console.log(error);
+                });
+              }}
+            >
+              Load more
+            </button>
+          </div>
+        ) : null}
+      </div>
+    </section>
+  );
+}
 
 export default createPaginationContainer(
   PullRequestList,
@@ -80,7 +86,7 @@ export default createPaginationContainer(
         count: totalCount,
       };
     },
-    getVariables(props, { count, cursor }, fragmentVariables) {
+    getVariables(props, { count, cursor }) {
       return {
         count,
         cursor,

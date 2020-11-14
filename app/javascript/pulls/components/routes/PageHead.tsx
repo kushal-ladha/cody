@@ -1,8 +1,8 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 
-const PageHead = ({ title }: { title?: string }) => (
-  <Helmet title={title} titleTemplate="%s - Cody" defaultTitle="Cody" />
-);
+function PageHead({ title }: { title?: string }): JSX.Element {
+  return <Helmet title={title} titleTemplate="%s - Cody" defaultTitle="Cody" />;
+}
 
 export default PageHead;

@@ -3,11 +3,11 @@ import Reviewer from "./Reviewer";
 import { createFragmentContainer, graphql } from "react-relay";
 import { PullRequestDetail_pullRequest } from "./__generated__/PullRequestDetail_pullRequest.graphql";
 
-const PullRequestDetail = ({
-  pullRequest
+function PullRequestDetail({
+  pullRequest,
 }: {
-  pullRequest: PullRequestDetail_pullRequest
-}) => {
+  pullRequest: PullRequestDetail_pullRequest;
+}): JSX.Element {
   return (
     <section className="section">
       <div className="container box code">
@@ -20,7 +20,7 @@ const PullRequestDetail = ({
         <hr />
         <div>
           {pullRequest.reviewers != null && pullRequest.reviewers.edges != null
-            ? pullRequest.reviewers.edges.map(edge => {
+            ? pullRequest.reviewers.edges.map((edge) => {
                 if (edge != null && edge.node != null) {
                   // https://github.com/facebook/relay/issues/1918
                   return <Reviewer key={edge.node.id} reviewer={edge.node} />;
@@ -31,26 +31,23 @@ const PullRequestDetail = ({
       </div>
     </section>
   );
-};
+}
 
-export default createFragmentContainer(
-  PullRequestDetail,
-  {
-    pullRequest: graphql`
-      fragment PullRequestDetail_pullRequest on PullRequest {
-        id
-        repository
-        number
-        status
-        reviewers {
-          edges {
-            node {
-              id
-              ...Reviewer_reviewer
-            }
+export default createFragmentContainer(PullRequestDetail, {
+  pullRequest: graphql`
+    fragment PullRequestDetail_pullRequest on PullRequest {
+      id
+      repository
+      number
+      status
+      reviewers {
+        edges {
+          node {
+            id
+            ...Reviewer_reviewer
           }
         }
       }
-    `
-  }
-);
+    }
+  `,
+});

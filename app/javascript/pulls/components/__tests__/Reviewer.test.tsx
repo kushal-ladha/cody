@@ -1,12 +1,13 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { createMockEnvironment, MockPayloadGenerator } from "relay-test-utils";
-import { QueryRenderer, graphql } from "react-relay";
+import { QueryRenderer, graphql, Environment } from "react-relay";
 import Reviewer from "../Reviewer";
 import "@testing-library/jest-dom/extend-expect";
+import { ReviewerTestSnapshotQuery } from "./__generated__/ReviewerTestSnapshotQuery.graphql";
 
-const TestComponent = ({ environment }) => (
-  <QueryRenderer
+const TestComponent = ({ environment }: { environment: Environment }) => (
+  <QueryRenderer<ReviewerTestSnapshotQuery>
     environment={environment}
     query={graphql`
       query ReviewerTestSnapshotQuery @relay_test_operation {
@@ -50,13 +51,13 @@ beforeEach(() => {
 });
 
 test("Reviewer snapshot test", () => {
-  let renderedComponent = render(<TestComponent environment={environment} />);
+  const renderedComponent = render(<TestComponent environment={environment} />);
 
   environment.mock.resolveMostRecentOperation((operation) =>
     MockPayloadGenerator.generate(operation)
   );
 
-  let fragment = renderedComponent.asFragment();
+  const fragment = renderedComponent.asFragment();
   expect(fragment).toMatchSnapshot();
 });
 

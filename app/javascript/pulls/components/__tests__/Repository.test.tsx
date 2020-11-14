@@ -1,12 +1,13 @@
 import React from "react";
 import { render } from "@testing-library/react";
 import { createMockEnvironment, MockPayloadGenerator } from "relay-test-utils";
-import { QueryRenderer, graphql } from "react-relay";
+import { QueryRenderer, graphql, Environment } from "react-relay";
 import { MemoryRouter } from "react-router";
 import Repository from "../Repository";
+import { RepositoryTestSnapshotQuery } from "./__generated__/RepositoryTestSnapshotQuery.graphql";
 
-const TestComponent = ({ environment }) => (
-  <QueryRenderer
+const TestComponent = ({ environment }: { environment: Environment }) => (
+  <QueryRenderer<RepositoryTestSnapshotQuery>
     environment={environment}
     query={graphql`
       query RepositoryTestSnapshotQuery @relay_test_operation {
@@ -42,12 +43,12 @@ beforeEach(() => {
 });
 
 test("Repository snapshot test", () => {
-  let renderedComponent = render(<TestComponent environment={environment} />, { wrapper: MemoryRouter });
+  const renderedComponent = render(<TestComponent environment={environment} />, { wrapper: MemoryRouter });
 
   environment.mock.resolveMostRecentOperation((operation) =>
     MockPayloadGenerator.generate(operation)
   );
 
-  let fragment = renderedComponent.asFragment();
+  const fragment = renderedComponent.asFragment();
   expect(fragment).toMatchSnapshot();
 });

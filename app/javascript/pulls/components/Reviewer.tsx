@@ -3,7 +3,7 @@ import { Circle, CheckCircle } from "react-feather";
 import { createFragmentContainer, graphql } from "react-relay";
 import type {
   Reviewer_reviewer,
-  ReviewerStatus
+  ReviewerStatus,
 } from "./__generated__/Reviewer_reviewer.graphql";
 
 function statusToOcticon(status: ReviewerStatus) {
@@ -25,32 +25,31 @@ function statusToOcticon(status: ReviewerStatus) {
   }
 }
 
-const Reviewer = ({ reviewer }: { reviewer: Reviewer_reviewer }) => (
-  <div className="level">
-    <div className="level-left">
-      <div className="level-item">{statusToOcticon(reviewer.status)}</div>
-      <div className="level-item">
-        <strong data-testid="reviewer-login">{reviewer.login}</strong>
-      </div>
-      <div className="level-item" data-testid="review-rule-name">
-        {reviewer.reviewRule != null ? reviewer.reviewRule.name : false}
+function Reviewer({ reviewer }: { reviewer: Reviewer_reviewer }): JSX.Element {
+  return (
+    <div className="level">
+      <div className="level-left">
+        <div className="level-item">{statusToOcticon(reviewer.status)}</div>
+        <div className="level-item">
+          <strong data-testid="reviewer-login">{reviewer.login}</strong>
+        </div>
+        <div className="level-item" data-testid="review-rule-name">
+          {reviewer.reviewRule != null ? reviewer.reviewRule.name : false}
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+}
 
-export default createFragmentContainer(
-  Reviewer,
-  {
-    reviewer: graphql`
-      fragment Reviewer_reviewer on Reviewer {
-        id
-        login
-        status
-        reviewRule {
-          name
-        }
+export default createFragmentContainer(Reviewer, {
+  reviewer: graphql`
+    fragment Reviewer_reviewer on Reviewer {
+      id
+      login
+      status
+      reviewRule {
+        name
       }
-    `
-  }
-);
+    }
+  `,
+});
