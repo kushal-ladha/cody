@@ -8,6 +8,8 @@ module.exports = {
     "plugin:react/recommended",
   ],
   env: {
-    jest: true
+    browser: true,
+    jest: true,
+    node: true
   }
 };
