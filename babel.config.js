@@ -1,18 +1,18 @@
-module.exports = function(api) {
-  var validEnv = ['development', 'test', 'production']
-  var currentEnv = api.env()
-  var isDevelopmentEnv = api.env('development')
-  var isProductionEnv = api.env('production')
-  var isTestEnv = api.env('test')
+module.exports = function (api) {
+  var validEnv = ["development", "test", "production"];
+  var currentEnv = api.env();
+  var isDevelopmentEnv = api.env("development");
+  var isProductionEnv = api.env("production");
+  var isTestEnv = api.env("test");
 
   if (!validEnv.includes(currentEnv)) {
     throw new Error(
-      'Please specify a valid `NODE_ENV` or ' +
+      "Please specify a valid `NODE_ENV` or " +
         '`BABEL_ENV` environment variables. Valid values are "development", ' +
         '"test", and "production". Instead, received: ' +
         JSON.stringify(currentEnv) +
-        '.'
-    )
+        "."
+    );
   }
 
   return {
@@ -36,7 +36,7 @@ module.exports = function(api) {
         },
       ],
       "@babel/preset-react",
-      "@babel/preset-typescript"
+      "@babel/preset-typescript",
     ].filter(Boolean),
     plugins: [
       "relay",
@@ -68,6 +68,7 @@ module.exports = function(api) {
           async: false,
         },
       ],
+      process.env.WEBPACK_DEV_SERVER && "react-refresh/babel",
     ].filter(Boolean),
   };
-}
+};
