@@ -71,7 +71,7 @@ GEM
       msgpack (~> 1.0)
     break (0.21.0)
     builder (3.2.4)
-    capybara (3.33.0)
+    capybara (3.34.0)
       addressable
       mini_mime (>= 0.1.3)
       nokogiri (~> 1.8)
@@ -287,7 +287,7 @@ GEM
       ffi (~> 1.0)
     rdoc (6.2.1)
     redis (4.2.2)
-    regexp_parser (1.7.1)
+    regexp_parser (1.8.2)
     request_store (1.5.0)
       rack (>= 1.4)
     rexml (3.2.4)
@@ -435,7 +435,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.16)
   bootsnap
   break
-  capybara (~> 3.33)
+  capybara (~> 3.34)
   codecov
   coffee-rails (~> 5.0)
   dalli
