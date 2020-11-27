@@ -2,80 +2,136 @@
 
 exports[`PullRequestDetail snapshot test 1`] = `
 <DocumentFragment>
-  <section
-    class="section"
+  <div
+    class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-6"
   >
     <div
-      class="container box code"
+      class="bg-white shadow overflow-hidden sm:rounded-md"
     >
       <div
-        class="pa4 br2 ba b--light-gray mt4 bg-white"
+        class="divide-y divide-gray-200"
       >
-        <h1
-          class="title code"
-        >
-          &lt;mock-value-for-field-"repository"&gt;#&lt;mock-value-for-field-"number"&gt;
-        </h1>
-        <h2
-          class="subtitle code"
-        >
-          &lt;mock-value-for-field-"status"&gt;
-        </h2>
-      </div>
-      <hr />
-      <div>
         <div
-          class="level"
+          class="flex items-center py-4 px-4 sm:px-6"
         >
           <div
-            class="level-left"
+            class="min-w-0 flex flex-1 items-center"
           >
             <div
-              class="level-item"
+              class="flex-shrink-0"
             >
-              <span
-                class="icon color-success"
-                title="Approved"
+              <svg
+                fill="none"
+                height="24"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+                width="24"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <svg
-                  fill="none"
-                  height="24"
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  viewBox="0 0 24 24"
-                  width="24"
-                  xmlns="http://www.w3.org/2000/svg"
+                <circle
+                  cx="18"
+                  cy="18"
+                  r="3"
+                />
+                <circle
+                  cx="6"
+                  cy="6"
+                  r="3"
+                />
+                <path
+                  d="M13 6h3a2 2 0 0 1 2 2v7"
+                />
+                <line
+                  x1="6"
+                  x2="6"
+                  y1="9"
+                  y2="21"
+                />
+              </svg>
+            </div>
+            <div
+              class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4"
+            >
+              <div>
+                <h1
+                  class="text-lg leading-6 font-medium text-gray-900"
                 >
-                  <path
-                    d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
-                  />
-                  <polyline
-                    points="22 4 12 14.01 9 11.01"
-                  />
-                </svg>
-              </span>
-            </div>
-            <div
-              class="level-item"
-            >
-              <strong
-                data-testid="reviewer-login"
-              >
-                &lt;mock-value-for-field-"login"&gt;
-              </strong>
-            </div>
-            <div
-              class="level-item"
-              data-testid="review-rule-name"
-            >
-              &lt;mock-value-for-field-"name"&gt;
+                  &lt;mock-value-for-field-"repository"&gt;#&lt;mock-value-for-field-"number"&gt;
+                </h1>
+                <p
+                  class="mt-1 text-sm text-gray-500"
+                >
+                  &lt;mock-value-for-field-"status"&gt;
+                </p>
+              </div>
             </div>
           </div>
         </div>
+        <div>
+          <ul>
+            <li>
+              <div
+                class="flex items-center px-4 py-4 sm:px-6"
+              >
+                <div
+                  class="min-w-0 flex flex-1 items-center"
+                >
+                  <div
+                    class="flex-shrink-0"
+                  >
+                    <span
+                      class="sr-only"
+                    >
+                      Approved
+                    </span>
+                    <svg
+                      class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-500"
+                      fill="none"
+                      height="24"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      viewBox="0 0 24 24"
+                      width="24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M22 11.08V12a10 10 0 1 1-5.93-9.14"
+                      />
+                      <polyline
+                        points="22 4 12 14.01 9 11.01"
+                      />
+                    </svg>
+                  </div>
+                  <div
+                    class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4"
+                  >
+                    <div>
+                      <p
+                        class="text-sm font-medium truncate"
+                        data-testid="reviewer-login"
+                      >
+                        &lt;mock-value-for-field-"login"&gt;
+                      </p>
+                      <p
+                        class="text-sm truncate text-gray-500"
+                        data-testid="review-rule-name"
+                      >
+                        &lt;mock-value-for-field-"name"&gt;
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-  </section>
+  </div>
 </DocumentFragment>
 `;

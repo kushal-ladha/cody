@@ -1,9 +1,17 @@
-import React, { SyntheticEvent } from "react";
-import { commitMutation, createFragmentContainer, graphql, RelayProp } from "react-relay";
+import React, { useReducer } from "react";
+import {
+  commitMutation,
+  createFragmentContainer,
+  graphql,
+  RelayProp,
+} from "react-relay";
 import { listTimeZones } from "timezone-support";
 import TextField from "./inputs/TextField";
 import Checkbox from "./inputs/Checkbox";
 import type { Profile_user } from "./__generated__/Profile_user.graphql";
+import Container from "./Container";
+import Button from "./inputs/Button";
+import Notification from "./Notification";
 
 const UPDATE_USER_MUTATION = graphql`
   mutation ProfileUpdateUserMutation($input: UpdateUserInput!) {
@@ -18,148 +26,149 @@ const UPDATE_USER_MUTATION = graphql`
 const timezones = listTimeZones();
 
 type Props = {
-  user: Profile_user,
-  relay: RelayProp
+  user: Profile_user;
+  relay: RelayProp;
 };
 
 type State = {
-  email: string,
-  sendNewReviewsSummary: boolean,
-  timezone: string,
-  paused: boolean,
-  lastResponseSuccess: boolean
+  email: string;
+  sendNewReviewsSummary: boolean;
+  timezone: string;
+  paused: boolean;
+  lastResponseSuccess: boolean;
 };
 
-class Profile extends React.Component<Props, State> {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      email: this.props.user.email != null ? this.props.user.email : "",
-      sendNewReviewsSummary: this.props.user.sendNewReviewsSummary,
-      timezone: this.props.user.timezone,
-      paused: this.props.user.paused,
-      lastResponseSuccess: false
-    };
-  }
-
-  handleChange = (event: SyntheticEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const target = event.currentTarget;
-    const name = target.name;
-    const value = target.type == "checkbox" ? (target as HTMLInputElement).checked : target.value;
-    this.setState({ [name]: value });
+function profileReducer<K extends keyof State>(
+  state: State,
+  action: { param: K; value: State[K] }
+): State {
+  return {
+    ...state,
+    [action.param]: action.value,
   };
-
-  saveChanges = () => {
-    this.setState({ lastResponseSuccess: false });
-    commitMutation(this.props.relay.environment, {
-      mutation: UPDATE_USER_MUTATION,
-      variables: {
-        input: {
-          email: this.state.email,
-          sendNewReviewsSummary: this.state.sendNewReviewsSummary,
-          paused: this.state.paused,
-          timezone: this.state.timezone
-        }
-      },
-      onCompleted: () => {
-        this.setState({ lastResponseSuccess: true });
-      }
-    });
-  };
-
-  render() {
-    return (
-      <div>
-        <section className="section">
-          <div className="container">
-            {this.state.lastResponseSuccess ? (
-              <article className="message is-success">
-                <div className="message-body">Profile updated successfully</div>
-              </article>
-            ) : null}
-            <div className="columns">
-              <div className="column is-half">
-                <h1 className="title">Profile</h1>
-                <TextField
-                  label="Email"
-                  name="email"
-                  value={this.state.email}
-                  handleChange={this.handleChange}
-                />
-
-                <div className="field">
-                  <label className="label" htmlFor="timezone">
-                    Time Zone
-                  </label>
-                  <div className="select">
-                    <select
-                      name="timezone"
-                      value={this.state.timezone}
-                      onChange={this.handleChange}
-                    >
-                      {timezones.map(zone => {
-                        return (
-                          <option key={zone} value={zone}>
-                            {zone}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  </div>
-                </div>
-
-                <h2 className="title is-4 is-spaced form-section-header">
-                  Subscription Preferences
-                </h2>
-                <Checkbox
-                  label="Send code review summary digests"
-                  name="sendNewReviewsSummary"
-                  checked={this.state.sendNewReviewsSummary}
-                  handleChange={this.handleChange}
-                />
-
-                <h2 className="title is-4 is-spaced form-section-header">
-                  Assignment Preferences
-                </h2>
-                <Checkbox
-                  label="Pause automatic assignment of new reviews"
-                  name="paused"
-                  checked={this.state.paused}
-                  handleChange={this.handleChange}
-                />
-
-                <div className="field">
-                  <div className="control">
-                    <button
-                      className="button is-primary"
-                      onClick={this.saveChanges}
-                    >
-                      Save
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-    );
-  }
 }
 
-export default createFragmentContainer(
-  Profile,
-  {
-    user: graphql`
-      fragment Profile_user on User {
-        login
-        email
-        name
-        sendNewReviewsSummary
-        timezone
-        paused
-      }
-    `
-  }
-);
+function Profile({ user, relay }: Props): JSX.Element {
+  const [state, dispatch] = useReducer(profileReducer, {
+    email: user.email != null ? user.email : "",
+    sendNewReviewsSummary: user.sendNewReviewsSummary,
+    timezone: user.timezone,
+    paused: user.paused,
+    lastResponseSuccess: false,
+  });
+
+  return (
+    <Container>
+      <div className="bg-white shadow overflow-hidden sm:rounded-md py-4 px-4 sm:px-6">
+        {state.lastResponseSuccess ? (
+          <Notification type="success" message="Saved successfully!" />
+        ) : null}
+        <form>
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-lg leading-6 font-medium text-gray-900">
+                Personal Settings
+              </h1>
+              <p className="mt-1 text-sm text-gray-500">
+                Update your personal information and preferences. These settings
+                apply to all organizations and repositories you have access to.
+              </p>
+            </div>
+            <TextField
+              label="Email"
+              hint="Your email is never shared and is not made public."
+              type="email"
+              name="email"
+              value={state.email}
+              handleChange={(event) =>
+                dispatch({ param: "email", value: event.target.value })
+              }
+            />
+            <div>
+              <label
+                htmlFor="timezone"
+                className="block text-sm font-medium text-gray-700"
+              >
+                Timezone
+              </label>
+              <select
+                name="timezone"
+                id="timezone"
+                onBlur={(event) => {
+                  dispatch({ param: "timezone", value: event.target.value });
+                }}
+                className="mt-1 block w-full sm:w-1/2 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+              >
+                {timezones.map((zone) => (
+                  <option
+                    selected={zone == state.timezone}
+                    key={zone}
+                    value={zone}
+                  >
+                    {zone}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <Checkbox
+              label="Subscribe to email digests"
+              hint="Your pending code reviews will be emailed to you at 8 am local time on weekdays."
+              name="send_new_reviews_summary"
+              checked={state.sendNewReviewsSummary}
+              handleChange={() =>
+                dispatch({
+                  param: "sendNewReviewsSummary",
+                  value: !state.sendNewReviewsSummary,
+                })
+              }
+            />
+            <Checkbox
+              label="Pause review assignment"
+              hint="You will not be automatically assigned new code reviews. Automatically disables after 2 weeks."
+              name="paused"
+              checked={state.paused}
+              handleChange={() =>
+                dispatch({ param: "paused", value: !state.paused })
+              }
+            />
+            <Button
+              label="Save"
+              style="primary"
+              onClick={(event) => {
+                event.preventDefault();
+                dispatch({ param: "lastResponseSuccess", value: false });
+                commitMutation(relay.environment, {
+                  mutation: UPDATE_USER_MUTATION,
+                  variables: {
+                    input: {
+                      email: state.email,
+                      sendNewReviewsSummary: state.sendNewReviewsSummary,
+                      paused: state.paused,
+                      timezone: state.timezone,
+                    },
+                  },
+                  onCompleted: () => {
+                    dispatch({ param: "lastResponseSuccess", value: true });
+                  },
+                });
+              }}
+            />
+          </div>
+        </form>
+      </div>
+    </Container>
+  );
+}
+
+export default createFragmentContainer(Profile, {
+  user: graphql`
+    fragment Profile_user on User {
+      login
+      email
+      name
+      sendNewReviewsSummary
+      timezone
+      paused
+    }
+  `,
+});

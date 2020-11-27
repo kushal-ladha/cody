@@ -54,7 +54,7 @@ function PullRequestShowRoute({
               />
             );
           }
-          return <div className="loader">Loading</div>;
+          return null;
         }}
       />
     </>

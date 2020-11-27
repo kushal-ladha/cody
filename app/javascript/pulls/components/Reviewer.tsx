@@ -8,36 +8,41 @@ import type {
 
 function statusToOcticon(status: ReviewerStatus) {
   switch (status) {
-    case "PENDING_APPROVAL":
-      return (
-        <span className="icon color-warning" title="Pending approval">
-          <Circle />
-        </span>
-      );
     case "APPROVED":
       return (
-        <span className="icon color-success" title="Approved">
-          <CheckCircle />
-        </span>
+        <>
+          <span className="sr-only">Approved</span>
+          <CheckCircle className="flex-shrink-0 mr-1.5 h-5 w-5 text-green-500" />
+        </>
       );
+    case "PENDING_APPROVAL":
     default:
-      return status;
+      return (
+        <>
+          <span className="sr-only">Pending approval</span>
+          <Circle className="flex-shrink-0 mr-1.5 h-5 w-5 text-yellow-300" />
+        </>
+      );
   }
 }
 
 function Reviewer({ reviewer }: { reviewer: Reviewer_reviewer }): JSX.Element {
   return (
-    <div className="level">
-      <div className="level-left">
-        <div className="level-item">{statusToOcticon(reviewer.status)}</div>
-        <div className="level-item">
-          <strong data-testid="reviewer-login">{reviewer.login}</strong>
-        </div>
-        <div className="level-item" data-testid="review-rule-name">
-          {reviewer.reviewRule != null ? reviewer.reviewRule.name : false}
+    <li>
+      <div className="flex items-center px-4 py-4 sm:px-6">
+        <div className="min-w-0 flex flex-1 items-center">
+          <div className="flex-shrink-0">
+            {statusToOcticon(reviewer.status)}
+          </div>
+          <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
+            <div>
+              <p className="text-sm font-medium truncate" data-testid="reviewer-login">{reviewer.login}</p>
+              {reviewer.reviewRule != null ? <p className="text-sm truncate text-gray-500" data-testid="review-rule-name">{reviewer.reviewRule.name}</p> : false}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </li>
   );
 }
 

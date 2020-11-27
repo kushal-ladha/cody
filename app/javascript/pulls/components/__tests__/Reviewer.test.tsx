@@ -119,5 +119,5 @@ test("Reviewer renders Pending Approval icon", () => {
     })
   );
 
-  expect(screen.getByTitle("Pending approval")).toBeDefined();
+  expect(screen.getByText("Pending approval")).toBeDefined();
 });

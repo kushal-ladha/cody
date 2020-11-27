@@ -24,7 +24,7 @@ function ProfileRoute({ environment }: { environment: Environment }): JSX.Elemen
           } else if (queryResponse) {
             return <Profile user={queryResponse.viewer} />;
           }
-          return <div className="loader">Loading</div>;
+          return null;
         }}
       />
     </>

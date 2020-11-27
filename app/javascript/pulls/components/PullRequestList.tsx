@@ -6,6 +6,9 @@ import {
   RelayPaginationProp,
 } from "react-relay";
 import type { PullRequestList_repository } from "./__generated__/PullRequestList_repository.graphql";
+import List from "./List";
+import LoadMore from "./LoadMore";
+import Container from "./Container";
 
 function PullRequestList({
   relay,
@@ -15,40 +18,36 @@ function PullRequestList({
   repository: PullRequestList_repository;
 }): JSX.Element {
   return (
-    <section className="section">
-      <div className="container">
-        {repository.pullRequests != null &&
-        repository.pullRequests.edges != null
-          ? repository.pullRequests.edges.map((edge) => {
-              if (edge != null && edge.node != null) {
-                return (
-                  <PullRequest key={edge.node.id} pullRequest={edge.node} />
-                );
-              } else {
-                return null;
-              }
-            })
-          : null}
-        {relay.hasMore() ? (
-          <div className="has-text-centered">
-            <button
-              className="button"
-              onClick={() => {
-                if (!relay.hasMore() || relay.isLoading()) {
-                  return;
-                }
+    <Container>
+      <>
+        <List>
+          {() => {
+            if (
+              repository.pullRequests != null &&
+              repository.pullRequests.edges != null
+            ) {
+              return (
+                <>
+                  {repository.pullRequests.edges.map((edge) => {
+                    if (edge != null && edge.node != null) {
+                      return (
+                        <PullRequest key={edge.node.id} pullRequest={edge.node} />
+                      );
+                    } else {
+                      return null;
+                    }
+                  })}
+                </>
+              );
+            } else {
+              return null;
+            }
+          }}
+        </List>
 
-                relay.loadMore(10, (error) => {
-                  console.log(error);
-                });
-              }}
-            >
-              Load more
-            </button>
-          </div>
-        ) : null}
-      </div>
-    </section>
+        <LoadMore relay={relay} />
+      </>
+    </Container>
   );
 }
 

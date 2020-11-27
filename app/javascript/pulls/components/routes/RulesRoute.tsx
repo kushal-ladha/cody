@@ -45,7 +45,7 @@ function RulesRoute({
           } else if (props && props.viewer && props.viewer.repository) {
             return <ReviewRuleList repository={props.viewer.repository} />;
           }
-          return <div className="loader">Loading</div>;
+          return null;
         }}
       />
     </>

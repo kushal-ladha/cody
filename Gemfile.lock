@@ -71,8 +71,6 @@ GEM
       msgpack (~> 1.0)
     break (0.21.0)
     builder (3.2.4)
-    bulma-rails (0.9.0)
-      sassc (~> 2.0)
     capybara (3.33.0)
       addressable
       mini_mime (>= 0.1.3)
@@ -437,7 +435,6 @@ DEPENDENCIES
   bcrypt (~> 3.1.16)
   bootsnap
   break
-  bulma-rails
   capybara (~> 3.33)
   codecov
   coffee-rails (~> 5.0)

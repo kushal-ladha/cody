@@ -1,9 +1,10 @@
 import React from "react";
-import Nav from "./Nav";
 import PageHead from "./routes/PageHead";
 import makeEnvironment from "../makeEnvironment";
 import Loadable from "react-loadable";
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import Nav from "./Nav";
+import Loading from "./Loading";
 
 const csrfToken = document
   .getElementsByName("csrf-token")[0]
@@ -13,37 +14,27 @@ const environment = makeEnvironment(csrfToken);
 
 const ReposLoadable = Loadable({
   loader: () => import("./routes/ReposRoute"),
-  loading() {
-    return <div className="loader">Loading</div>;
-  },
+  loading: Loading
 });
 
 const PullRequestsLoadable = Loadable({
   loader: () => import("./routes/PullRequestsRoute"),
-  loading() {
-    return <div className="loader">Loading</div>;
-  },
+  loading: Loading,
 });
 
 const PullRequestShowLoadable = Loadable({
   loader: () => import("./routes/PullRequestShowRoute"),
-  loading() {
-    return <div className="loader">Loading</div>;
-  },
+  loading: Loading,
 });
 
 const ProfileLoadable = Loadable({
   loader: () => import("./routes/ProfileRoute"),
-  loading() {
-    return <div className="loader">Loading</div>;
-  },
+  loading: Loading,
 });
 
 const RulesLoadable = Loadable({
   loader: () => import("./routes/RulesRoute"),
-  loading() {
-    return <div className="loader">Loading</div>;
-  },
+  loading: Loading,
 });
 
 function App(): JSX.Element {

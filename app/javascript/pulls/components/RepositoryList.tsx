@@ -6,6 +6,9 @@ import {
   RelayPaginationProp,
 } from "react-relay";
 import type { RepositoryList_viewer } from "./__generated__/RepositoryList_viewer.graphql";
+import LoadMore from "./LoadMore";
+import List from "./List";
+import Container from "./Container";
 
 function RepositoryList({
   relay,
@@ -15,36 +18,35 @@ function RepositoryList({
   viewer: RepositoryList_viewer;
 }): JSX.Element {
   return (
-    <section className="section">
-      <div className="container">
-        {viewer.repositories != null && viewer.repositories.edges != null
-          ? viewer.repositories.edges.map((edge) => {
-              if (edge != null && edge.node != null) {
-                // https://github.com/facebook/relay/issues/1918
-                return <Repository key={edge.node.id} repository={edge.node} />;
-              }
-            })
-          : null}
-        {relay.hasMore() ? (
-          <div className="has-text-centered">
-            <button
-              className="button"
-              onClick={() => {
-                if (!relay.hasMore() || relay.isLoading()) {
-                  return;
-                }
+    <Container>
+      <>
+        <List>
+          {() => {
+            if (
+              viewer.repositories != null &&
+              viewer.repositories.edges != null
+            ) {
+              return (
+                <>
+                  {viewer.repositories.edges.map((edge) => {
+                    if (edge != null && edge.node != null) {
+                      // https://github.com/facebook/relay/issues/1918
+                      return (
+                        <Repository key={edge.node.id} repository={edge.node} />
+                      );
+                    }
+                  })}
+                </>
+              );
+            } else {
+              return null;
+            }
+          }}
+        </List>
 
-                relay.loadMore(10, (error) => {
-                  console.log(error);
-                });
-              }}
-            >
-              Load more
-            </button>
-          </div>
-        ) : null}
-      </div>
-    </section>
+        <LoadMore relay={relay} />
+      </>
+    </Container>
   );
 }
 

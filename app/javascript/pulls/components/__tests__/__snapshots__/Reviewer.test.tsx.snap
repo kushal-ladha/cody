@@ -2,20 +2,23 @@
 
 exports[`Reviewer snapshot test 1`] = `
 <DocumentFragment>
-  <div
-    class="level"
-  >
+  <li>
     <div
-      class="level-left"
+      class="flex items-center px-4 py-4 sm:px-6"
     >
       <div
-        class="level-item"
+        class="min-w-0 flex flex-1 items-center"
       >
-        <span
-          class="icon color-success"
-          title="Approved"
+        <div
+          class="flex-shrink-0"
         >
+          <span
+            class="sr-only"
+          >
+            Approved
+          </span>
           <svg
+            class="flex-shrink-0 mr-1.5 h-5 w-5 text-green-500"
             fill="none"
             height="24"
             stroke="currentColor"
@@ -33,24 +36,27 @@ exports[`Reviewer snapshot test 1`] = `
               points="22 4 12 14.01 9 11.01"
             />
           </svg>
-        </span>
-      </div>
-      <div
-        class="level-item"
-      >
-        <strong
-          data-testid="reviewer-login"
+        </div>
+        <div
+          class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4"
         >
-          &lt;mock-value-for-field-"login"&gt;
-        </strong>
-      </div>
-      <div
-        class="level-item"
-        data-testid="review-rule-name"
-      >
-        &lt;mock-value-for-field-"name"&gt;
+          <div>
+            <p
+              class="text-sm font-medium truncate"
+              data-testid="reviewer-login"
+            >
+              &lt;mock-value-for-field-"login"&gt;
+            </p>
+            <p
+              class="text-sm truncate text-gray-500"
+              data-testid="review-rule-name"
+            >
+              &lt;mock-value-for-field-"name"&gt;
+            </p>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
+  </li>
 </DocumentFragment>
 `;

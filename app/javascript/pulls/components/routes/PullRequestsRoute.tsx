@@ -42,7 +42,7 @@ function PullRequestsRoute({
           } else if (props && props.viewer) {
             return <PullRequestList repository={props.viewer.repository} />;
           }
-          return <div className="loader">Loading</div>;
+          return null;
         }}
       />
     </>

@@ -63,8 +63,6 @@ gem "graphql"
 
 gem "kaminari"
 
-gem "bulma-rails"
-
 gem "pundit"
 
 gem "paper_trail", "~> 11.0"

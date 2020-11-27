@@ -28,7 +28,7 @@ function ReposRoute({
           } else if (queryResponse) {
             return <RepositoryList viewer={queryResponse.viewer} />;
           }
-          return <div className="loader">Loading</div>;
+          return null;
         }}
       />
     </>

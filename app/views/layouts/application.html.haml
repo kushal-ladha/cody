@@ -4,9 +4,10 @@
     %title Cody
     %meta{name: "viewport", content: "width=device-width, initial-scale=1"}
     = csrf_meta_tags
+    = csp_meta_tag
 
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => 'reload'
-    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_pack_tag "application"
+    = javascript_packs_with_chunks_tag "pulls_app", "application"
 
-  %body.w-100.sans-serif.bg-near-white
+  %body.bg-gray-100
     = yield

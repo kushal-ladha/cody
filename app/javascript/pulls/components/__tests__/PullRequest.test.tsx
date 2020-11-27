@@ -31,7 +31,9 @@ const TestComponent = ({ environment }: { environment: Environment }) => (
         return error.message;
       } else if (props) {
         return (
-          <PullRequest pullRequest={props.viewer.repository.pullRequests.edges[0].node} />
+          <PullRequest
+            pullRequest={props.viewer.repository.pullRequests.edges[0].node}
+          />
         );
       } else {
         return "Loading";
@@ -46,7 +48,10 @@ beforeEach(() => {
 });
 
 test("PullRequest snapshot test", () => {
-  const renderedComponent = render(<TestComponent environment={environment} />, { wrapper: MemoryRouter });
+  const renderedComponent = render(
+    <TestComponent environment={environment} />,
+    { wrapper: MemoryRouter }
+  );
 
   environment.mock.resolveMostRecentOperation((operation) =>
     MockPayloadGenerator.generate(operation)
@@ -68,11 +73,39 @@ test("PullRequest generates a link to view the details", () => {
           id: `test-id-${generateId()}`,
           repository: "test/test",
           number: "42",
-          status: "APPROVED",
+          status: "approved",
         };
-      }
+      },
     })
   );
 
-  expect(screen.queryByRole("link")).toHaveAttribute("href", "/repos/test/test/pull/42");
-})
+  expect(screen.queryByRole("link")).toHaveAttribute(
+    "href",
+    "/repos/test/test/pull/42"
+  );
+});
+
+test.each([
+  ["approved", "Approved"],
+  ["pending_review", "Pending Review"],
+  ["closed", "Closed"],
+])('PullRequest with status: `%s` shows message: "%s"', (status, message) => {
+  render(<TestComponent environment={environment} />, {
+    wrapper: MemoryRouter,
+  });
+
+  environment.mock.resolveMostRecentOperation((operation) =>
+    MockPayloadGenerator.generate(operation, {
+      PullRequest(_, generateId) {
+        return {
+          id: `test-id-${generateId()}`,
+          repository: "test/test",
+          number: "42",
+          status,
+        };
+      },
+    })
+  );
+
+  expect(screen.getByTestId("pull-request-status")).toHaveTextContent(message);
+});

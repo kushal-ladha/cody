@@ -2,61 +2,67 @@
 
 exports[`Repository snapshot test 1`] = `
 <DocumentFragment>
-  <div
-    class="level box"
-  >
-    <div
-      class="level-left code"
+  <li>
+    <a
+      class="block hover:bg-gray-50"
+      href="/repos/<mock-value-for-field-\\"owner\\">/<mock-value-for-field-\\"name\\">"
     >
       <div
-        class="level-item"
+        class="flex items-center px-4 py-4 sm:px-6"
       >
-        <strong>
-          &lt;mock-value-for-field-"owner"&gt;/&lt;mock-value-for-field-"name"&gt;
-        </strong>
-      </div>
-    </div>
-    <div
-      class="level-right"
-    >
-      <div
-        class="level-item"
-      >
-        <a
-          class="button"
-          href="/repos/<mock-value-for-field-\\"owner\\">/<mock-value-for-field-\\"name\\">"
-          title="<mock-value-for-field-\\"owner\\">/<mock-value-for-field-\\"name\\">"
+        <div
+          class="mix-w-0 flex-1 flex items-center"
         >
-          <svg
-            fill="none"
-            height="24"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            viewBox="0 0 24 24"
-            width="24"
-            xmlns="http://www.w3.org/2000/svg"
+          <div
+            class="flexh-shrink-0"
           >
-            <circle
-              cx="12"
-              cy="12"
-              r="1"
-            />
-            <circle
-              cx="19"
-              cy="12"
-              r="1"
-            />
-            <circle
-              cx="5"
-              cy="12"
-              r="1"
-            />
-          </svg>
-        </a>
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+              />
+            </svg>
+          </div>
+          <div
+            class="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4"
+          >
+            <div>
+              <p
+                class="text-sm font-medium truncate"
+              >
+                &lt;mock-value-for-field-"owner"&gt;/&lt;mock-value-for-field-"name"&gt;
+              </p>
+            </div>
+          </div>
+          <div>
+            <svg
+              fill="none"
+              height="24"
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+              width="24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <polyline
+                points="9 18 15 12 9 6"
+              />
+            </svg>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
+    </a>
+  </li>
 </DocumentFragment>
 `;
