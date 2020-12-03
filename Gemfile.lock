@@ -349,8 +349,13 @@ GEM
       childprocess (>= 0.5, < 4.0)
       rubyzip (>= 1.2.2)
     semantic_range (2.3.0)
-    sentry-raven (3.1.1)
+    sentry-rails (0.2.0)
+      rails (>= 5.0)
+      sentry-ruby (>= 0.2.0)
+    sentry-ruby (0.2.0)
       faraday (>= 1.0)
+    sentry-sidekiq (0.1.3)
+      sentry-ruby (>= 0.2.0)
     sexp_processor (4.12.1)
     shoulda-matchers (4.4.1)
       activesupport (>= 4.2.0)
@@ -473,7 +478,9 @@ DEPENDENCIES
   scout_apm
   sdoc (~> 2.0.2)
   selenium-webdriver
-  sentry-raven
+  sentry-rails
+  sentry-ruby
+  sentry-sidekiq
   shoulda-matchers
   sidekiq
   sidekiq-unique-jobs

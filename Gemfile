@@ -41,7 +41,11 @@ gem "sidekiq"
 
 gem "octokit"
 
-gem "sentry-raven"
+gem "sentry-ruby"
+
+gem "sentry-rails"
+
+gem "sentry-sidekiq"
 
 gem "haml-rails"
 

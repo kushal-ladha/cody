@@ -33,13 +33,3 @@ module Cody
     end
   end
 end
-
-if ENV["RAVEN_DSN"]
-  sentry_environment = ENV["SENTRY_ENV"] || ENV["RAILS_ENV"]
-
-  Raven.configure do |config|
-    config.dsn = ENV["RAVEN_DSN"]
-    config.environments = ["production", "staging"]
-    config.current_environment = sentry_environment
-  end
-end

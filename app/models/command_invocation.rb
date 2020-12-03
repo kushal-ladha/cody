@@ -27,6 +27,6 @@ class CommandInvocation < ApplicationRecord
   def self.record_invocation(attributes)
     create!(attributes)
   rescue
-    Raven.capture_exception($ERROR_INFO)
+    Sentry.capture_exception($ERROR_INFO)
   end
 end

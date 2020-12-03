@@ -5,17 +5,21 @@ class ReceivePullRequestEvent
   include GithubApi
 
   def perform(payload)
+    Sentry.configure_scope do |scope|
+      scope.set_user(username: payload["sender"]["login"])
+      scope.set_tags(
+        event: "pull_request",
+        repo: payload["repository"]["full_name"]
+      )
+
+      do_perform(payload)
+    end
+  end
+
+  def do_perform(payload)
     Current.reset
 
     @payload = payload
-
-    Raven.user_context(
-      username: @payload["sender"]["login"]
-    )
-    Raven.tags_context(
-      event: "pull_request",
-      repo: @payload["repository"]["full_name"]
-    )
 
     if (installation_id = @payload.dig("installation", "id"))
       Current.installation_id = installation_id

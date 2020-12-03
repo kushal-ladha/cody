@@ -6,6 +6,7 @@ class GraphqlController < ApplicationController
   protect_from_forgery with: :null_session
 
   before_action :require_authentication!
+  before_action :set_sentry_context
 
   def execute
     variables = ensure_hash(params[:variables])
@@ -25,6 +26,18 @@ class GraphqlController < ApplicationController
   end
 
   private
+
+  def set_sentry_context
+    if current_user.present?
+      Sentry.configure_scope do |scope|
+        scope.set_user(
+          id: current_user.id,
+          username: current_user.login,
+          email: current_user.email
+        )
+      end
+    end
+  end
 
   # Handle form data, JSON body, or a blank value
   def ensure_hash(ambiguous_param)

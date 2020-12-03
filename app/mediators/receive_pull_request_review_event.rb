@@ -27,17 +27,21 @@ class ReceivePullRequestReviewEvent
   end
 
   def perform(request)
+    Sentry.configure_scope do |scope|
+      scope.set_user(username: request["sender"]["login"])
+      scope.set_tags(
+        event: "pull_request_review",
+        repo: request["repository"]["full_name"]
+      )
+
+      do_perform(request)
+    end
+  end
+
+  def do_perform(request)
     Current.reset
 
     request = request.with_indifferent_access
-
-    Raven.user_context(
-      username: request[:sender][:login]
-    )
-    Raven.tags_context(
-      event: "pull_request_review",
-      repo: request[:repository][:full_name]
-    )
 
     if (installation_id = request.dig("installation", "id"))
       Current.installation_id = installation_id
