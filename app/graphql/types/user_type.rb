@@ -14,6 +14,9 @@ class Types::UserType < Types::BaseObject
   field :send_new_reviews_summary, Boolean, null: false,
                                             description: "Opt-in choice for daily code review summary email"
 
+  field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+  field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+
   def send_new_reviews_summary
     !!@object.send_new_reviews_summary?
   end
@@ -50,10 +53,12 @@ class Types::UserType < Types::BaseObject
       .find_by(owner: args[:owner], name: args[:name])
   end
 
-  field :assignedReviews, Types::ReviewerType.connection_type, null: true,
-                                                               connection: true do
+  field :assigned_reviews, Types::ReviewerType.connection_type, null: true,
+                                                                connection: true do
     description "Find the user's assigned reviews"
     argument :status, Types::ReviewerStatusType, required: false,
-                                                 description: "Filter assigned reviews by status"
+                                                 description: "Filter by status"
+    argument :reviewRule, String, required: false, description: "Filter by Review Rule name"
+    argument :repository, String, required: false, description: "Filter by Repository full name"
   end
 end

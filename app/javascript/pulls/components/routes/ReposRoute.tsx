@@ -1,14 +1,11 @@
 import React from "react";
 import RepositoryList from "../RepositoryList";
 import PageHead from "./PageHead";
-import { QueryRenderer, graphql, Environment } from "react-relay";
+import environment from "../../environment";
+import { QueryRenderer, graphql } from "react-relay";
 import { ReposRouteQuery } from "./__generated__/ReposRouteQuery.graphql";
 
-function ReposRoute({
-  environment,
-}: {
-  environment: Environment;
-}): JSX.Element {
+function ReposRoute(): JSX.Element {
   return (
     <>
       <PageHead title="Repositories" />

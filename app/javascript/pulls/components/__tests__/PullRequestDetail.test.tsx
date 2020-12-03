@@ -1,5 +1,5 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render } from "test-utils";
 import { createMockEnvironment, MockPayloadGenerator } from "relay-test-utils";
 import { QueryRenderer, graphql, Environment } from "react-relay";
 import PullRequestDetail from "../PullRequestDetail";

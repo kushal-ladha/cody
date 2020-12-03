@@ -8,6 +8,9 @@ class Types::RepositoryType < Types::BaseObject
   field :owner, String, null: false
   field :name, String, null: false
 
+  field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+  field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+
   field :pull_requests, Types::PullRequestType.connection_type, null: true, connection: true do # rubocop:disable Layout/LineLength
     description "This reapository's Pull Requests"
     argument :status, String, required: false

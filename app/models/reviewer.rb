@@ -2,7 +2,7 @@
 
 class Reviewer < ApplicationRecord
   belongs_to :review_rule, required: false
-  belongs_to :pull_request
+  belongs_to :pull_request, inverse_of: :reviewers
 
   STATUS_PENDING_APPROVAL = "pending_approval"
   STATUS_APPROVED = "approved"

@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test-utils";
 import { createMockEnvironment, MockPayloadGenerator } from "relay-test-utils";
 import { QueryRenderer, graphql, Environment } from "react-relay";
 import Reviewer from "../Reviewer";

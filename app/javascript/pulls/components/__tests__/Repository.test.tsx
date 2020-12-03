@@ -1,8 +1,7 @@
 import React from "react";
-import { render } from "@testing-library/react";
+import { render } from "test-utils";
 import { createMockEnvironment, MockPayloadGenerator } from "relay-test-utils";
 import { QueryRenderer, graphql, Environment } from "react-relay";
-import { MemoryRouter } from "react-router";
 import Repository from "../Repository";
 import { RepositoryTestSnapshotQuery } from "./__generated__/RepositoryTestSnapshotQuery.graphql";
 
@@ -43,7 +42,7 @@ beforeEach(() => {
 });
 
 test("Repository snapshot test", () => {
-  const renderedComponent = render(<TestComponent environment={environment} />, { wrapper: MemoryRouter });
+  const renderedComponent = render(<TestComponent environment={environment} />);
 
   environment.mock.resolveMostRecentOperation((operation) =>
     MockPayloadGenerator.generate(operation)

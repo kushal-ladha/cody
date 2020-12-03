@@ -1,7 +1,8 @@
 import React from "react";
 import PullRequestList from "../PullRequestList";
 import PageHead from "./PageHead";
-import { QueryRenderer, graphql, Environment } from "react-relay";
+import environment from "../../environment";
+import { QueryRenderer, graphql } from "react-relay";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { PullRequestsRouteQuery } from "./__generated__/PullRequestsRouteQuery.graphql";
 
@@ -11,11 +12,8 @@ type Params = {
 };
 
 function PullRequestsRoute({
-  environment,
   match,
-}: {
-  environment: Environment;
-} & RouteComponentProps<Params>): JSX.Element {
+}: RouteComponentProps<Params>): JSX.Element {
   return (
     <>
       <PageHead title={`${match.params.owner}/${match.params.name}`} />

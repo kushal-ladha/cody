@@ -11,10 +11,10 @@ exports[`Repository snapshot test 1`] = `
         class="flex items-center px-4 py-4 sm:px-6"
       >
         <div
-          class="mix-w-0 flex-1 flex items-center"
+          class="min-w-0 flex-1 flex items-center"
         >
           <div
-            class="flexh-shrink-0"
+            class="flex-shrink-0"
           >
             <svg
               fill="none"

@@ -1,8 +1,7 @@
 import React from "react";
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "test-utils";
 import { createMockEnvironment, MockPayloadGenerator } from "relay-test-utils";
 import { QueryRenderer, graphql, Environment } from "react-relay";
-import { MemoryRouter } from "react-router";
 import PullRequest from "../PullRequest";
 import "@testing-library/jest-dom/extend-expect";
 import { PullRequestTestSnapshotQuery } from "./__generated__/PullRequestTestSnapshotQuery.graphql";
@@ -48,10 +47,7 @@ beforeEach(() => {
 });
 
 test("PullRequest snapshot test", () => {
-  const renderedComponent = render(
-    <TestComponent environment={environment} />,
-    { wrapper: MemoryRouter }
-  );
+  const renderedComponent = render(<TestComponent environment={environment} />);
 
   environment.mock.resolveMostRecentOperation((operation) =>
     MockPayloadGenerator.generate(operation)
@@ -62,9 +58,7 @@ test("PullRequest snapshot test", () => {
 });
 
 test("PullRequest generates a link to view the details", () => {
-  render(<TestComponent environment={environment} />, {
-    wrapper: MemoryRouter,
-  });
+  render(<TestComponent environment={environment} />);
 
   environment.mock.resolveMostRecentOperation((operation) =>
     MockPayloadGenerator.generate(operation, {
@@ -90,9 +84,7 @@ test.each([
   ["pending_review", "Pending Review"],
   ["closed", "Closed"],
 ])('PullRequest with status: `%s` shows message: "%s"', (status, message) => {
-  render(<TestComponent environment={environment} />, {
-    wrapper: MemoryRouter,
-  });
+  render(<TestComponent environment={environment} />);
 
   environment.mock.resolveMostRecentOperation((operation) =>
     MockPayloadGenerator.generate(operation, {

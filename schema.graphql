@@ -1,4 +1,9 @@
 """
+An ISO 8601-encoded datetime
+"""
+scalar ISO8601DateTime
+
+"""
 The mutation root
 """
 type Mutation {
@@ -44,8 +49,15 @@ type PageInfo {
 }
 
 type PullRequest implements Node {
+  createdAt: ISO8601DateTime!
+  headSha: String
+  htmlUrl: String
   id: ID!
   number: String!
+
+  """
+  The full name of the repository, in `owner/name` format
+  """
   repository: String!
   reviewers(
     """
@@ -67,9 +79,11 @@ type PullRequest implements Node {
     Returns the last _n_ elements from the list.
     """
     last: Int
-    status: String
+    status: ReviewerStatus
   ): ReviewerConnection
   status: String!
+  title: String
+  updatedAt: ISO8601DateTime!
 }
 
 """
@@ -138,6 +152,7 @@ type Query {
 }
 
 type Repository implements Node {
+  createdAt: ISO8601DateTime!
   id: ID!
   name: String!
   owner: String!
@@ -202,6 +217,7 @@ type Repository implements Node {
     """
     last: Int
   ): ReviewRuleConnection
+  updatedAt: ISO8601DateTime!
 }
 
 """
@@ -240,6 +256,7 @@ type RepositoryEdge {
 }
 
 type ReviewRule implements Node {
+  createdAt: ISO8601DateTime!
   id: ID!
 
   """
@@ -271,6 +288,7 @@ type ReviewRule implements Node {
   The rule's type
   """
   type: String!
+  updatedAt: ISO8601DateTime!
 }
 
 """
@@ -309,14 +327,21 @@ type ReviewRuleEdge {
 }
 
 type Reviewer implements Node {
+  createdAt: ISO8601DateTime!
   id: ID!
   login: String!
+
+  """
+  The Pull Request this Reviewer is assigned to
+  """
+  pullRequest: PullRequest!
 
   """
   The Review Rule that added this Reviewer
   """
   reviewRule: ReviewRule
   status: ReviewerStatus!
+  updatedAt: ISO8601DateTime!
 }
 
 """
@@ -420,10 +445,21 @@ type User implements Node {
     last: Int
 
     """
-    Filter assigned reviews by status
+    Filter by Repository full name
+    """
+    repository: String
+
+    """
+    Filter by Review Rule name
+    """
+    reviewRule: String
+
+    """
+    Filter by status
     """
     status: ReviewerStatus
   ): ReviewerConnection
+  createdAt: ISO8601DateTime!
 
   """
   The user's email
@@ -481,4 +517,5 @@ type User implements Node {
   The user's configured timezone
   """
   timezone: String!
+  updatedAt: ISO8601DateTime!
 }

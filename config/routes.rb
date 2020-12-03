@@ -21,6 +21,8 @@ Rails.application.routes.draw do
 
   get "/profile" => "pulls#index"
 
+  get "/assigned" => "pulls#index"
+
   resource :session, only: %i[new create destroy]
 
   get "/config/schema" => "config#schema"

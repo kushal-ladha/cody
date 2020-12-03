@@ -10,6 +10,9 @@ class Types::ReviewRuleType < Types::BaseObject
     description: "Short code identifying the rule in commands",
     null: false
 
+  field :created_at, GraphQL::Types::ISO8601DateTime, null: false
+  field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+
   def short_code
     @object.short_code
   end

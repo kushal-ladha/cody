@@ -13,7 +13,7 @@ class PullRequest < ApplicationRecord
 
   belongs_to :repository, required: true
   belongs_to :parent_pull_request, required: false, class_name: "PullRequest"
-  has_many :reviewers
+  has_many :reviewers, inverse_of: :pull_request
 
   has_paper_trail
 
@@ -96,12 +96,10 @@ class PullRequest < ApplicationRecord
     )
   end
 
+  delegate :title, :html_url, to: :resource, allow_nil: true
+
   def head_sha
     resource.head.sha
-  end
-
-  def html_url
-    resource.html_url
   end
 
   def full_title

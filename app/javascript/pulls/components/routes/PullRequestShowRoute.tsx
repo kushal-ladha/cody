@@ -1,7 +1,8 @@
 import React from "react";
 import PullRequestDetail from "../PullRequestDetail";
 import PageHead from "./PageHead";
-import { QueryRenderer, graphql, Environment } from "react-relay";
+import environment from "../../environment";
+import { QueryRenderer, graphql } from "react-relay";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { PullRequestShowRouteQuery } from "./__generated__/PullRequestShowRouteQuery.graphql";
 
@@ -12,11 +13,8 @@ type Params = {
 };
 
 function PullRequestShowRoute({
-  environment,
   match,
-}: {
-  environment: Environment;
-} & RouteComponentProps<Params>): JSX.Element {
+}: RouteComponentProps<Params>): JSX.Element {
   return (
     <>
       <PageHead
