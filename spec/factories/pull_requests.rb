@@ -1,3 +1,4 @@
+# typed: false
 FactoryBot.define do
   factory :pull_request do
     status { "pending_review" }

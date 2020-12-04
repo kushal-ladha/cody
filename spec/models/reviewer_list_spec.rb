@@ -1,3 +1,4 @@
+# typed: false
 # rubocop:disable Naming/VariableName
 require "rails_helper"
 

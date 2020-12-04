@@ -1,3 +1,4 @@
+# typed: true
 class CreateReviewers < ActiveRecord::Migration[5.1]
   def change
     create_table :reviewers do |t|

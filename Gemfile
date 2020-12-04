@@ -71,6 +71,8 @@ gem "pundit"
 
 gem "paper_trail", "~> 11.0"
 
+gem "sorbet-runtime"
+
 group :development, :test do
   gem "break"
   gem "pry-rails"
@@ -80,6 +82,10 @@ group :development, :test do
   gem "dotenv-rails"
 
   gem "memory_profiler", require: false
+
+  gem "sorbet"
+
+  gem "tapioca", require: false
 end
 
 group :development do

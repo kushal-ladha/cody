@@ -1,3 +1,4 @@
+# typed: false
 class AddReviewRules < ActiveRecord::Migration
   def change
     create_table :review_rules do |t|

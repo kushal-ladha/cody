@@ -1,3 +1,4 @@
+# typed: false
 FactoryBot.define do
   factory :user do
     sequence(:login) { |x| "user#{x}" }

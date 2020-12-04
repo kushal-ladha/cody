@@ -91,6 +91,9 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.12.2)
+    colorize (0.8.1)
+    commander (4.5.2)
+      highline (~> 2.0.0)
     concurrent-ruby (1.1.7)
     connection_pool (2.2.3)
     crack (0.4.4)
@@ -151,6 +154,7 @@ GEM
     hashie (4.1.0)
     heapy (0.2.0)
       thor
+    highline (2.0.3)
     html2haml (2.2.0)
       erubis (~> 2.7.0)
       haml (>= 4.0, < 6)
@@ -233,6 +237,11 @@ GEM
       activerecord (>= 5.2)
       request_store (~> 1.1)
     parallel (1.19.2)
+    parlour (4.0.1)
+      commander (~> 4.5)
+      parser
+      rainbow (~> 3.0)
+      sorbet-runtime (>= 0.5)
     parser (2.7.2.0)
       ast (~> 2.4.1)
     pg (1.2.3)
@@ -377,6 +386,15 @@ GEM
       gli
       hashie
       websocket-driver
+    sorbet (0.5.6130)
+      sorbet-static (= 0.5.6130)
+    sorbet-runtime (0.5.6130)
+    sorbet-static (0.5.6130-universal-darwin-14)
+    spoom (1.0.7)
+      colorize
+      sorbet (~> 0.5.5)
+      sorbet-runtime
+      thor (>= 0.19.2)
     spring (2.1.1)
     sprockets (4.0.2)
       concurrent-ruby (~> 1.0)
@@ -390,6 +408,13 @@ GEM
       rubocop (~> 0.80.1)
       rubocop-performance (~> 1.5.2)
     statsd-ruby (1.4.0)
+    tapioca (0.4.10)
+      parlour (>= 2.1.0)
+      pry (>= 0.12.2)
+      sorbet-runtime
+      sorbet-static (>= 0.4.4471)
+      spoom
+      thor (>= 0.19.2)
     temple (0.8.1)
     thor (1.0.1)
     thread_safe (0.3.6)
@@ -485,9 +510,12 @@ DEPENDENCIES
   sidekiq
   sidekiq-unique-jobs
   slack-ruby-client
+  sorbet
+  sorbet-runtime
   spring
   stackprof
   standard (~> 0.2.3)
+  tapioca
   timecop
   transit-ruby
   turbolinks

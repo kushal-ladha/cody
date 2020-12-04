@@ -1,3 +1,4 @@
+# typed: false
 FactoryBot.define do
   factory :slack_team do
     name { "My Slack Team" }

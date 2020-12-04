@@ -1,3 +1,4 @@
+# typed: false
 require "securerandom"
 
 FactoryBot.define do
