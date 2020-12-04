@@ -13,3 +13,11 @@ inherit_gem:
 AllCops:
   Exclude:
     - db/schema.rb
+
+Style/EmptyMethod:
+  Exclude:
+    - "**/*.rbi"
+
+Style/SingleLineMethods:
+  Exclude:
+    - "**/*.rbi"
