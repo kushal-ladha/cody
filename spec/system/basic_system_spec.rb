@@ -30,6 +30,9 @@ RSpec.describe "Pull Requests flow", type: :system do
 
   it "allows drilling down to a single Pull Request", aggregate_failures: true do
     visit "/"
+
+    click_on "Sign in with GitHub"
+
     expect(page).to have_text("Cody")
 
     pull_requests.each do |pr|

@@ -1,0 +1,5 @@
+en:
+  sessions:
+    must_sign_in: "You must sign in."
+    signed_out: "You have been signed out."
+    auth_failure: "You could not be authenticated."

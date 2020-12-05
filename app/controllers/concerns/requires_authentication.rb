@@ -6,6 +6,7 @@ module RequiresAuthentication
   def require_authentication!
     unless current_user.present?
       session[:return_to] = request.url
+      flash[:info] = I18n.t("sessions.must_sign_in")
       redirect_to new_session_path
     end
   end

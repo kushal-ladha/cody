@@ -9,5 +9,8 @@ Sentry.init({
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  ReactDOM.render(<App />, document.getElementById("pull_request_mount"));
-})
+  const root = document.getElementById("pull_request_mount");
+  if (root) {
+    ReactDOM.render(<App />, root);
+  }
+});
