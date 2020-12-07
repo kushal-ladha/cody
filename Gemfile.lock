@@ -108,6 +108,8 @@ GEM
       thor (>= 0.19, < 2)
     diff-lcs (1.4.4)
     docile (1.3.2)
+    doorkeeper (5.4.0)
+      railties (>= 5)
     dotenv (2.7.6)
     dotenv-rails (2.7.6)
       dotenv (= 2.7.6)
@@ -445,6 +447,7 @@ DEPENDENCIES
   coffee-rails (~> 5.0)
   dalli
   derailed_benchmarks
+  doorkeeper
   dotenv-rails
   factory_bot_rails
   faraday
