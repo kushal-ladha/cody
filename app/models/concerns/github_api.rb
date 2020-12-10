@@ -45,7 +45,7 @@ module GithubApi
 
     payload = {
       iat: Time.now.to_i,
-      exp: 10.minutes.from_now.to_i,
+      exp: 5.minutes.from_now.to_i,
       iss: ENV["CODY_GITHUB_INTEGRATION_IDENTIFIER"]
     }
 
