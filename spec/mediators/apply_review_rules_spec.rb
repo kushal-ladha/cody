@@ -40,6 +40,11 @@ RSpec.describe ApplyReviewRules do
       <<~ADDENDUM.chomp
         ## Generated Reviewers
 
+        <details>
+          <summary><em>:warning: Do not modify anything in this section! :warning:</em></summary>
+          <em>The content in this section is managed automatically, and any manual changes to it will be ignored and overwritten the next time the code review status is refreshed! View <a href="#{pr.target_url}">this PR</a> on Cody to see the current code review status.</em>
+        </details>
+
         #{reviewer.addendum}
       ADDENDUM
     end

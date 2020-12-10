@@ -140,6 +140,11 @@ class PullRequest < ApplicationRecord
     addendum = +<<~ADDENDUM
       ## Generated Reviewers
 
+      <details>
+        <summary><em>:warning: Do not modify anything in this section! :warning:</em></summary>
+        <em>The content in this section is managed automatically, and any manual changes to it will be ignored and overwritten the next time the code review status is refreshed! View <a href="#{target_url}">this PR</a> on Cody to see the current code review status.</em>
+      </details>
+
     ADDENDUM
 
     generated_reviewers.each do |reviewer|
