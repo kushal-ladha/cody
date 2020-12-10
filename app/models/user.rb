@@ -40,32 +40,7 @@ class User < ApplicationRecord
   end
 
   def assigned_reviews(status: nil, review_rule: nil, repository: nil)
-    relation =
-      Reviewer
-        .includes(:review_rule, :pull_request, pull_request: :repository)
-        .where(login: login)
-        .where(pull_requests: {status: [PullRequest::STATUS_PENDING_REVIEW, PullRequest::STATUS_APPROVED]})
-        .order(created_at: :desc)
-
-    unless status.nil?
-      relation = relation.where(status: status)
-    end
-
-    unless review_rule.blank?
-      relation =
-        if review_rule == "none"
-          relation.where(review_rule_id: nil)
-        else
-          relation.where(review_rules: {name: review_rule})
-        end
-    end
-
-    unless repository.blank?
-      owner, name = repository.split("/", 2)
-      relation = relation.joins(pull_request: :repository).where(pull_requests: {repositories: {owner: owner, name: name}})
-    end
-
-    relation
+    AssignedReviewsQuery.run(login: login, status: status, review_rule_name: review_rule, repository_name: repository)
   end
 
   def average_review_speed(since:)
