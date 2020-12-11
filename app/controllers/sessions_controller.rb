@@ -15,6 +15,7 @@ class SessionsController < ApplicationController
       flash[:danger] = I18n.t("sessions.auth_failure")
     end
     destination = session[:return_to] || root_path
+    session[:return_to] = nil
     redirect_to destination
   end
 
