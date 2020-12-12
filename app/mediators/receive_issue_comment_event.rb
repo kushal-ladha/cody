@@ -165,10 +165,18 @@ class ReceiveIssueCommentEvent
 
       next unless reviewer.review_rule.possible_reviewer?(login)
 
-      reviewer.update!(login: login)
-      if reviewer.saved_change_to_login?
-        removed_reviewers << reviewer.login_before_last_save
-      end
+      next if reviewer.login == login
+
+      # store the login of the old reviewer
+      removed_reviewers << reviewer.login
+
+      # duplicate the old reviewer, destroy it, then update the login of the dup
+      reviewer_dup = reviewer.dup
+      reviewer.destroy!
+      reviewer_dup.login = login
+      reviewer_dup.review_rule = reviewer.review_rule
+      reviewer_dup.pull_request = reviewer.pull_request
+      reviewer_dup.save!
     end
 
     unless removed_reviewers.empty?

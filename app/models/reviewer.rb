@@ -46,14 +46,19 @@ class Reviewer < ApplicationRecord
   def reassign
     return true unless review_rule
 
-    new_reviewer =
+    new_reviewer_login =
       review_rule.choose_reviewer(
         pull_request: pull_request,
         extra_excludes: [login]
       )
 
-    if new_reviewer
-      update(login: new_reviewer.login)
+    if new_reviewer_login && new_reviewer_login.login != login
+      new_reviewer = dup
+      new_reviewer.review_rule = review_rule
+      new_reviewer.pull_request = pull_request
+      new_reviewer.login = new_reviewer_login.login
+      destroy
+      new_reviewer.save!
     else
       false
     end

@@ -151,7 +151,12 @@ RSpec.describe ReceiveIssueCommentEvent do
 
       it "replaces aergonaut with BrentW" do
         foo_reviewer = pr.reviewers.find_by(review_rule_id: rule.id)
-        expect { job.perform(payload) }.to change { foo_reviewer.reload.login }.from("aergonaut").to("BrentW")
+
+        job.perform(payload)
+
+        expect(Reviewer.exists?(foo_reviewer.id)).to be_falsey
+        foo_reviewer = pr.reviewers.find_by(review_rule_id: rule.id)
+        expect(foo_reviewer.login).to eq("BrentW")
       end
 
       it "records the command usage" do
@@ -174,7 +179,12 @@ RSpec.describe ReceiveIssueCommentEvent do
 
       it "replaces aergonaut with BrentW" do
         foo_reviewer = pr.reviewers.find_by(review_rule_id: rule.id)
-        expect { job.perform(payload) }.to change { foo_reviewer.reload.login }.from("aergonaut").to("BrentW")
+
+        job.perform(payload)
+
+        expect(Reviewer.exists?(foo_reviewer.id)).to be_falsey
+        foo_reviewer = pr.reviewers.find_by(review_rule_id: rule.id)
+        expect(foo_reviewer.login).to eq("BrentW")
       end
     end
 
@@ -184,7 +194,12 @@ RSpec.describe ReceiveIssueCommentEvent do
 
       it "replaces aergonaut with BrentW" do
         foo_reviewer = pr.reviewers.find_by(review_rule_id: rule.id)
-        expect { job.perform(payload) }.to change { foo_reviewer.reload.login }.from("aergonaut").to("BrentW")
+
+        job.perform(payload)
+
+        expect(Reviewer.exists?(foo_reviewer.id)).to be_falsey
+        foo_reviewer = pr.reviewers.find_by(review_rule_id: rule.id)
+        expect(foo_reviewer.login).to eq("BrentW")
       end
     end
   end
@@ -218,7 +233,12 @@ RSpec.describe ReceiveIssueCommentEvent do
 
       it "replaces aergonaut with mrpasquini" do
         foo_reviewer = pr.reviewers.find_by(review_rule_id: rule.id)
-        expect { job.perform(payload) }.to change { foo_reviewer.reload.login }.from("aergonaut").to("mrpasquini")
+
+        job.perform(payload)
+
+        expect(Reviewer.exists?(foo_reviewer.id)).to be_falsey
+        foo_reviewer = pr.reviewers.find_by(review_rule_id: rule.id)
+        expect(foo_reviewer.login).to eq("mrpasquini")
       end
     end
 
