@@ -101,6 +101,7 @@ group :development do
   gem "standard", "~> 0.2.3", require: false
   gem "rubocop-performance", require: false
   gem "rubocop-rails", require: false
+  gem "rubocop-sorbet", require: false
 
   gem "letter_opener"
 

@@ -5,11 +5,21 @@ inherit_mode:
 require:
   - rubocop-rails
   - rubocop-performance
+  - rubocop-sorbet
   - standard/cop/semantic_blocks
 
 inherit_gem:
   standard: config/base.yml
+  rubocop-sorbet: config/default.yml
 
 AllCops:
   Exclude:
     - db/schema.rb
+
+Style/EmptyMethod:
+  Exclude:
+    - "**/*.rbi"
+
+Style/SingleLineMethods:
+  Exclude:
+    - "**/*.rbi"

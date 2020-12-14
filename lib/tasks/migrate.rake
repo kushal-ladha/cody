@@ -1,3 +1,4 @@
+# typed: false
 # rubocop:disable Metrics/BlockLength
 namespace :data do
   desc "Migrate repositories from string columns to table"

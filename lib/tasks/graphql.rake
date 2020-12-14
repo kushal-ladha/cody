@@ -1,3 +1,5 @@
+# typed: false
+
 namespace :graphql do
   desc "Export the GraphQL schema"
   task schema: :environment do

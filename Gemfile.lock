@@ -335,6 +335,8 @@ GEM
       activesupport
       rack (>= 1.1)
       rubocop (>= 0.72.0)
+    rubocop-sorbet (0.5.1)
+      rubocop
     ruby-progressbar (1.10.1)
     ruby-statistics (2.1.2)
     ruby2_keywords (0.0.2)
@@ -502,6 +504,7 @@ DEPENDENCIES
   rubocop
   rubocop-performance
   rubocop-rails
+  rubocop-sorbet
   sass-rails (~> 6.0)
   scout_apm
   sdoc (~> 2.0.2)
