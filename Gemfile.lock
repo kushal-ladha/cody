@@ -345,7 +345,7 @@ GEM
       faraday (> 0.8, < 2.0)
     scout_apm (4.0.0)
       parser
-    sdoc (2.0.2)
+    sdoc (2.0.3)
       rdoc (>= 5.0)
     selenium-webdriver (3.142.7)
       childprocess (>= 0.5, < 4.0)
@@ -477,7 +477,7 @@ DEPENDENCIES
   rubocop-rails
   sass-rails (~> 6.0)
   scout_apm
-  sdoc (~> 2.0.2)
+  sdoc (~> 2.0.3)
   selenium-webdriver
   sentry-rails
   sentry-ruby
