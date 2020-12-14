@@ -1,3 +1,4 @@
+# typed: false
 class AssignedReviewsQuery
   attr_reader :login
   attr_reader :status

@@ -1,3 +1,4 @@
+# typed: true
 class CreateSlackTeams < ActiveRecord::Migration[5.1]
   def change
     create_table :slack_teams do |t|

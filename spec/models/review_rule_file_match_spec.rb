@@ -1,3 +1,4 @@
+# typed: false
 require "rails_helper"
 
 RSpec.describe ReviewRuleFileMatch, type: :model do

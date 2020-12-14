@@ -1,7 +1,8 @@
+# typed: true
 # frozen_string_literal: true
 
 class RepositoryPolicy < ApplicationPolicy
-  class Scope < Scope
+  class Scope < ::ApplicationPolicy::Scope
     def resolve
       Repository.all
     end
