@@ -17,6 +17,13 @@ function PullRequestsRoute({
   return (
     <>
       <PageHead title={`${match.params.owner}/${match.params.name}`} />
+      <header>
+        <div className="max-w-7xl mx-auto pt-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-2xl leading-tight font-semibold text-gray-900">
+            {`${match.params.owner}/${match.params.name}`}
+          </h1>
+        </div>
+      </header>
       <QueryRenderer<PullRequestsRouteQuery>
         environment={environment}
         query={graphql`

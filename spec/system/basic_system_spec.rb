@@ -26,6 +26,24 @@ RSpec.describe "Pull Requests flow", type: :system do
       # These ones will have a review rule associated
       FactoryBot.create :reviewer, pull_request: pr
     end
+
+    stubbed_installation_ids = pull_requests.map { |pr| {id: pr.repository.installation.github_id} }
+    stub_request(:get, "https://api.github.com/user/installations")
+      .to_return(
+        status: 200,
+        body: JSON.dump({installations: stubbed_installation_ids}),
+        headers: {"Content-Type" => "application/json"}
+      )
+
+    pull_requests.each do |pr|
+      installation_id = pr.repository.installation.github_id
+      stub_request(:get, "https://api.github.com/user/installations/#{installation_id}/repositories")
+        .to_return(
+          status: 200,
+          body: JSON.dump({repositories: [{id: pr.repository.github_id}]}),
+          headers: {"Content-Type" => "application/json"}
+        )
+    end
   end
 
   it "allows drilling down to a single Pull Request", aggregate_failures: true do

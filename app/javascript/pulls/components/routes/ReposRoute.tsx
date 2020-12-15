@@ -9,6 +9,13 @@ function ReposRoute(): JSX.Element {
   return (
     <>
       <PageHead title="Repositories" />
+      <header>
+        <div className="max-w-7xl mx-auto pt-6 px-4 sm:px-6 lg:px-8">
+          <h1 className="text-2xl leading-tight font-semibold text-gray-900">
+            Repositories
+          </h1>
+        </div>
+      </header>
       <QueryRenderer<ReposRouteQuery>
         environment={environment}
         query={graphql`
@@ -19,11 +26,11 @@ function ReposRoute(): JSX.Element {
           }
         `}
         variables={{}}
-        render={({ error, props: queryResponse }) => {
+        render={({ error, props }) => {
           if (error) {
             return <div>{error.message}</div>;
-          } else if (queryResponse) {
-            return <RepositoryList viewer={queryResponse.viewer} />;
+          } else if (props) {
+            return <RepositoryList viewer={props.viewer} />;
           }
           return null;
         }}

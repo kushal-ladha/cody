@@ -48,9 +48,9 @@ class Types::UserType < Types::BaseObject
     argument :name, String, required: true
   end
 
-  def repository(**args)
+  def repository(owner:, name:)
     Pundit.policy_scope(@object, Repository)
-      .find_by(owner: args[:owner], name: args[:name])
+      .find_by(owner: owner, name: name)
   end
 
   field :assigned_reviews, Types::ReviewerType.connection_type, null: true,

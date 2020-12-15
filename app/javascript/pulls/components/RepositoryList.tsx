@@ -24,7 +24,8 @@ function RepositoryList({
           {() => {
             if (
               viewer.repositories != null &&
-              viewer.repositories.edges != null
+              viewer.repositories.edges != null &&
+              viewer.repositories.edges.length > 0
             ) {
               return (
                 <>
@@ -39,7 +40,17 @@ function RepositoryList({
                 </>
               );
             } else {
-              return null;
+              return (
+                <li>
+                  <div className="mx-auto text-sm font-medium px-4 py-4 sm:px-6">
+                    <p>Nothing to show</p>
+                    <p className="italic mt-2 text-gray-500">
+                      If you think this is an error, please check that the
+                      repository exists and is accessible to you on GitHub.
+                    </p>
+                  </div>
+                </li>
+              );
             }
           }}
         </List>

@@ -5,6 +5,7 @@
 import { ReaderFragment } from "relay-runtime";
 import { FragmentRefs } from "relay-runtime";
 export type PullRequestList_repository = {
+    readonly id: string;
     readonly owner: string;
     readonly name: string;
     readonly pullRequests: {
@@ -25,7 +26,15 @@ export type PullRequestList_repository$key = {
 
 
 
-const node: ReaderFragment = {
+const node: ReaderFragment = (function(){
+var v0 = {
+  "alias": null,
+  "args": null,
+  "kind": "ScalarField",
+  "name": "id",
+  "storageKey": null
+};
+return {
   "argumentDefinitions": [
     {
       "defaultValue": 10,
@@ -53,6 +62,7 @@ const node: ReaderFragment = {
   },
   "name": "PullRequestList_repository",
   "selections": [
+    (v0/*: any*/),
     {
       "alias": null,
       "args": null,
@@ -91,13 +101,7 @@ const node: ReaderFragment = {
               "name": "node",
               "plural": false,
               "selections": [
-                {
-                  "alias": null,
-                  "args": null,
-                  "kind": "ScalarField",
-                  "name": "id",
-                  "storageKey": null
-                },
+                (v0/*: any*/),
                 {
                   "alias": null,
                   "args": null,
@@ -155,5 +159,6 @@ const node: ReaderFragment = {
   "type": "Repository",
   "abstractKey": null
 };
-(node as any).hash = 'c2982a90cbbfb7c95c2a8fb790195e3c';
+})();
+(node as any).hash = '4148df7110ceb6274db7c3b06b5a5aae';
 export default node;

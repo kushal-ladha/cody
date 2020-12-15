@@ -23,15 +23,20 @@ function PullRequestList({
         <List>
           {() => {
             if (
+              repository != null &&
               repository.pullRequests != null &&
-              repository.pullRequests.edges != null
+              repository.pullRequests.edges != null &&
+              repository.pullRequests.edges.length > 0
             ) {
               return (
                 <>
                   {repository.pullRequests.edges.map((edge) => {
                     if (edge != null && edge.node != null) {
                       return (
-                        <PullRequest key={edge.node.id} pullRequest={edge.node} />
+                        <PullRequest
+                          key={edge.node.id}
+                          pullRequest={edge.node}
+                        />
                       );
                     } else {
                       return null;
@@ -40,7 +45,17 @@ function PullRequestList({
                 </>
               );
             } else {
-              return null;
+              return (
+                <li>
+                  <div className="mx-auto text-sm font-medium px-4 py-4 sm:px-6">
+                    <p>Nothing to show</p>
+                    <p className="italic mt-2 text-gray-500">
+                      If you think this is an error, please check that the
+                      repository exists and is accessible to you on GitHub.
+                    </p>
+                  </div>
+                </li>
+              );
             }
           }}
         </List>
@@ -60,6 +75,7 @@ export default createPaginationContainer(
         count: { type: "Int", defaultValue: 10 }
         cursor: { type: "String" }
       ) {
+        id
         owner
         name
         pullRequests(first: $count, after: $cursor)
@@ -89,22 +105,18 @@ export default createPaginationContainer(
       return {
         count,
         cursor,
-        owner: props.repository.owner,
-        name: props.repository.name,
+        repoID: props.repository.id,
       };
     },
     query: graphql`
       query PullRequestListPaginationQuery(
-        $owner: String!
-        $name: String!
+        $repoID: ID!
         $count: Int!
         $cursor: String
       ) {
-        viewer {
-          repository(owner: $owner, name: $name) {
-            ...PullRequestList_repository
-              @arguments(count: $count, cursor: $cursor)
-          }
+        repository: node(id: $repoID) {
+          ...PullRequestList_repository
+            @arguments(count: $count, cursor: $cursor)
         }
       }
     `,

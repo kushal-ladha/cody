@@ -2,6 +2,7 @@ import React from "react";
 import {
   Calendar,
   ChevronRight,
+  Gift,
   GitPullRequest,
   HelpCircle,
 } from "react-feather";
@@ -23,11 +24,11 @@ import LoadMore from "./LoadMore";
 function ReviewDashboardResults({
   viewer,
   relay,
-  environment
+  environment,
 }: {
   viewer: ReviewDashboardResults_viewer;
   relay: RelayPaginationProp;
-  environment: Environment
+  environment: Environment;
 }): JSX.Element {
   return (
     <>
@@ -55,19 +56,25 @@ function ReviewDashboardResults({
                                 <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                                   <div>
                                     <p className="text-sm font-medium truncate">
-                                      <QueryRenderer<ReviewDashboardResultsPullRequestExternalQuery>
+                                      <QueryRenderer<
+                                        ReviewDashboardResultsPullRequestExternalQuery
+                                      >
                                         environment={environment}
                                         query={graphql`
-                                          query ReviewDashboardResultsPullRequestExternalQuery($nodeID: ID!) {
+                                          query ReviewDashboardResultsPullRequestExternalQuery(
+                                            $nodeID: ID!
+                                          ) {
                                             node(id: $nodeID) {
-                                              ...on PullRequest {
+                                              ... on PullRequest {
                                                 title
                                                 htmlUrl
                                               }
                                             }
                                           }
                                         `}
-                                        variables={{ nodeID: node.pullRequest.id }}
+                                        variables={{
+                                          nodeID: node.pullRequest.id,
+                                        }}
                                         render={({ props, error }) => {
                                           if (error) {
                                             console.log(error.message);
@@ -177,7 +184,10 @@ function ReviewDashboardResults({
                 return (
                   <li>
                     <div className="mx-auto text-sm font-medium px-4 py-4 sm:px-6">
-                      Nothing to show
+                      <p className="flex items-center text-sm text-gray-500">
+                        <Gift className="flex-shrink-0 mr-1.5 h-5 w-5" />
+                        No pending reviews! Great job!
+                      </p>
                     </div>
                   </li>
                 );
@@ -243,8 +253,8 @@ export default createPaginationContainer(
     getFragmentVariables(prevVars, totalCount) {
       return {
         ...prevVars,
-        count: totalCount
-      }
+        count: totalCount,
+      };
     },
     getVariables(props, { count, cursor }, fragmentVariables) {
       return {

@@ -47,6 +47,11 @@ class User < ApplicationRecord
     AverageReviewSpeedQuery.new(login: login, since: since).run
   end
 
+  def accessible_installations
+    installation_ids = github_client.find_user_installations.installations&.map(&:id)
+    Installation.where(github_id: installation_ids)
+  end
+
   def make_api_key
     api_key = api_keys.build
     api_key.password = SecureRandom.base58(24)
@@ -104,5 +109,9 @@ class User < ApplicationRecord
   def encryption_key
     base64_key = Rails.application.secrets.attr_encrypted_key
     base64_key.unpack1("m")
+  end
+
+  def github_client
+    @github_client ||= Octokit::Client.new(access_token: access_key)
   end
 end

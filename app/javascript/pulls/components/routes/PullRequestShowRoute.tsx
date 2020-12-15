@@ -5,6 +5,7 @@ import environment from "../../environment";
 import { QueryRenderer, graphql } from "react-relay";
 import { RouteComponentProps, withRouter } from "react-router-dom";
 import { PullRequestShowRouteQuery } from "./__generated__/PullRequestShowRouteQuery.graphql";
+import Container from "../Container";
 
 type Params = {
   number: string;
@@ -45,12 +46,39 @@ function PullRequestShowRoute({
         render={({ error, props }) => {
           if (error) {
             return <div>{error.message}</div>;
-          } else if (props && props.viewer && props.viewer.repository) {
-            return (
-              <PullRequestDetail
-                pullRequest={props.viewer.repository.pullRequest}
-              />
-            );
+          } else if (props) {
+            if (
+              props.viewer &&
+              props.viewer.repository &&
+              props.viewer.repository.pullRequest
+            ) {
+              return (
+                <PullRequestDetail
+                  pullRequest={props.viewer.repository.pullRequest}
+                />
+              );
+            } else {
+              return (
+                <Container>
+                  <div className="bg-white shadow overflow-hidden sm:rounded-md">
+                    <div className="divide-y divide-gray-200">
+                      <ul>
+                        <li>
+                          <div className="mx-auto text-sm font-medium px-4 py-4 sm:px-6">
+                            <p>Nothing to show</p>
+                            <p className="italic mt-2 text-gray-500">
+                              If you think this is an error, please check that
+                              the repository exists and is accessible to you on
+                              GitHub.
+                            </p>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </Container>
+              );
+            }
           }
           return null;
         }}

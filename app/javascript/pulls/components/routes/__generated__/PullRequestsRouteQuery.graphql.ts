@@ -41,6 +41,7 @@ query PullRequestsRouteQuery(
 }
 
 fragment PullRequestList_repository on Repository {
+  id
   owner
   name
   pullRequests(first: 10) {
@@ -104,20 +105,20 @@ v4 = {
   "name": "name",
   "storageKey": null
 },
-v5 = [
-  {
-    "kind": "Literal",
-    "name": "first",
-    "value": 10
-  }
-],
-v6 = {
+v5 = {
   "alias": null,
   "args": null,
   "kind": "ScalarField",
   "name": "id",
   "storageKey": null
-};
+},
+v6 = [
+  {
+    "kind": "Literal",
+    "name": "first",
+    "value": 10
+  }
+];
 return {
   "fragment": {
     "argumentDefinitions": [
@@ -186,6 +187,7 @@ return {
             "name": "repository",
             "plural": false,
             "selections": [
+              (v5/*: any*/),
               {
                 "alias": null,
                 "args": null,
@@ -196,7 +198,7 @@ return {
               (v4/*: any*/),
               {
                 "alias": null,
-                "args": (v5/*: any*/),
+                "args": (v6/*: any*/),
                 "concreteType": "PullRequestConnection",
                 "kind": "LinkedField",
                 "name": "pullRequests",
@@ -218,7 +220,7 @@ return {
                         "name": "node",
                         "plural": false,
                         "selections": [
-                          (v6/*: any*/),
+                          (v5/*: any*/),
                           {
                             "alias": null,
                             "args": null,
@@ -290,32 +292,31 @@ return {
               },
               {
                 "alias": null,
-                "args": (v5/*: any*/),
+                "args": (v6/*: any*/),
                 "filters": null,
                 "handle": "connection",
                 "key": "PullRequestList_pullRequests",
                 "kind": "LinkedHandle",
                 "name": "pullRequests"
-              },
-              (v6/*: any*/)
+              }
             ],
             "storageKey": null
           },
           (v3/*: any*/),
           (v4/*: any*/),
-          (v6/*: any*/)
+          (v5/*: any*/)
         ],
         "storageKey": null
       }
     ]
   },
   "params": {
-    "cacheID": "ade81d8ba951513fb3e8a516c57446fa",
+    "cacheID": "f6beb84e86c510d92ba9e12dd5d5e963",
     "id": null,
     "metadata": {},
     "name": "PullRequestsRouteQuery",
     "operationKind": "query",
-    "text": "query PullRequestsRouteQuery(\n  $owner: String!\n  $name: String!\n) {\n  viewer {\n    repository(owner: $owner, name: $name) {\n      ...PullRequestList_repository\n      id\n    }\n    login\n    name\n    id\n  }\n}\n\nfragment PullRequestList_repository on Repository {\n  owner\n  name\n  pullRequests(first: 10) {\n    edges {\n      node {\n        id\n        ...PullRequest_pullRequest\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment PullRequest_pullRequest on PullRequest {\n  id\n  repository\n  number\n  status\n}\n"
+    "text": "query PullRequestsRouteQuery(\n  $owner: String!\n  $name: String!\n) {\n  viewer {\n    repository(owner: $owner, name: $name) {\n      ...PullRequestList_repository\n      id\n    }\n    login\n    name\n    id\n  }\n}\n\nfragment PullRequestList_repository on Repository {\n  id\n  owner\n  name\n  pullRequests(first: 10) {\n    edges {\n      node {\n        id\n        ...PullRequest_pullRequest\n        __typename\n      }\n      cursor\n    }\n    pageInfo {\n      endCursor\n      hasNextPage\n    }\n  }\n}\n\nfragment PullRequest_pullRequest on PullRequest {\n  id\n  repository\n  number\n  status\n}\n"
   }
 };
 })();

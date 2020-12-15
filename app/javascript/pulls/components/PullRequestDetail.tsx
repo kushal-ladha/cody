@@ -5,6 +5,19 @@ import { PullRequestDetail_pullRequest } from "./__generated__/PullRequestDetail
 import Container from "./Container";
 import { GitPullRequest } from "react-feather";
 
+function humanStatus(status: string): string {
+  switch (status) {
+    case "pending_review":
+      return "Pending Review";
+    case "approved":
+      return "Approved";
+    case "closed":
+      return "Closed";
+    default:
+      return status;
+  }
+}
+
 function PullRequestDetail({
   pullRequest,
 }: {
@@ -22,9 +35,11 @@ function PullRequestDetail({
               <div className="min-w-0 flex-1 px-4 md:grid md:grid-cols-2 md:gap-4">
                 <div>
                   <h1 className="text-lg leading-6 font-medium text-gray-900">
-                    {`${pullRequest.repository}#${pullRequest.number}`}
+                    {`${pullRequest.repository} #${pullRequest.number}`}
                   </h1>
-                  <p className="mt-1 text-sm text-gray-500">{pullRequest.status}</p>
+                  <p className="mt-1 text-sm text-gray-500">
+                    {humanStatus(pullRequest.status)}
+                  </p>
                 </div>
               </div>
             </div>
