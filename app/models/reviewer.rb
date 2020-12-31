@@ -66,6 +66,7 @@ class Reviewer < ApplicationRecord
 
   def approve!
     self.status = STATUS_APPROVED
+    self.approved_at = Time.now.utc
     save!
   end
 

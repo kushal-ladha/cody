@@ -38,6 +38,8 @@ class ReceiveIssueCommentEvent
 
     comment = @payload["comment"]["body"]
 
+    record_comment_interaction
+
     PaperTrail.request(whodunnit: @payload["sender"]["login"]) do
       if comment_affirmative?(comment)
         approval_comment
@@ -51,6 +53,18 @@ class ReceiveIssueCommentEvent
     end
 
     Current.reset
+  end
+
+  def record_comment_interaction
+    pr = find_pull_request(@payload)
+    return unless pr
+
+    login = @payload["sender"]["login"]
+
+    now = Time.now.utc
+    reviewers_for_login = pr.reviewers.pending_review.where(login: login)
+    reviewers_for_login.where(first_commented_at: nil).update(first_commented_at: now)
+    reviewers_for_login.update(last_commented_at: now)
   end
 
   def approval_comment

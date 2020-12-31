@@ -31,12 +31,43 @@ RSpec.describe ReceiveIssueCommentEvent do
       stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
     end
 
+    let(:pr_response_body) { json_fixture("pr") }
+
+    let(:comment) { "foobar" }
+
     subject { job.perform(payload) }
+
+    it "updates last_commented_at for the reviewer" do
+      Timecop.freeze do
+        subject
+        review.reload
+        expect(review.last_commented_at).to be_within(1.second).of(Time.now.utc)
+      end
+    end
+
+    context "when first_commented_at is nil" do
+      it "sets first_commented_at" do
+        Timecop.freeze do
+          subject
+          review.reload
+          expect(review.first_commented_at).to be_within(1.second).of(Time.now.utc)
+        end
+      end
+    end
+
+    context "when first_commented_at is not nil" do
+      it "does not change first_commented_at" do
+        review.first_commented_at = 2.days.ago
+        review.save!
+
+        Timecop.freeze do
+          expect { subject }.to_not change { review.reload.first_commented_at }
+        end
+      end
+    end
 
     context "when submitting an approval" do
       let(:comment) { "lgtm" }
-
-      let(:pr_response_body) { json_fixture("pr") }
 
       context "and the PR has one of the configured ignore labels on it" do
         let(:ignore_labels_setting) { ["cody skip"] }
