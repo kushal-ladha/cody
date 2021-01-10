@@ -114,14 +114,19 @@ Rails.application.configure do
     config.cache_store = :mem_cache_store, ENV["MEMCACHEDCLOUD_SERVERS"].split(","), {username: ENV["MEMCACHEDCLOUD_USERNAME"], password: ENV["MEMCACHEDCLOUD_PASSWORD"], compress: true, expires_in: 1.day}
   end
 
-  config.action_mailer.smtp_settings = {
-    user_name: ENV["SENDGRID_USERNAME"],
-    password: ENV["SENDGRID_PASSWORD"],
-    domain: ENV["CODY_HOST"],
-    address: "smtp.sendgrid.net",
-    port: 587,
-    authentication: :plain,
-    enable_starttls_auto: true
+  # config.action_mailer.smtp_settings = {
+  #   user_name: ENV["SENDGRID_USERNAME"],
+  #   password: ENV["SENDGRID_PASSWORD"],
+  #   domain: ENV["CODY_HOST"],
+  #   address: "smtp.sendgrid.net",
+  #   port: 587,
+  #   authentication: :plain,
+  #   enable_starttls_auto: true
+  # }
+  config.action_mailer.delivery_method = :sendgrid_actionmailer
+  config.action_mailer.sendgrid_actionmailer_settings = {
+    api_key: ENV.fetch("SENDGRID_API_KEY"),
+    raise_delivery_errors: true
   }
 
   config.middleware.use Rack::CanonicalHost, ENV["CODY_HOST"] if ENV["CODY_HOST"]
