@@ -37,6 +37,7 @@ class SummaryMailer < ApplicationMailer
     User.joins(:user_preference)
       .where(user_preferences: {send_new_reviews_summary: true})
       .where.not(email: nil)
+      .where.not(email: "")
       .find_each do |user|
         Time.use_zone(user.timezone) do
           if !Time.zone.now.on_weekend? && Time.zone.now.hour == 9
