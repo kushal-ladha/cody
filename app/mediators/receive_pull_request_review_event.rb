@@ -60,13 +60,6 @@ class ReceivePullRequestReviewEvent
   def receive_event(request)
     return if request[:action] == "dismissed"
 
-    case request[:review][:state].downcase
-    when "approved"
-      on_approve(request)
-    end
-  end
-
-  def on_approve(request)
     pr =
       PullRequest.joins(:repository).pending_review.find_by(
         number: request[:pull_request][:number],
@@ -77,6 +70,15 @@ class ReceivePullRequestReviewEvent
       )
     return unless pr.present?
 
+    record_comment_interaction(pr, request)
+
+    case request[:review][:state].downcase
+    when "approved"
+      on_approve(pr, request)
+    end
+  end
+
+  def on_approve(pr, request)
     author = request[:sender][:login]
     review = pr.reviewers.pending_review.find_by(login: author)
     return unless review.present?
@@ -98,5 +100,18 @@ class ReceivePullRequestReviewEvent
       login: request[:sender][:login],
       pull_request_id: pr.id
     )
+  end
+
+  def record_comment_interaction(pr, request)
+    author = request[:sender][:login]
+    review = pr.reviewers.pending_review.find_by(login: author)
+    return unless review.present?
+
+    now = Time.now.utc
+    if review.first_commented_at.nil?
+      review.first_commented_at = now
+    end
+    review.last_commented_at = now
+    review.save
   end
 end

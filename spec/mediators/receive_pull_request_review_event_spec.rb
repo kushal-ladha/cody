@@ -35,7 +35,7 @@ RSpec.describe ReceivePullRequestReviewEvent do
       end
 
       context "when the sender is a reviewer" do
-        let(:subject_reviewer) { FactoryBot.create :reviewer, pull_request: pull_request, login: sender }
+        let!(:subject_reviewer) { FactoryBot.create :reviewer, pull_request: pull_request, login: sender }
         let(:pr_response_body) { json_fixture("pr") }
 
         before do
@@ -52,6 +52,34 @@ RSpec.describe ReceivePullRequestReviewEvent do
 
         it "changes the sender's review to approved" do
           expect { subject }.to change { subject_reviewer.reload.status }.from(Reviewer::STATUS_PENDING_APPROVAL).to(Reviewer::STATUS_APPROVED)
+        end
+
+        it "updates last_commented_at for the reviewer" do
+          subject
+          subject_reviewer.reload
+          expect(subject_reviewer.last_commented_at).to be_within(1.second).of(Time.now.utc)
+        end
+
+        context "when first_commented_at is nil" do
+          before do
+            subject_reviewer.update(first_commented_at: nil)
+          end
+
+          it "sets first_commented_at" do
+            subject
+            subject_reviewer.reload
+            expect(subject_reviewer.first_commented_at).to be_within(1.second).of(Time.now.utc)
+          end
+        end
+
+        context "when first_commented_at is not nil" do
+          before do
+            subject_reviewer.update(first_commented_at: 2.weeks.ago)
+          end
+
+          it "does not change first_commented_at" do
+            expect { subject }.to_not change { subject_reviewer.reload.first_commented_at }
+          end
         end
       end
     end
