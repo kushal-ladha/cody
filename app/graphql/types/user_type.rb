@@ -58,7 +58,7 @@ class Types::UserType < Types::BaseObject
     description "Find the user's assigned reviews"
     argument :status, Types::ReviewerStatusType, required: false,
                                                  description: "Filter by status"
-    argument :reviewRule, String, required: false, description: "Filter by Review Rule name"
+    argument :review_rule, String, required: false, description: "Filter by Review Rule name"
     argument :repository, String, required: false, description: "Filter by Repository full name"
   end
 end
