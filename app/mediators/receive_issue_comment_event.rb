@@ -97,6 +97,12 @@ class ReceiveIssueCommentEvent
       login: @payload["sender"]["login"],
       pull_request_id: pr.id
     )
+
+    github_client.add_comment(
+      @payload["repository"]["full_name"],
+      @payload["issue"]["number"],
+      "@#{comment_author} Approving a code review using a comment has been deprecated and will be removed in the future. Please [submit your review](https://docs.github.com/en/github/collaborating-with-issues-and-pull-requests/reviewing-proposed-changes-in-a-pull-request#submitting-your-review) through the GitHub interface instead."
+    )
   end
 
   def rebuild_reviews

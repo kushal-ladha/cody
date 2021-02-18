@@ -69,6 +69,10 @@ RSpec.describe ReceiveIssueCommentEvent do
     context "when submitting an approval" do
       let(:comment) { "lgtm" }
 
+      before do
+        stub_request(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/issues/\d+/comments})
+      end
+
       context "and the PR has one of the configured ignore labels on it" do
         let(:ignore_labels_setting) { ["cody skip"] }
         let(:payload) do
