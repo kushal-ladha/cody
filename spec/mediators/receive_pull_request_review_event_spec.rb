@@ -114,8 +114,8 @@ RSpec.describe ReceivePullRequestReviewEvent do
 
       it "does not reassign the generated reviewer's review" do
         subject
-        expect(WebMock).to have_requested(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers}).
-          with { |req|
+        expect(WebMock).to have_requested(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
+          .with { |req|
             body = JSON.parse(req.body)
             !body["reviewers"].include?(reviewer)
           }
@@ -127,8 +127,8 @@ RSpec.describe ReceivePullRequestReviewEvent do
 
       it "reassigns the generated reviewer's review" do
         subject
-        expect(WebMock).to have_requested(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers}).
-          with { |req|
+        expect(WebMock).to have_requested(:post, %r{https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/pulls/\d+/requested_reviewers})
+          .with { |req|
             body = JSON.parse(req.body)
             body["reviewers"].include?(reviewer)
           }
