@@ -2,6 +2,7 @@
   action ||= "submitted"
   state ||= "approved"
   sender ||= "Codertocat"
+  reviewer ||= "Codertocat"
   repo ||= { name: "testrepo", owner: "aergonaut" }
   pull_request ||= { number: 1234 }
 %>
@@ -11,7 +12,7 @@
     "id": 237895671,
     "node_id": "MDE3OlB1bGxSZXF1ZXN0UmV2aWV3MjM3ODk1Njcx",
     "user": {
-      "login": "Codertocat",
+      "login": "<%= reviewer %>",
       "id": 21031067,
       "node_id": "MDQ6VXNlcjIxMDMxMDY3",
       "avatar_url": "https://avatars1.githubusercontent.com/u/21031067?v=4",

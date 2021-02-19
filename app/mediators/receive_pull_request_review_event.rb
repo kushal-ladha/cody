@@ -18,7 +18,7 @@ class ReceivePullRequestReviewEvent
   def self.permit(params)
     params.require(:webhook).permit(
       :action,
-      review: [:state],
+      review: [:state, user: [:login]],
       pull_request: [:number],
       sender: [:login],
       repository: [:full_name, :name, owner: [:login]],
@@ -58,8 +58,6 @@ class ReceivePullRequestReviewEvent
 
   # Router to route event based on event's action and review's state
   def receive_event(request)
-    return if request[:action] == "dismissed"
-
     pr =
       PullRequest.joins(:repository).pending_review.find_by(
         number: request[:pull_request][:number],
@@ -70,7 +68,10 @@ class ReceivePullRequestReviewEvent
       )
     return unless pr.present?
 
-    record_comment_interaction(pr, request)
+    if request[:action].downcase == "dismissed"
+      on_dismissed(pr, request)
+      return
+    end
 
     case request[:review][:state].downcase
     when "approved"
@@ -79,6 +80,8 @@ class ReceivePullRequestReviewEvent
   end
 
   def on_approve(pr, request)
+    record_comment_interaction(pr, request)
+
     author = request[:sender][:login]
     review = pr.reviewers.pending_review.find_by(login: author)
     return unless review.present?
@@ -100,6 +103,30 @@ class ReceivePullRequestReviewEvent
       login: request[:sender][:login],
       pull_request_id: pr.id
     )
+  end
+
+  def on_dismissed(pr, request)
+    reviewer = request[:review][:user][:login]
+    review = pr.reviewers.pending_review.find_by(login: reviewer)
+    return unless review.present?
+
+    # If the dismissed review was for a manually added reviewer, destroy the
+    # reviewer record as well.
+    if review.review_rule_id.nil?
+      review.destroy!
+    end
+
+    # Not pictured: reviews belonging to generated reviewers are not allowed to
+    # be dismissed via GitHub
+
+    if pr.reviewers.pending_review.empty?
+      pr.status = PullRequest::STATUS_APPROVED
+      pr.save!
+      pr.update_status
+    end
+
+    pr.update_body
+    pr.assign_reviewers
   end
 
   def record_comment_interaction(pr, request)
