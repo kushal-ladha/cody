@@ -62,7 +62,7 @@ GEM
       zeitwerk (~> 2.3)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
-    ast (2.4.1)
+    ast (2.4.2)
     attr_encrypted (3.1.0)
       encryptor (~> 3.0.0)
     barnes (0.0.8)
@@ -355,7 +355,7 @@ GEM
     sawyer (0.8.2)
       addressable (>= 2.3.5)
       faraday (> 0.8, < 2.0)
-    scout_apm (4.0.3)
+    scout_apm (4.0.4)
       parser
     sdoc (2.0.4)
       rdoc (>= 5.0)
