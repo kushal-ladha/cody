@@ -11,7 +11,7 @@ class SendSlackMessage
     client = Slack::Web::Client.new(token: token)
 
     if recipient.slack_identity.channel.blank?
-      response = client.im_open(user: recipient.slack_identity.uid)
+      response = client.conversations_open(users: recipient.slack_identity.uid)
       recipient.slack_identity.channel = response.channel.id
       recipient.slack_identity.save!
     end
