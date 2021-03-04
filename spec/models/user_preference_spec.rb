@@ -16,7 +16,11 @@ RSpec.describe UserPreference, type: :model do
 
           expect(Sidekiq::Extensions::DelayedClass.jobs.size).to eq(1)
           job = Sidekiq::Extensions::DelayedClass.jobs[0]
-          expect(job["at"]).to be_within(0.0001).of(2.weeks.from_now.to_f)
+
+          job_at = Time.at(job["at"]).to_datetime.to_date
+          expected_date = 2.weeks.from_now.to_date
+
+          expect(job_at).to eq(expected_date)
         end
       end
     end
