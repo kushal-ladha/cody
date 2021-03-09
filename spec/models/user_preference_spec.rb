@@ -10,7 +10,7 @@ RSpec.describe UserPreference, type: :model do
       let(:initial_state) { false }
 
       it "schedules unpause for 2 weeks from now" do
-        Timecop.freeze do
+        Timecop.freeze(Time.local(2021, 3, 8, 8, 0, 0)) do
           pref.paused = true
           pref.save!
 
