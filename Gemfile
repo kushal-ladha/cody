@@ -59,6 +59,8 @@ gem "faraday-http-cache"
 
 gem "omniauth-github"
 
+gem "omniauth-rails_csrf_protection"
+
 gem "jwt"
 
 gem "webpacker"
