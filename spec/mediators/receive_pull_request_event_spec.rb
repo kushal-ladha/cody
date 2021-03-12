@@ -183,6 +183,28 @@ RSpec.describe ReceivePullRequestEvent do
       end
     end
 
+    context "when the action is \"closed\"" do
+      let(:ignore_labels_setting) { ["cody skip"] }
+      let(:payload) { json_fixture("pull_request", action: action, body: body, labels: ["foobar", "cody skip"]) }
+      let(:action) { "closed" }
+      let!(:pr) { FactoryBot.create :pull_request, number: payload["number"], repository: repo }
+
+      context "and the PR exists" do
+        before do
+          job.perform(payload)
+        end
+
+        it "sets the status message on GitHub" do
+          expect(WebMock).to have_requested(:post, %r(https?://api.github.com/repos/[A-Za-z0-9_-]+/[A-Za-z0-9_-]+/statuses/[0-9abcdef]{40}))
+            .with { |req| JSON.parse(req.body)["description"] == "Pull Request closed" }
+        end
+
+        it "marks the PR as closed" do
+          expect(pr.reload.status).to eq("closed")
+        end
+      end
+    end
+
     context "when the action is \"unlabeled\"" do
       let(:action) { "unlabeled" }
 

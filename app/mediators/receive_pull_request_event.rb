@@ -29,6 +29,16 @@ class ReceivePullRequestEvent
     @repository =
       Repository.find_by_full_name(@payload["repository"]["full_name"])
 
+    # Process "closed" action before checking for ignores
+    PaperTrail.request(whodunnit: @payload["sender"]["login"]) do
+      case @payload["action"]
+      when "closed"
+        on_closed
+        Current.reset
+        return
+      end
+    end
+
     labels = @payload["pull_request"]["labels"].map { |label| label["name"] }
     if @repository.ignore?(labels)
       github_client.create_status(
