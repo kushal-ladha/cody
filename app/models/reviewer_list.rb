@@ -22,10 +22,29 @@ class ReviewerList
       .each(&block)
   end
 
-  def choose_reviewer(exclude_list: [])
-    each
-      .reject { |r| exclude_list.include?(r.login) }
-      .sample
+  def choose_reviewer(pull_request, exclude_list: [])
+    filtered_reviewers = each
+                           .reject { |r| exclude_list.include?(r.login) }
+    # Average the load from last 7 days. Irrespective of the whether it is already reviewed or pending
+    reviewers_load = Reviewer.where("login IN (?) AND created_at > ?", filtered_reviewers.map(&:login), 1.week.ago).group(:login).count
+
+    reviewers_with_no_load = filtered_reviewers.map(&:login) - reviewers_load.keys
+    reviewer = nil
+
+    if reviewers_with_no_load.present?
+      reviewer = reviewers_with_no_load.first
+    else
+      # Do not assign any reviewer from the last PR's reviewer list to avoid overburdening of any reviewer who was unavailable/leave in last 7 days.
+      last_pr_reviewers = PullRequest.where("number != ? AND repository_id = ? AND status != '#{PullRequest::STATUS_CLOSED}'",
+                                            pull_request.number, pull_request.repository_id).last&.reviewers&.map(&:login)
+      reviewers_load.sort_by {|_key, value| value}.each do |login_count|
+        reviewer = login_count[0]
+        next if last_pr_reviewers&.include?(reviewer)
+        break
+      end
+    end
+
+    filtered_reviewers.find{|r| r.login == reviewer}
   end
 
   private

@@ -124,13 +124,11 @@ class ReviewRule < ApplicationRecord
       User.paused_logins |
       extra_excludes
 
-    reviewer_list.choose_reviewer(
-      exclude_list: excludes
+    reviewer_list.choose_reviewer(pull_request, exclude_list: excludes
     ) ||
-      reviewer_list.choose_reviewer(
-        exclude_list: pull_request.pending_review_logins
+      reviewer_list.choose_reviewer(pull_request, exclude_list: pull_request.pending_review_logins
       ) ||
-      reviewer_list.choose_reviewer
+      reviewer_list.choose_reviewer(pull_request)
   end
 
   def self.apply(pr, pull_request_hash)
