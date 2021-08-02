@@ -26,7 +26,7 @@ class ReviewerList
     filtered_reviewers = each
                            .reject { |r| exclude_list.include?(r.login) }
     # Average the load from last 7 days. Irrespective of the whether it is already reviewed or pending
-    reviewers_load = Reviewer.where("login IN (?) AND created_at > ?", filtered_reviewers.map(&:login), 1.week.ago).group(:login).count
+    reviewers_load = AverageReviewLoad.new(filtered_reviewers.map(&:login)).run
 
     reviewers_with_no_load = filtered_reviewers.map(&:login) - reviewers_load.keys
     reviewer = nil
@@ -35,8 +35,7 @@ class ReviewerList
       reviewer = reviewers_with_no_load.first
     else
       # Do not assign any reviewer from the last PR's reviewer list to avoid overburdening of any reviewer who was unavailable/leave in last 7 days.
-      last_pr_reviewers = PullRequest.where("number != ? AND repository_id = ? AND status != '#{PullRequest::STATUS_CLOSED}'",
-                                            pull_request.number, pull_request.repository_id).last&.reviewers&.map(&:login)
+      last_pr_reviewers = LastPrReviewers.new(pull_request).run
       reviewers_load.sort_by {|_key, value| value}.each do |login_count|
         reviewer = login_count[0]
         next if last_pr_reviewers&.include?(reviewer)
